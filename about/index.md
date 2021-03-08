@@ -10,11 +10,7 @@ comments: false
 
 ## Features
 * [2016~2018] Graduated from Cheongdam High School
-* [2019~ing] [Hankuk University of Foreign Studies](http://www.hufs.ac.kr/)
-
-  (major)[GBT](http://hufsgbtgbt.cafe24.com/)
-
-  (double major) [AI Convergence](http://soft.hufs.ac.kr/)
+* [2019~ing] [Hankuk University of Foreign Studies](http://www.hufs.ac.kr/)   (major)[GBT](http://hufsgbtgbt.cafe24.com/)   (double major) [AI Convergence](http://soft.hufs.ac.kr/)
 * [2019~ing] [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 on the management team.
 {% capture images %}
