@@ -6,11 +6,11 @@ date: 2016-03-21
 comments: false
 ---
     
-<center>Always with Passion and Joy:D</center>
+<center>Always with Passion and Joy :D</center>
 
 ## Features
 * [2016~2018] Graduated from Cheongdam High School
-* [2019~ing][Hankuk University of Foreign Studies](http://www.hufs.ac.kr/)
+* [2019~ing] [Hankuk University of Foreign Studies](http://www.hufs.ac.kr/)
 (major) [GBT](http://hufsgbtgbt.cafe24.com/)
 (double major) [AI Convergence Major](http://soft.hufs.ac.kr/)
 * [2019~ing] [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
