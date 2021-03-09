@@ -16,7 +16,8 @@ comments: true
 ---
 
 ## [eng] 
-I participated in the Seoul Metropolitan Big Data Campus Competition and participated in the selection of the best power independent bus stop using a voltage device
+I participated in **the Seoul Metropolitan Big Data Campus Competition** 
+Analysis Data with the subject of "the selection of the best power independent bus stop using a voltage device"
 
 TAVE 6th project
 
