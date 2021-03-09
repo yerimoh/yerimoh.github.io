@@ -22,10 +22,12 @@ I participated in the Seoul Metropolitan Big Data Campus Competition and partici
 
 ## [kor]
 
-서울시 빅데이터 캠퍼스 공모전에 출전하여 "압전소자를 활용한 최적의 전력 자립 버스정류장 위치 선정" 을 해봤습니다.
+서울시 빅데이터 캠퍼스 공모전에 출전하여 "압전소자를 활용한 최적의 전력 자립 버스정류장 위치 선정" .
+
+TAVE 6th project
 
 ---
-[[2020서울시빅캠공모전]_[길가온발전소]_TAVE.pdf](https://github.com/yerimoh/yerimoh.github.io/files/6106000/2020._._TAVE.pdf){: .btn}
+[[2020서울시빅캠공모전]_[길가온발전소]_TAVE.pdf]( https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/._._TAVE.pdf){: .btn}
   
     
 <center><b>Moon</b> is a minimal, one column jekyll theme.</center>
