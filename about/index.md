@@ -14,7 +14,7 @@ comments: false
 * [2019~ing] [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 on the management team.
 
-![hufs](./assets/img/hufs.png)
+![hufs](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/hufs.png)
 {% include gallery images=images caption="Hankuk University of Foreign Studies" cols=2 %}
 ![%25B7%25CE%25B0%25ED](./assets/img/%25B7%25CE%25B0%25ED.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
