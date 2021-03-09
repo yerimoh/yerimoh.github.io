@@ -18,20 +18,12 @@ https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/img_2020060920
 {% endcapture %}
 {% include gallery images=images caption="Hankuk University of Foreign Studies" cols=2 %}
 {% capture images %}
-https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/img_20200609204612_b2855f45.webp
+https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png
 {% endcapture %}
 {% include gallery images=images caption="TAVE" cols=2 %}
 
 ## Project
 
-{% capture images %}
-    https://cloud.yerimohcontent.com/assets/754514/14509720/img_20200609204612_b2855f45.webp
-g
-
-{% endcapture %}
-{% include gallery images=images caption="Screenshots of Moon Theme" cols=2 %}
-
-See a [live version of Moon](http://taylantatli.github.io/Moon) hosted on GitHub.
 
 ## Getting Started
 
