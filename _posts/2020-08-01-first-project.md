@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "**[Data Analysis] Bus Stop Selection with piezoelectric devices ** "
+title:  "[Data Analysis] Bus Stop Selection with piezoelectric devices"
 date:   2016-04-06
 excerpt: "Selection of the optimal power independent bus stop location using piezoelectric devices"
 project: true
