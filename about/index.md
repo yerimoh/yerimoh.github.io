@@ -13,13 +13,11 @@ comments: false
 * [2019~ing] [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies <br/>**major** [GBT](http://hufsgbtgbt.cafe24.com/) <br/>**double major** [AI Convergence](http://soft.hufs.ac.kr/)
 * [2019~ing] [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 on the management team.
-{% capture images %}
-https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/img_20200609204612_b2855f45.webp
-{% endcapture %}
+
+![HUFS](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/img_20200609204612_b2855f45.webp)
 {% include gallery images=images caption="Hankuk University of Foreign Studies" cols=2 %}
-{% capture images %}
-https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png
-{% endcapture %}
+![TAVE]
+(https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
 
 ## Project
