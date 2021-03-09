@@ -15,6 +15,7 @@ tag:
 comments: true
 ---
 
+
 ## [eng] 
 I participated in **the Seoul Metropolitan Big Data Campus Competition** 
 and analysis data with the subject of "the selection of the best power independent bus stop using a voltage device"
@@ -30,6 +31,8 @@ TAVE 6기 프로젝트
 
 [project]( https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%5B2020%EC%84%9C%EC%9A%B8%EC%8B%9C%EB%B9%85%EC%BA%A0%EA%B3%B5%EB%AA%A8%EC%A0%84%5D_%5B%EA%B8%B8%EA%B0%80%EC%98%A8%EB%B0%9C%EC%A0%84%EC%86%8C%5D_TAVE.pdf){: .btn}
 
+{% include gallery images=images caption="Click to view the entire project." cols=2 %}
+
 ---
 ## RESULT
 
@@ -40,10 +43,18 @@ TAVE 6기 프로젝트
   TAVE 3st place in the Best Project
   
 {% capture images %}
-https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%EC%98%A4%EC%98%88%EB%A6%BC_%EC%A0%84%EB%B0%98%EA%B8%B0%EC%8A%A4%ED%84%B0%EB%94%941%EB%93%B1.pdf.png 
-https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%EC%98%A4%EC%98%88%EB%A6%BC_%ED%9B%84%EB%B0%98%EA%B8%B0%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B83%EB%93%B1.pdf 
+https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/1aw.pdf 
+https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/3aw.pdf
 {% endcapture %}
     
+---
+## PREVIEW
+
+{% capture images %}
+https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/p1.png
+https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/p2.png
+{% endcapture %}
+
 
      
 
