@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Moon Jekyll Theme"
+title:  "**[Data Analysis] Bus Stop Selection with piezoelectric devices ** "
 date:   2016-04-06
-excerpt: "Minimal, one column Jekyll theme for your blog."
+excerpt: "Selection of the optimal power independent bus stop location using piezoelectric devices"
 project: true
 tag:
 - jekyll 
@@ -10,8 +10,20 @@ tag:
 - blog
 - about
 - theme
+- Bus Data
+- 서울시 빅테이터 캠퍼스 공모전
 comments: true
 ---
+
+## [eng] 
+I participated in the Seoul Metropolitan Big Data Campus Competition and participated in the selection of the best power independent bus stop using a voltage device
+
+
+
+## [kor]
+
+서울시 빅데이터 캠퍼스 공모전에 출전하여 "압전소자를 활용한 최적의 전력 자립 버스정류장 위치 선정" 을 해봤습니다.
+
 
 ![Moon Homepage](https://cloud.githubusercontent.com/assets/754514/14509720/61c61058-01d6-11e6-93ab-0918515ecd56.png)    
     
