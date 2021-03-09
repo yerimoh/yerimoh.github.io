@@ -18,7 +18,7 @@ comments: false
 <br/> **RESEARCH** Deep Learning and Machine Learning 
 * [2021~ing] Hyundai Motor Company's Embedded Self-driving Competition study
 
-![hufs](./assets/img/hufs.png)
+![hufs](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/assets/img/hufs.png)
 {% include gallery images=images caption="Hankuk University of Foreign Studies" cols=2 %}
 ![%25B7%25CE%25B0%25ED](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
