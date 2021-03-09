@@ -19,12 +19,9 @@ on the management team.
 ![TAVE](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
 
-## Project
 
 
 ## Getting Started
-
-To learn how to install and use this theme check out the [Setup Guide](http://taylantatli.me/Moon/moon-theme/) for more information.
       
 
 [Install Hankuk University of Foreign Studies](http://www.hufs.ac.kr/){: .btn}
