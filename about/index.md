@@ -16,7 +16,7 @@ on the management team.
 
 ![hufs](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/hufs.png)
 {% include gallery images=images caption="Hankuk University of Foreign Studies" cols=2 %}
-![%25B7%25CE%25B0%25ED](./assets/img/%25B7%25CE%25B0%25ED.png)
+![%25B7%25CE%25B0%25ED](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
 
 
