@@ -17,11 +17,8 @@ comments: false
 <br/>7th) management team
 <br/>RESEARCH) Deep Learning and Machine Learning 
 * **[2021~ing]** Hyundai Motor Company's Embedded Self-driving Competition study
-{% capture images %}
-    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
-{% endcapture %}
 ![hufs](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png)
-
+![TAVE](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
 
 
