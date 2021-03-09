@@ -10,12 +10,12 @@ comments: false
 
 ## Features
 * **[2016~2018]** Graduated from Cheongdam High School
-* **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies <br/>**major** [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology <br/>**double major** [AI Convergence](http://soft.hufs.ac.kr/)
+* **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies <br/><u>major</u> [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology <br/><u>double major</u> [AI Convergence](http://soft.hufs.ac.kr/)
 * **[2021]** AI Education Center Coding Zone Assistant
 * **[2019~ing]** [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
-<br/>**6th** Data Analysis Project using Python Library
-<br/>**7th** management team
-<br/> **RESEARCH** Deep Learning and Machine Learning 
+<br/><u>6th</u> Data Analysis Project using Python Library
+<br/><u>7th</u> management team
+<br/><u>RESEARCH</u> Deep Learning and Machine Learning 
 * **[2021~ing]** Hyundai Motor Company's Embedded Self-driving Competition study
 
 ![hufs](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/hufs.png)
