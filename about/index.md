@@ -25,8 +25,9 @@ comments: false
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%25B7%25CE%25B0%25ED.png
 {% endcapture %}
+
 {% include gallery images=images caption="HUFS / TAVE" cols=2 %}
-{% include gallery images=images caption="TAVE" cols=2 %}
+
 
 ## Getting Started
       
