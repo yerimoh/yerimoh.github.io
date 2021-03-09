@@ -4,7 +4,7 @@ bio:                'Welcom to my Shelter'
 description:        "Happy and worthwhile day by day :)"
 reading_time:       true
 words_per_minute:   200
-logo:               'assets/img/logo.png'
+logo:               'assets/img/KakaoTalk_20210309_104132241.jpg'
 background:         'assets/img/placeholder-big.jpg'
 tiled_bg:           false   # Set this true if you want to tile your background image, otherwise it will be covered
 locale:             en_US
