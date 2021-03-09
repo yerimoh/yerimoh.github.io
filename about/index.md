@@ -19,8 +19,9 @@ comments: false
 * **[2021~ing]** Hyundai Motor Company's Embedded Self-driving Competition study
 {% capture images %}
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
+    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%25B7%25CE%25B0%25ED.png
 {% endcapture %}
-![hufs](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/hufs.png)
+![hufs](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png)
 {% include gallery images=images caption="Hankuk University of Foreign Studies" cols=2 %}
 ![%25B7%25CE%25B0%25ED](https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/%25B7%25CE%25B0%25ED.png)
 {% include gallery images=images caption="TAVE" cols=2 %}
