@@ -48,9 +48,8 @@ zzz
 ## PREVIEW
 
 
-{% capture images %}
-    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
-{% endcapture %}
+![hufs](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png)
+
 
 {% capture images %}
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/p1.png
