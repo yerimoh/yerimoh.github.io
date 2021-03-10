@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Introduce about Myself
-tags: [about, Jekyll, theme, moon, TAVE,HUFS , GBT, AI Convergence]
+tags: [about]
 date: 2016-03-21
 comments: false
 ---
