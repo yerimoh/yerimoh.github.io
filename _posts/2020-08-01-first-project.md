@@ -5,13 +5,7 @@ date:   2020-08-01
 excerpt: "Selection of the optimal power independent bus stop location using piezoelectric devices"
 project: true
 tag:
-- jekyll 
-- moon
-- blog
-- about
-- theme
-- Bus Data
-- 서울시 빅테이터 캠퍼스 공모전
+- project
 comments: true
 ---
 
