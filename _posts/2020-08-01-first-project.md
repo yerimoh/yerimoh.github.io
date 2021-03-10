@@ -43,7 +43,9 @@ TAVE 6기 프로젝트
   TAVE 3st place in the Best Project
   
 {% capture images %}
-    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/1aw.pdf 
+    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/1aw.pdf
+    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
+    https://github.com/yerimoh/yerimoh.github.io/blob/main/assets/img/1aw.pdf
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/3aw.pdf
 {% endcapture %}
     
