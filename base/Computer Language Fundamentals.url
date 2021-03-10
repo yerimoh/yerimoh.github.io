@@ -1,2 +1,6 @@
-[InternetShortcut]
-URL=https://github.com/yerimoh/yerimoh.github.io/blob/main/Computer%20Language%20Fundamentals
+---
+layout: post-list
+title: Computer Language
+excerpt: "Python, Java, C, C++, R"
+comments: false
+---
