@@ -94,7 +94,7 @@ Make any link standout more when applying the `.btn` class.
 <div markdown="0"><a href="#" class="btn btn-success">Success Button</a></div>
 <div markdown="0"><a href="#" class="btn btn-warning">Warning Button</a></div>
 <div markdown="0"><a href="#" class="btn btn-danger">Danger Button</a></div>
-<div markdown="0"><a href="#" class="btn btn-info">Info Button</a></div>
+<div markdown="0"><a href="#" class="btn btn-info">Info</a></div>
 
 ## KBD
 
