@@ -1,27 +1,44 @@
-<div class="post-list">
-      {% assign category = page.title %}
-      {% for post in site.categories[category] %} <!-- 카테고리 조건 -->
-            <ul>
-                  <li>Cumputer Language
-                         <ul> 
-                               <li>Python</li>
-                               <li>Java</li>
-                               <li>R</li>
-                          </ul>
-                  </li>
-                  <li>Deep Learning</li>
-                          <ul> 
-                               <li>Deep Learning 1</li>
-                               <li>Deep Learning 2</li>
-                          </ul>
-                  <li>Machine Learning</li>          
-                  <li>Algorithm
-                      <ul>
-                            <li>Baekjun</li>
-                            <li>Interviews with Python algorithms</li>
-                       </ul>
-                  </li>
-                  </li>       
-            </ul>
-      {% endfor %}
-</div>
+---
+layout: compress
+---
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"><!--<![endif]-->
+<head>
+    {% include head.html %}
+</head>
+<body>
+    {% include nav.html %}
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="post_wrapper animated fadeIn">
+            <div class="content">
+                <div class="post-title">
+                    <h1>{{ page.title }}</h1>
+                    <a class="btn zoombtn" href="{{site.url}}">
+                        <i class="fa fa-home"></i>
+                    </a>
+                </div>
+                <div class="post-list">
+                     {% assign category = page.title %}
+                     {% for post in site.categories[category] %}
+                    <ul>
+                        <li class="wow fadeInLeft" data-wow-duration="1.5s">
+                            <a class="zoombtn" href="{{ site.url }}{{ post.url }}">{{ post.title }}</a>
+                            <p>{{ post.excerpt }}</p>
+                            <a href="{{ site.url }}{{ post.url }}" class="btn zoombtn">Read More</a>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% include categorybox.html %}
+    </header>
+    {% include scripts.html %}
+    <script src="{{ site.url }}/assets/js/wow.min.js"></script>
+    <script type="text/javascript">(new WOW).init();</script>
+</body>
+</html>
