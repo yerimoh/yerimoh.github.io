@@ -1,19 +1,16 @@
 
-<p class="page__taxonomy">
-    <strong
-    ><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i>
-    Categories:
-    </strong>
-    <p >
+
+<div>
+  <div class="sidebar-nav-item">Category</div>
+  <nav class="content-ul">
     {% for category in site.categories %}
-    <a
-        href="/categories/{{ category[0] | slugify: 'pretty' }}"
-        class="page__taxonomy-item category-item"
-        rel="tag"
-    >
-        {{ category[0] }}
-        <span class="category-count">{{category | last | size}}</span>
+    <a href="{{ root_url }}/{{ site.category_dir }}#{{ category | first }}"
+       class="sidebar-nav-item pl-3rem">
+                          <span class="name">
+                              {{ category | first }}
+                          </span>
+      <span class="badge">{{ category | last | size }}</span>
     </a>
     {% endfor %}
-    </p>
-</p>
+  </nav>
+</div>
