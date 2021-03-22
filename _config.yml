@@ -79,3 +79,6 @@ remote_theme : mmistakes/minimal-mistakes
 
 category_dir: category/
 tag_dir: tag/
+toc_sticky: true
+toc: true
+toc_label: "페이지 주요 목차"
