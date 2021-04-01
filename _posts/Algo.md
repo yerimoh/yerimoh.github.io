@@ -11,4 +11,32 @@ order: 0
 comments: true
 ---
 
-알고리즘에서 처음 접하는 낯선 함수들을 추가하여 정리해두었습니다 :)
+알고리즘에서 처음 접하는 **낯선 함수들을 추가**하여 정리해두었습니다 :)
+
+
+
+
+# 목차
+
+- 코딩테스트 준비사항 [learn [01]](https://yerimoh.github.io//NP1/){: .btn}
+
+
+
+
+- [시작하기 전, 파이썬에 대한 기본적인 문법]  [learn [02]](https://yerimoh.github.io//Algo/){: .btn}
+  * [인덴트](#인덴트)
+  * [네이밍 컨벤션(파이썬의 변수명)](#네이밍-컨벤션(파이썬의-변수명))
+    + [스네이크 케이스 Snake Case](#스네이크-케이스-snake-case)
+  * [타입 힌트](#타입-힌트)
+    + [mypy](#mypy)
+      - [mypy 설치](#mypy-설치)
+  * [리스트 컴프리헨션(List Comprehension)](#리스트-컴프리헨션(List-Comprehension))
+  * [제너레이터 Generator](#제너레이터-generator)
+    + [range()](#range())
+  * [enumerate](#enumerate)
+  * [// 나눗셈 연산자](#//-나눗셈-연산자)
+  * [print](#print)
+    + [출력 방법](#출력-방법)
+  * [pass](#pass)
+  * [locals](#locals)
+
