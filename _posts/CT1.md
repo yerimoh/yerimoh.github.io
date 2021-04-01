@@ -1,6 +1,6 @@
 ---
 title: "[01] Python_Algorithm"
-date:   2021-03-12
+date:   2021-03-13
 excerpt: "Are You Ready To solve Python_Algorithm problem"
 category: [Algorithm]
 layout: post
@@ -36,7 +36,7 @@ comments: true
 <br> 스스로 제한시간을 설정해두고 이 시간이 초과 된 후에 구조가 잘못되었다는 것을 인지하면 깔끔하게 다음 문제로 넘어가자
 <br> 이제 말만 쉽지 실전가면 못 푼 문제에 미련이 남으므로 연습할때도 **시간을 정해두고** 포기하는 연습을 하자.
 
-## 6. 풀이시간이 초과되었을 떄 대처
+ 펜의 ## 6. 풀이시간이 초과되었을 때 대처
 : **면접관의 메일주소를 알고있다면** 끝까지 풀고 면접관에게 보내보자
 <br>오답처리가 되긴하지만 면접관에게 좋은 피드백을 받았다는 사례가 있다.
 
