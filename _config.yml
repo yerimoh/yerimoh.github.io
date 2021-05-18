@@ -8,7 +8,7 @@ logo:               'assets/img/KakaoTalk_20210309_104132241.jpg'
 background:         'assets/img/unnamed.jpg'
 tiled_bg:           false   # Set this true if you want to tile your background image, otherwise it will be covered
 locale:             en_US
-url:                https://yerimoh.github.io/
+url:                https://yerimoh.github.io
 
 # Jekyll
 permalink:          /:title/
@@ -45,7 +45,7 @@ github-url:         yerimoh/https-yerimoh.github.io-
 #stackoverflow:     123456/username   from a "http://stackoverflow.com/users/123456/username" link
 #linkedin:          username
 #xing:              username
-instagram:          https://www.instagram.com/5yerim__/        
+instagram:          https://www.instagram.com/5yerim__        
 #lastfm:            username
 #tumblr:            username
 #medium:            '@username'
