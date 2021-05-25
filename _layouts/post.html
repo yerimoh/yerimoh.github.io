@@ -40,7 +40,7 @@ layout: compress
                 {{ content }}
                 <div class="entry-meta">
                 {% include meta.html %}
-                </article>
+                    <script>
                   function getTOCNodes(master) {
     var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
     var tocNodes = nodes.filter(function(elem) {
@@ -111,6 +111,8 @@ layout: compress
     }
 
   }, false);
+</script>
+                </article>
                 </div>
                 </div>
             </div>
@@ -123,9 +125,6 @@ layout: compress
     <script async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     {% endif %}
 </body>
-<script>
-
-</script>
 </html>
 
 
