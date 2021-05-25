@@ -271,6 +271,18 @@ header .entry-meta {
     @media #{$small} {
 		visibility: hidden;
 	}
+    @media (min-width: 75em){
+    	width: 240px;
+    	display: block;
+  	}
+    @media (min-width: 85em){
+    	width: 300px;
+    	display: block;
+  	}
+    @media (min-width: 95em){
+    	width: 360px;
+    	display: block;
+  	}
 
   a.toc-active {
     font-weight: bold; 
