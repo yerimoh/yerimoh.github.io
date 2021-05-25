@@ -257,20 +257,18 @@ header .entry-meta {
 }
 
 .toc {
-  position: fixed;
-  top: 8rem;
-  left: 1rem;
-  width: 25%;
-	background: $white;
-	color: $color_tuatara;
-	padding: 2em;
-	border-radius: 3px;
-	box-shadow: 0 0 10px 0 rgba($color_shark,0.3);
-
-    @media #{$small} {
-		visibility: hidden;
-	}
-
+  right: 0px;
+  width: 240px;
+  color: $white;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  margin-right: 0px;
+  font-size: 0.7rem;
+  border-left: 2px solid #e0d9e7;
 
   a.toc-active {
     font-weight: bold; 
@@ -278,6 +276,20 @@ header .entry-meta {
     font-size: 80%;
     color: #9075aa;
   }
+	  display: none;
+  @media (min-width: 75em){
+    width: 240px;
+    display: block;
+  }
+  @media (min-width: 85em){
+    width: 300px;
+    display: block;
+  }
+  @media (min-width: 95em){
+    width: 360px;
+    display: block;
+  }
+
 
   ul {
     list-style-type: none;
