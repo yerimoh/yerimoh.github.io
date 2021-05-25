@@ -259,16 +259,18 @@ header .entry-meta {
 
 .toc {
   position: fixed;
-  right: 0px;
-  width: 240px;
-  color: #f5dff4;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.65rem;
-  padding-bottom: 0.65rem;
-  margin-right: 0px;
-  font-size: 0.7rem;
-  border-left: 2px solid #e0d9e7;
+  top: 8rem;
+  left: 1rem;
+  width: 25%;
+	background: $white;
+	color: $color_tuatara;
+	padding: 2em;
+	border-radius: 3px;
+	box-shadow: 0 0 10px 0 rgba($color_shark,0.3);
+
+    @media #{$small} {
+		visibility: hidden;
+	}
 
   a.toc-active {
     font-weight: bold; 
