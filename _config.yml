@@ -8,7 +8,7 @@ logo:               'assets/img/KakaoTalk_20210309_104132241.jpg'
 background:         'assets/img/unnamed.jpg'
 tiled_bg:           false   # Set this true if you want to tile your background image, otherwise it will be covered
 locale:             en_US
-url:                https://yerimoh.github.io/
+url:                https://yerimoh.github.io
 
 # Jekyll
 permalink:          /:title/
