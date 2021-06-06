@@ -73,7 +73,7 @@ plugins:
   - jekyll-toc
 
 jekyll-mentions:
-    base_url: https://yerimoh.github.com
+    base_url: ''
 plugins:
   - jekyll-sitemap
 
