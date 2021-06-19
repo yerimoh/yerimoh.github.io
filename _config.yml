@@ -11,6 +11,8 @@ locale:             en_US
 url:                https://yerimoh.github.io/
 baseurl :           ''
 
+iis_slider_array: []
+
 # Jekyll
 permalink:          /:title/
 markdown:           kramdown
