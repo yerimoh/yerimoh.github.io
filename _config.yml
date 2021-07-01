@@ -43,13 +43,13 @@ google: bora2267474@gmail.com
 email: bora3328@naver.com
 #twitter:            username
 #facebook:           username
-github-url:         https://github.com/yerimoh/
+github-url:         "https://github.com/yerimoh/"
 
 
 #stackoverflow:     123456/username   from a "http://stackoverflow.com/users/123456/username" link
 #linkedin:          username
 #xing:              username
-instagram:          https://www.instagram.com/5yerim__     
+instagram:          "https://www.instagram.com/5yerim__"     
 #lastfm:            username
 #tumblr:            username
 #medium:            '@username'
@@ -57,7 +57,7 @@ instagram:          https://www.instagram.com/5yerim__
 #foursquare:        username
 #steam:              username
 #dribbble:          username
-youtube:            https://www.youtube.com/channel/UChJVcaf67lOTD0DIwldcfUw
+youtube:            "https://www.youtube.com/channel/UChJVcaf67lOTD0DIwldcfUw"
 #youtube-channel:   channel
 #soundcloud:        username
 #weibo:             username
