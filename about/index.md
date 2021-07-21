@@ -18,6 +18,7 @@ comments: false
 * **[2019~ing]** [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 <br/> 6th) Data Analysis Project using Python Library
 <br/> 7th) management team
+<br/> 7th) president
 <br/>RESEARCH) Deep Learning and Machine Learning 
 * **[2021~ing]** Hyundai Motor Company's Embedded Self-driving Competition study
 
