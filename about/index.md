@@ -22,6 +22,25 @@ comments: false
 * **[2021~ing]** Hyundai Motor Company's Embedded Self-driving Competition study
 
 
+### Development languages that I use
+✓ Python  
+✓ R   
+✓ C   
+✓ C++    
+✓ Java       
+✓ JavaScript   
+
+### Framework I've Used
+✓ TensorFlow    
+✓ Keras   
+✓ PyTorch    
+✓ OpenCV
+✓ Arduino    
+✓ Raspberry Pi      
+✓ MATLAB     
+
+
+
 {% capture images %}
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%25B7%25CE%25B0%25ED.png
