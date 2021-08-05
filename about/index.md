@@ -35,7 +35,7 @@ comments: false
 ✓ TensorFlow    
 ✓ Keras   
 ✓ PyTorch    
-✓ OpenCV
+✓ OpenCV      
 ✓ Arduino    
 ✓ Raspberry Pi      
 ✓ MATLAB     
