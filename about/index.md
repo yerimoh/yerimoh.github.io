@@ -19,8 +19,8 @@ comments: false
 <br/> 6th) Data Analysis Project using Python Library
 <br/> 7th) management team
 <br/> 7th) president
-<br/>RESEARCH) Deep Learning and Machine Learning 
-* **[2021~ing]** Hyundai Motor Company's Embedded Self-driving Competition study
+<br/>[RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
+* **[2021~ing]** [Advance to the 19th Embedded Software Competition](https://eswcontest.or.kr/main/main.php)   
 
 
 ### Development languages that I use
