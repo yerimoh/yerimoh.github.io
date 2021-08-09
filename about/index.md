@@ -14,13 +14,14 @@ comments: false
 <br/>major) [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology 
 <br/>double major) [AI Convergence](http://soft.hufs.ac.kr/)  
 [Certificate](https://user-images.githubusercontent.com/76824611/125048882-54cb4780-e0db-11eb-8ed2-cf6b458fa042.png)          
-* **[2021]** [Certificate](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/certification.pdf) AI Education Center Coding Zone Assistant 
+* **[2021]** [AI Education Center Coding Zone Assistant](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/certification.pdf)     
 * **[2019~ing]** [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
-<br/> 6th) Data Analysis Project using Python Library
-<br/> 7th) management team
-<br/> 7th) president
-<br/>[RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
-* **[2021~ing]** [Advance to the 19th Embedded Software Competition](https://eswcontest.or.kr/main/main.php)   
+<br/> 6th) [Data Analysis Project using Python Library](https://yerimoh.github.io/first-project/) 
+<br/> 7th) [management team](https://www.instagram.com/p/CKvZreGhiWh/)
+<br/> 7th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)
+<br/> [RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
+* **[2021~ing]** [Advance to the 19th Embedded Software Competition](https://eswcontest.or.kr/main/main.php)     
+* **[2021~ing]** [NVIDIA DLI Ambassador Challenge](https://www.nvidia.com/ko-kr/)    
 
 
 ### Development languages that I use
