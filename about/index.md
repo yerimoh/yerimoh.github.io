@@ -9,7 +9,7 @@ comments: false
 <center>Always with Passion and Joy :D</center>
 
 ## Features
-* **[2016~2018]** Graduated from Cheongdam High School
+* **[2016~2018]** Graduated from [Cheongdam High School](http://chungdam.sen.hs.kr/index.do)
 * **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies
 <br/>major) [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology 
 <br/>double major) [AI Convergence](http://soft.hufs.ac.kr/)  
