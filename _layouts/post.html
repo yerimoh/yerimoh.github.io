@@ -36,7 +36,16 @@ layout: compress
                     <div class="toc">
                         </h2>Table of Contents</h2>
                         {% include toc.html html=content %}
-                    </div>    
+                    </div>   
+                       
+            <script src="https://utteranc.es/client.js"
+                repo="yerimoh/blog-comments"
+                issue-term="pathname"
+                label="comments"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+            </script>
                 {{ content }}
                 <div class="entry-meta">
                 {% include meta.html %}
@@ -117,15 +126,7 @@ layout: compress
                 </div>
             </div>
         </div>
-   
-            <script src="https://utteranc.es/client.js"
-                repo="yerimoh/blog-comments"
-                issue-term="pathname"
-                label="comments"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-            </script>
+
     </header>
     {% include scripts.html %}
     {% if site.mathjax == true %}
