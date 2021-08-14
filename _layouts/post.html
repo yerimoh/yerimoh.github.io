@@ -37,15 +37,6 @@ layout: compress
                         </h2>Table of Contents</h2>
                         {% include toc.html html=content %}
                     </div>   
-                       
-            <script src="https://utteranc.es/client.js"
-                repo="yerimoh/blog-comments"
-                issue-term="pathname"
-                label="comments"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-            </script>
                 {{ content }}
                 <div class="entry-meta">
                 {% include meta.html %}
@@ -121,6 +112,15 @@ layout: compress
 
   }, false);
 </script>
+                    
+            <script src="https://utteranc.es/client.js"
+                repo="yerimoh/blog-comments"
+                issue-term="pathname"
+                label="comments"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+            </script>
                 </article>
                 </div>
                 </div>
