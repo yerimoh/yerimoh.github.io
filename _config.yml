@@ -81,6 +81,14 @@ jekyll-mentions:
 plugins:
   - jekyll-sitemap
 
+<script src="https://utteranc.es/client.js"
+        repo="yerimoh / comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
 
 # Exclude list
 exclude: [README.md, Gemfile, Gemfile.lock, node_modules, gulpfile.js, package.json, _site, src, vendor, CNAME, LICENSE, Rakefile]
