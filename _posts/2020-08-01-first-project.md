@@ -30,9 +30,13 @@ TAVE 6기 프로젝트
 
 * study
   TAVE 1st place in the Best Study
+  [오예림_전반기스터디1등.pdf](https://github.com/yerimoh/yerimoh.github.io/files/7026699/_.1.pdf)
+
+
    
 * project
   TAVE 3st place in the Best Project
+  [오예림_후반기프로젝트3등.pdf](https://github.com/yerimoh/yerimoh.github.io/files/7026700/_.3.pdf)
   
 
   
@@ -40,8 +44,8 @@ TAVE 6기 프로젝트
 ---
 ## PREVIEW
 
- ![1](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/p1.png)
- ![2](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/p2.png)
+![image](https://user-images.githubusercontent.com/76824611/130345429-16a48213-6609-4881-859a-b933e83170e7.png)
+
 
      
 
