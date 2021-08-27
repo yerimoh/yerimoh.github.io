@@ -25,14 +25,14 @@ comments: false
 
 
 ### Development languages that I use
-✓ Python  
+✓ Python  <img src="https://img.shields.io/badge/Python-0769AD?style=for-the-badge&logo=Python&logoColor=white">
 ✓ R   
 ✓ C   
-✓ C++    
+✓ C++  <img src="https://img.shields.io/badge/C++-7952B3?style=for-the-badge&logo=C++&logoColor=white">  
 ✓ Java       
 ✓ JavaScript   
 
-<img src="https://img.shields.io/badge/Python-0769AD?style=for-the-badge&logo=Python&logoColor=white"><img src="https://img.shields.io/badge/C++-7952B3?style=for-the-badge&logo=C++&logoColor=white"><img src="https://img.shields.io/badge/C-7952B3?style=for-the-badge&logo=C&logoColor=white"><img src="https://img.shields.io/badge/R-1572B6?style=for-the-badge&logo=R&logoColor=white"><img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/C-7952B3?style=for-the-badge&logo=C&logoColor=white"><img src="https://img.shields.io/badge/R-1572B6?style=for-the-badge&logo=R&logoColor=white"><img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 
 ### Framework I've Used
 ✓ TensorFlow    
