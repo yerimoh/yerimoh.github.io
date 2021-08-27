@@ -25,14 +25,13 @@ comments: false
 
 
 ### Development languages that I use
-✓ Python  <img src="https://img.shields.io/badge/Python-0769AD?style=for-the-badge&logo=Python&logoColor=white">
+✓ Python  
 ✓ R   
 ✓ C   
-✓ C++  <img src="https://img.shields.io/badge/C++-7952B3?style=for-the-badge&logo=C++&logoColor=white">  
+✓ C++    
 ✓ Java       
 ✓ JavaScript   
 
-<img src="https://img.shields.io/badge/C-7952B3?style=for-the-badge&logo=C&logoColor=white"><img src="https://img.shields.io/badge/R-1572B6?style=for-the-badge&logo=R&logoColor=white"><img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 
 ### Framework I've Used
 ✓ TensorFlow    
@@ -44,7 +43,7 @@ comments: false
 ✓ MATLAB     
 ✓ Pandas   
 
- <img src="https://img.shields.io/badge/pandas-E34F26?style=for-the-badge&logo=pandas&logoColor=white"> <img src="https://img.shields.io/badge/OpenCV-7952B3?style=for-the-badge&logo=OpenCV&logoColor=white"> <img src="https://img.shields.io/badge/NumPy-4FC08D?style=for-the-badge&logo=NumPy&logoColor=white"> <img src="https://img.shields.io/badge/TensorFlow-61DAFB?style=for-the-badge&logo=TensorFlow&logoColor=black"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=aws&logoColor=white"> <img src="https://img.shields.io/badge/Raspberry Pi-7952B3?style=for-the-badge&logo=Raspberry Pi&logoColor=white"> <img src="https://img.shields.io/badge/Arduino-7952B3?style=for-the-badge&logo=Arduino&logoColor=white">
+
 
 {% capture images %}
     https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
