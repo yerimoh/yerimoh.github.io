@@ -22,7 +22,7 @@ comments: false
 <br/> [RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
 * **[2021~ing]** [Advance to the 19th Embedded Software Competition](https://eswcontest.or.kr/main/main.php)     
 * **[2021~ing]** [NVIDIA DLI Ambassador Challenge](https://www.nvidia.com/ko-kr/)    
-
+* **[2021 0916]** [Attend as a Teaching Ambassador in NVIDIA Technical lecture](https://yerimoh.github.io/NLPTA/): Global Startup Academy NVIDIA Technical Education "Natural Language Processing" Transformer-based natural language processing application construction
 
 ### Development languages that I use
 ✓ Python  
