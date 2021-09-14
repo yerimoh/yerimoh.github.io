@@ -45,10 +45,9 @@ comments: false
 
 
 
-{% capture images %}
-    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/hufs.png
-    https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/%25B7%25CE%25B0%25ED.png
-{% endcapture %}
+![image](https://user-images.githubusercontent.com/76824611/133220622-355a358b-16c3-410c-baad-5178ed223883.png)
+![image](https://user-images.githubusercontent.com/76824611/133220637-89f8f54c-49e5-43a8-8ebf-0060c1813969.png)
+
 
 {% include gallery images=images caption="HUFS / TAVE" cols=2 %}
 
@@ -60,4 +59,4 @@ comments: false
 [Install GBT](http://hufsgbtgbt.cafe24.com/){: .btn}
 [Install AI Convergence Major](http://soft.hufs.ac.kr/){: .btn}
 [Install TAVE](https://blog.naver.com/t-ave){: .btn}
-
+[Install NVIDIA](https://www.nvidia.com/en-us/){: .btn}
