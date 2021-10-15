@@ -41,7 +41,8 @@ comments: false
 ✓ Arduino    
 ✓ Raspberry Pi      
 ✓ MATLAB     
-✓ Pandas   
+✓ Pandas     
+✓ tesseract   
 
 
 
