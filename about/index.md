@@ -23,7 +23,7 @@ comments: false
 * **[2021~ing]** [Advance to the 19th Embedded Software Competition](https://eswcontest.or.kr/main/main.php)     
 * **[2021 08]** [NVIDIA DLI Ambassador](https://yerimoh.github.io/03-NVIDIA-DLI/)    
 * **[2021 09]** [Attend as a Teaching Ambassador in NVIDIA Technical lecture](https://yerimoh.github.io/NLPTA/): Global Startup Academy NVIDIA Technical Education "Natural Language Processing" Transformer-based natural language processing application construction        
-* **[2021 10]** [HCLT Publishing](https://yerimoh.github.io/HCLT/) 박제윤, 김민규, 오예림, 이상원, 이상원, 오영대, "An Empirical Study of Topic Classification for Korean Newspaper Headlines", HCLT 2021, (2021)        
+* **[2021 10]** [HCLT Publishing](https://yerimoh.github.io/HCLT/) "An Empirical Study of Topic Classification for Korean Newspaper Headlines", HCLT 2021, (2021)        
 * **[2021 11]** [NVIDIA GTC 21 TA](https://www.nvidia.com/ko-kr/) NVIDIA's special event, which includes the disclosure of the latest technologies and demonstrations, announces 500 selected session technologies in AI, data science, and graphics.
 
 ### Development languages that I use
