@@ -47,7 +47,7 @@ comments: false
 ✓ tesseract   
 
 
-<img src = "https://user-images.githubusercontent.com/76824611/133220622-355a358b-16c3-410c-baad-5178ed223883.png" width="40%"><img src = "https://user-images.githubusercontent.com/76824611/133220637-89f8f54c-49e5-43a8-8ebf-0060c1813969.png" width="40%"><img src = "https://user-images.githubusercontent.com/76824611/138794522-fbdca78c-da09-4ca6-ac58-8497d9463229.png" width="40%">
+<img src = "https://user-images.githubusercontent.com/76824611/133220622-355a358b-16c3-410c-baad-5178ed223883.png" width="40%" align="left"><img src = "https://user-images.githubusercontent.com/76824611/133220637-89f8f54c-49e5-43a8-8ebf-0060c1813969.png" width="40%" align="left"><img src = "https://user-images.githubusercontent.com/76824611/138794522-fbdca78c-da09-4ca6-ac58-8497d9463229.png" width="40%" align="right">
 
 
 
