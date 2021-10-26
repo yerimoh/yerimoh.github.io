@@ -21,8 +21,10 @@ comments: false
 <br/> 7th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)
 <br/> [RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
 * **[2021~ing]** [Advance to the 19th Embedded Software Competition](https://eswcontest.or.kr/main/main.php)     
-* **[2021~ing]** [NVIDIA DLI Ambassador Challenge](https://www.nvidia.com/ko-kr/)    
-* **[2021 0916]** [Attend as a Teaching Ambassador in NVIDIA Technical lecture](https://yerimoh.github.io/NLPTA/): Global Startup Academy NVIDIA Technical Education "Natural Language Processing" Transformer-based natural language processing application construction
+* **[2021 08]** [NVIDIA DLI Ambassador](https://yerimoh.github.io/03-NVIDIA-DLI/)    
+* **[2021 09]** [Attend as a Teaching Ambassador in NVIDIA Technical lecture](https://yerimoh.github.io/NLPTA/): Global Startup Academy NVIDIA Technical Education "Natural Language Processing" Transformer-based natural language processing application construction        
+* **[2021 10]** [HCLT Publishing](https://yerimoh.github.io/HCLT/) 박제윤, 김민규, 오예림, 이상원, 이상원, 오영대, "An Empirical Study of Topic Classification for Korean Newspaper Headlines", HCLT 2021, (2021)        
+* **[2021 11]** [NVIDIA GTC 21 TA](https://www.nvidia.com/ko-kr/) NVIDIA's special event, which includes the disclosure of the latest technologies and demonstrations, announces 500 selected session technologies in AI, data science, and graphics.
 
 ### Development languages that I use
 ✓ Python  
@@ -44,13 +46,23 @@ comments: false
 ✓ Pandas     
 ✓ tesseract   
 
+![16_DeepLearningInstitute_Logo_R1_RBG_CertifiedInstructor](https://user-images.githubusercontent.com/76824611/138792227-927b94ac-7be3-4cc5-bc06-ba74227ccc0c.png)
 
 
 ![image](https://user-images.githubusercontent.com/76824611/133220622-355a358b-16c3-410c-baad-5178ed223883.png)
 ![image](https://user-images.githubusercontent.com/76824611/133220637-89f8f54c-49e5-43a8-8ebf-0060c1813969.png)
 
+{% highlight html %}
+<figure class="half">
+    <a href="https://user-images.githubusercontent.com/76824611/133220622-355a358b-16c3-410c-baad-5178ed223883.png"></a>
+    <a href="https://user-images.githubusercontent.com/76824611/133220637-89f8f54c-49e5-43a8-8ebf-0060c1813969.png"></a>
+    <a href="https://user-images.githubusercontent.com/76824611/138792227-927b94ac-7be3-4cc5-bc06-ba74227ccc0c.png"></a>
+    <figcaption>Caption describing these two images.</figcaption>
+</figure>
+{% endhighlight %}
 
-{% include gallery images=images caption="HUFS / TAVE" cols=2 %}
+
+{% include gallery images=images caption="HUFS / TAVE / NVIDIA" cols=2 %}
 
 
 ## Getting Started
