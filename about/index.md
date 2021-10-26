@@ -62,6 +62,8 @@ comments: false
 <img align="" src="https://user-images.githubusercontent.com/76824611/138792227-927b94ac-7be3-4cc5-bc06-ba74227ccc0c.png" alt="Developed using Browsersync" title="Browsersync" hspace="20"/>
 <br/><br/><br/><br/><br/>
 
+![title](https://user-images.githubusercontent.com/76824611/133220622-355a358b-16c3-410c-baad-5178ed223883.png){: width="40%" height="100%"}![title](https://user-images.githubusercontent.com/76824611/138792227-927b94ac-7be3-4cc5-bc06-ba74227ccc0c.png){: width="40%" height="100%"}![title](/img/myImg.png){: width="40%" height="100%"}
+
 
 {% include gallery images=images caption="HUFS / TAVE / NVIDIA" cols=2 %}
 
