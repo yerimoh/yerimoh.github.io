@@ -1,0 +1,358 @@
+---
+title: "[11] STATISTICS: Fundamentals of Hypothesis Testing_one tail test"
+date:   2020-03-1
+excerpt: ""
+category: [Mathematics]
+layout: post
+tag:
+- Mathematics
+order: 0 
+ 
+comments: true
+---
+
+# 목차
+- [Fundamentals of Hypothesis Testing: One-Sample Tests](#fundamentals-of-hypothesis-testing--one-sample-tests)
+- [개요](#개요)
+- [INTRO](#intro)
+- [What is a Hypothesis?](#what-is-a-hypothesis-)
+  * [The Null Hypothesis, $$H_0$$](#the-null-hypothesis----h-0--)
+  * [The Alternative Hypothesis, $$H_1$$](#the-alternative-hypothesis----h-1--)
+- [The Hypothesis Testing Process](#the-hypothesis-testing-process)
+- [Z-Test of Hypothesis for the Mean](#z-test-of-hypothesis-for-the-mean)
+  * [Critical Value approach](#critical-value-approach)
+  * [p-Value approach](#p-value-approach)
+- [Risks in Decision Making Using Hypothesis Testing](#risks-in-decision-making-using-hypothesis-testing)
+- [문제](#문제)
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+ 
+👀, 🤷‍♀️ , 📜, 📝    
+이 아이콘들을 누르시면 정답, 개념 부가 설명을 보실 수 있습니다:)
+
+
+
+---
+----
+
+
+# Fundamentals of Hypothesis Testing: One-Sample Tests
+즉, 가설검증이다.     
+test라는 위딩이 들어갔다는 것은 이 추정의 결과로 인한 **의사결정**까지 한다는 것이다.     
+
+One-Sample Tests: 데이터 세트가 하나이다.      
+* One-Sample Tests: 우리나라 사람의 아이큐가 100 이상이다 -> 우리나라 사람의 아이큐라는 하나의 데이터 세트가 필요하다     
+* Two-Sample Tests: 우리나라와 일본의 아이큐를 비교해보면 우리나라가 더 높다 -> 우리나라 아이쿠 데이터 세트와 일본의 아이큐 데이터세트가 필요하다. 즉, 비교, 변화 검증에 많이 쓰인다.             
+
+
+# 개요
+아래의 도식을 하나씩 자세히 알아볼 것이다.    
+![image](https://user-images.githubusercontent.com/76824611/139967586-711a758e-4e95-4c37-8e9a-32d3ae13b142.png)
+* **σ known**: Fundamentals of Hypothesis Testing Methodology           
+* **σ Unknown**: t-Test of Hypothesis for the Mean      
+* One-Tail Tests(도식 전체에 적용)     
+* **Population Proportion**: Z-Test of Hypothesis for the Proportion     
+* Potential Hypothesis Testing Pitfalls and Ethical Issues(추가)   
+
+
+-------
+
+# INTRO
+
+**[One-Tail Tests(도식 전체에 적용)]**     
+![image](https://user-images.githubusercontent.com/76824611/142053694-70269546-d589-4c4a-867a-f8a9d5ad1d89.png)
+* **two-tail test**: 지금까지 배운것으로 이게 맞냐 아니냐의 문제    
+![image](https://user-images.githubusercontent.com/76824611/144459970-b148715e-b424-4161-abbf-de42bd4a906a.png)
+* **one-tail test**: 이거보다 작냐 이거보다 크냐의 문제       
+![image](https://user-images.githubusercontent.com/76824611/144459986-87a8c59b-08ad-4564-87f1-c6d365cbddfb.png)
+ 
+
+
+
+------
+-----
+
+# One-Tail Tests 종류     
+* Lower-Tail Tests
+![image](https://user-images.githubusercontent.com/76824611/144460040-c803a0dc-955f-4c0d-9786-46d841db56bd.png)
+* Upper-Tail Tests
+![image](https://user-images.githubusercontent.com/76824611/144460026-0a7b3996-fdca-4558-9fbe-67b490b81901.png)
+
+
+
+----
+
+
+## Lower-Tail Tests
+![image](https://user-images.githubusercontent.com/76824611/144460918-c9a432ce-aaf1-4092-bf3e-ca4de644b9a8.png)
+
+**[가설의 방향]**    
+**alternative hypothesis $$H_1$$** is focused on the **lower tail**         
+[$$H_0$$, $$H_1$$ 더 알아보기](https://yerimoh.github.io/MATH10/#what-is-a-hypothesis)        
+(EX)     
+* $$H_0 : μ$$ **$$>=$$** $$3$$ ➡️ = 이 들어가는 이유는 현재의 것을 accept하기 때문이다.              
+* $$H_1 : μ < 3$$      
+
+
+**[critical value]**     
+There is **only one critical value**, since the rejection area is in only one tail       
+또한 [a](https://yerimoh.github.io/MATH10/#critical-value-approach)값이 a/2값 (two-tail test) 이 아닌 a그 자체 이다.
+
+
+
+-----
+
+## Upper-Tail Tests
+![image](https://user-images.githubusercontent.com/76824611/144461120-048e0e88-56d4-4ab0-8922-f2693b05d59c.png)
+
+**[가설의 방향]**    
+**alternative hypothesis $$H_1$$** is focused on the **upper tail**         
+[$$H_0$$, $$H_1$$ 더 알아보기](https://yerimoh.github.io/MATH10/#what-is-a-hypothesis)        
+(EX)     
+* $$H_0 : μ$$ **$$<=$$** $$3$$        
+* $$H_1 : μ > 3$$      
+
+
+
+**[critical value]**     
+There is **only one critical value**, since the rejection area is in only one tail     
+또한 [a](https://yerimoh.github.io/MATH10/#critical-value-approach)값이 a/2값 (two-tail test) 이 아닌 a그 자체 이다.   
+
+
+
+----
+----
+
+# Example: Upper-Tail t Test for Mean (𝜎)
+그럼 이제 위의 개념을 이용해 문제를 풀어보며 이해를 해보자!    
+그럼 무슨 개념인지 더 와닿을 것이다.   
+
+## PROBLEM
+A phone industry manager thinks that customer monthly cell phone bills have increased, and **now average over $52 per month**. The company wishes to test this claim. (Assume a normal population)
+
+➡️  **now average over $52 per month**: 52보다는 많다 이므로 one-tail 이라는 것을 알 수 있다.     
+
+**[Form hypothesis test:]**   
+* $$H_0 : μ$$ **$$<=$$** $$52$$   
+ * the mean is not over $52 per month        
+* $$H_1 : μ > 52$$    
+ * the mean is greater than $52 per month   
+
+
+## SOLVE
+**1) Find Rejection Region**      
+* Suppose that a = 0.10 is chosen for this test and n = 25.    
+* Find the rejection region:    
+![image](https://user-images.githubusercontent.com/76824611/144469587-d3fd2a8f-1ff1-40e5-996e-d9352bf133ef.png)
+
+
+**2) Test Statistic**    
+Obtain sample and compute the test statistic   
+Suppose a sample is taken with the following results:      
+* n = 25, = 53.1, and S = 10
+* Then the test statistic is
+
+
+----
+----
+
+
+# 문제
+
+**1. Which of the following would be an appropriate null hypothesis?**    
+a) The population proportion is less than 0.65.   
+b) The sample proportion is less than 0.65.     
+c) The population proportion is no less than 0.65.    
+d) The sample proportion is no less than 0.65.     
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+ 📌 Always contains “=“, or “≤”, or “≥” sign   
+ 즉 거의 대부분의 사람이 믿고 있으므로 항상 population parameter만 씀(not about a sample statistic)    
+ 
+ 
+ c) The population proportion is no less than 0.65.    
+ less하지 않다는거니까 같거나 크다 라는 “≥”  뜻임   
+ 
+</div>
+</details>  
+
+**2. Which of the following would be an appropriate alternative hypothesis?**  
+a) The mean of a population is equal to 55.   
+b) The mean of a sample is equal to 55.   
+c) The mean of a population is greater than 55.    
+d) The mean of a sample is greater than 55.    
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+
+📌 Never contains the “=“, or “≤”, or “≥” sign    
+즉 거의 대부분의 사람이 믿고 있으므로 항상 population parameter만 씀(not about a sample statistic)    
+ 
+c) The mean of a population is greater than 55.      
+ 
+</div>
+</details>  
+
+**3. (T/F) The director of the city Park and Recreation Department claims that the mean distance people travel to the city's greenbelt is 5.0 miles. Assume that the population standard deviation is known to be 1.2 miles and the significance level to be used to test the hypothesis is 0.01 when a sample size of n = 64 people are surveyed. Given this information, if the sample mean is 5.9 miles, the null hypothesis should be rejected.**   
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+일단 맞는지 아닌지 보는 것 이므로 two-tail test가 맞다.     
+* mean 5.0 miles   
+* standard deviation 1.2 miles   
+* test the hypothesis is 0.01 when a sample size of n = 64   
+* if the sample mean is 5.9 miles   
+
+이 조건들을 정리해서 구해보자
+ 
+![image](https://user-images.githubusercontent.com/76824611/140012390-e208f973-61a5-48e9-b3f6-d4b2e9f4f830.png)
+ 
+![image](https://user-images.githubusercontent.com/76824611/140012394-a993460b-087a-4255-94bf-246e3caba15b.png)
+ 
+![image](https://user-images.githubusercontent.com/76824611/140012402-341dedab-f9e6-40da-9125-0e4c6a64b40f.png)
+ 
+이제 주어진 5.9를 test statistic으로 변형해보면,   
+ 
+![image](https://user-images.githubusercontent.com/76824611/140012447-e1d7417d-7cf9-4265-bc76-a5f5bce96233.png)
+
+즉 📌conclude there is sufficient evidence📌 that sample mean is 5.9 miles is rejected     
+ 
+**TRUE**
+ 
+</div>
+</details>  
+
+**4. An entrepreneur is considering the purchase of a coin-operated laundry. The current owner claims that over the past 5 years, the average daily revenue was $675 with a standard deviation of $75. A sample of 30 days reveals a daily average revenue of $625. If you were to test the null hypothesis that the daily average revenue was $675 and decide not to reject the null hypothesis, what can you conclude?**       
+a) There is not enough evidence to conclude that the daily average revenue was $675.   
+b) There is not enough evidence to conclude that the daily average revenue was not $675.     
+c) There is enough evidence to conclude that the daily average revenue was $675.    
+d) There is enough evidence to conclude that the daily average revenue was not $675.   
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+If you were to test the null hypothesis that the daily average revenue was $675 and **decide not to reject** the null hypothesis
+
+675가 아니라는 명확한 증거가 없다.   
+
+ 
+📌 **decide not to reject** 얘는 절대 enough evidence가 아님     
+
+**b) There is not enough evidence to conclude that the daily average revenue was not $675.**     
+ 
+</div>
+</details>  
+
+
+**5. (T/F) A bank tests the null hypothesis that the mean age of the bank's mortgage holders is 45. They take a sample and calculate a p-value of 0.0202. The null hypothesis would be rejected at a significance level of α = 0.05.**       
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+p-value  0.0202 보다 α 0.05 가 더 큼
+                   
+이므로 reject 된다   
+                   
+**TRUE**                    
+ 
+</div>
+</details>  
+
+
+**[TABLE 9]**       
+A student claims that he can correctly identify whether a person is a business major or an agriculture major by the way the person dresses. Suppose in actuality that if someone is a business major, he can correctly identify that person as a business major 87% of the time. When a person is an agriculture major, the student will incorrectly identify that person as a business major 16% of the time. Presented with one person and asked to identify the major of this person (who is either a business or agriculture major), he considers this to be a hypothesis test with the null hypothesis being that the person is a business major and the alternative that the person is an agriculture major.      
+
+
+**6. Referring to Table 9, what would be a Type I error?**      
+a) Saying that the person is a business major when in fact the person is a business major.     
+b) Saying that the person is a business major when in fact the person is an agriculture major.   
+c) Saying that the person is an agriculture major when in fact the person is a business major.   
+d) Saying that the person is an agriculture major when in fact the person is an agriculture major.    
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+$$H_0$$: he null hypothesis being that the person is a business major       
+$$H_1$$: the alternative that the person is an agriculture major    
+ 
+Type I Error: 상식이 맞는데 상식이 아니야라고 잘못 추정 
+c) Saying that the person is an agriculture major when in fact the person is a business major. 
+ 
+</div>
+</details>  
+
+
+**7. Referring to Table 9, what would be a Type II error?**     
+a) Saying that the person is a business major when in fact the person is a business major.    
+b) Saying that the person is a business major when in fact the person is an agriculture major.     
+c) Saying that the person is an agriculture major when in fact the person is a business major.      
+d) Saying that the person is an agriculture major when in fact the person is an agriculture major.     
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+  
+$$H_0$$: he null hypothesis being that the person is a business major       
+$$H_1$$: the alternative that the person is an agriculture major    
+ 
+Type II Error: 상식이 아닌데도 불구하고 상식이야라고 잘못 추정
+b) Saying that the person is a business major when in fact the person is an agriculture major.
+ 
+</div>
+</details>  
+
+**8. True or False: For a given level of significance, if the sample size is increased, the probability of committing a Type I error will increase.**   
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+![image](https://user-images.githubusercontent.com/76824611/140013692-a6ba66a5-4077-41c3-9371-12187799e4a4.png)
+
+sample size is increased -> 데이터가 뾰족해짐   
+줄어듦      
+False 
+ 
+</div>
+</details>
+
+**9. True or False: For a given level of significance, if the sample size is increased, the probability of committing a Type II error will increase.**       
+
+<details>
+<summary>📜 정답 보기</summary>
+<div markdown="1">
+  
+![image](https://user-images.githubusercontent.com/76824611/140013692-a6ba66a5-4077-41c3-9371-12187799e4a4.png)
+
+sample size is increased -> 데이터가 뾰족해짐   
+줄어듦      
+False 
+ 
+</div>
+</details>
+
+
+
