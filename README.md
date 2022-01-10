@@ -16,7 +16,7 @@
 * Page for sharing projects
 * Optional background image
 * Simple navigation menu
-* MathJax support
+* MathJax support 
 
 ## Preview
 
