@@ -9,7 +9,7 @@ comments: false
 <center>Always with Passion and Joy :D</center>
 
 ## Features
-* **[2021 03 ~]** 4th Industrial Revolution Center in Seodaemun-gu After-school instructor for basic IT studies.   
+* **[2021 03 ~]** [4th Industrial Revolution Center in Seodaemun-gu](https://lle.jongno.go.kr/site/main/archive/post/%EC%84%9C%EB%8C%80%EB%AC%B8%EA%B5%AC-4%EC%B0%A8-%EC%82%B0%EC%97%85%ED%98%81%EB%AA%85-%EC%8B%9C%EB%8C%80-%EB%8C%80%EB%B9%84-%EA%B5%90%EC%9C%A1%EC%84%BC%ED%84%B0-%EB%A7%8C%EB%93%A0%EB%8B%A4?cp=4&sortDirection=DESC&listType=list&arcSubCategory=LLE&catId=1) After-school instructor for basic IT studies.   
 * **[2021 01 ~]**  Building Transformer-Based Natural Language Processing Applications Instructor Challenge      
 * **[2021 01]** UST - KISTI DLI workshop TA (UST For teachers/students)     
 * **[2021 12]** [NVIDIA DLI Instructor](https://yerimoh.github.io/Instructor/)      
