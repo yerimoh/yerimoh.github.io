@@ -9,23 +9,36 @@ comments: false
 <center>Always with Passion and Joy :D</center>
 
 ## Features
-* **[2016~2018]** Graduated from [Cheongdam High School](http://chungdam.sen.hs.kr/index.do)
-* **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies
-<br/>major) [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology 
-<br/>double major) [AI Convergence](http://soft.hufs.ac.kr/)  
-[Certificate](https://user-images.githubusercontent.com/76824611/125048882-54cb4780-e0db-11eb-8ed2-cf6b458fa042.png)          
-* **[2021]** [AI Education Center Coding Zone Assistant](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/certification.pdf)     
+* **[2021 01 ~]**  Building Transformer-Based Natural Language Processing Applications Instructor Challenge      
+* **[2021 01]** UST - KISTI DLI workshop TA (UST For teachers/students)     
+* **[2021 12]** [NVIDIA DLI Instructor](https://yerimoh.github.io/Instructor/)      
+* **[2021 11]** [NVIDIA GTC 21 TA](https://www.nvidia.com/ko-kr/) NVIDIA's special event, which includes the disclosure of the latest technologies and demonstrations, announces 500 selected session technologies in AI, data science, and graphics.     
+* **[2021 11]** [Advance to the 19th Embedded Software Competition ](https://eswcontest.or.kr/main/main.php) Embedded Sw.System Industry Association President Award   
+* **[2021 10]** [HCLT Publishing](https://yerimoh.github.io/HCLT/) "An Empirical Study of Topic Classification for Korean Newspaper Headlines", HCLT 2021, (2021)  
+* **[2021 09]** [Attend as a Teaching Ambassador in NVIDIA Technical lecture](https://yerimoh.github.io/NLPTA/): Global Startup Academy NVIDIA Technical Education "Natural Language Processing" Transformer-based natural language processing application construction      
+* **[2021 08]** [NVIDIA DLI Ambassador](https://yerimoh.github.io/03-NVIDIA-DLI/)     
 * **[2019~ing]** [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 <br/> 6th) [Data Analysis Project using Python Library](https://yerimoh.github.io/first-project/) 
 <br/> 7th) [management team](https://www.instagram.com/p/CKvZreGhiWh/)
-<br/> 7th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)
+<br/> 7th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)     
+       * Hosting lectures at the 4th Industrial Revolution Center in Seodaemun-gu   
+       * inviting lectures by incumbent developers from large companies such as Naver and LG      
+       * hosting NVIDIA DLI lectures
 <br/> [RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
-* **[2021 11]** [Advance to the 19th Embedded Software Competition ](https://eswcontest.or.kr/main/main.php) Embedded Sw.System Industry Association President Award     
-* **[2021 08]** [NVIDIA DLI Ambassador](https://yerimoh.github.io/03-NVIDIA-DLI/)    
-* **[2021 09]** [Attend as a Teaching Ambassador in NVIDIA Technical lecture](https://yerimoh.github.io/NLPTA/): Global Startup Academy NVIDIA Technical Education "Natural Language Processing" Transformer-based natural language processing application construction        
-* **[2021 10]** [HCLT Publishing](https://yerimoh.github.io/HCLT/) "An Empirical Study of Topic Classification for Korean Newspaper Headlines", HCLT 2021, (2021)        
-* **[2021 11]** [NVIDIA GTC 21 TA](https://www.nvidia.com/ko-kr/) NVIDIA's special event, which includes the disclosure of the latest technologies and demonstrations, announces 500 selected session technologies in AI, data science, and graphics.     
-* **[2021 12]** [NVIDIA DLI Instructor](https://yerimoh.github.io/Instructor/)    
+* **[2021]** [AI Education Center Coding Zone Assistant](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/certification.pdf)  
+* **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies
+<br/>major) [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology 
+<br/>double major) [AI Convergence](http://soft.hufs.ac.kr/)  
+[Certificate](https://user-images.githubusercontent.com/76824611/125048882-54cb4780-e0db-11eb-8ed2-cf6b458fa042.png)     
+* **[2016~2018]** Graduated from [Cheongdam High School](http://chungdam.sen.hs.kr/index.do)
+     
+
+    
+  
+
+  
+
+
 
 ### Development languages that I use
 ✓ Python  
