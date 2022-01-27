@@ -21,10 +21,10 @@ comments: false
 * **[2019~ing]** [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 <br/> 6th) [Data Analysis Project using Python Library](https://yerimoh.github.io/first-project/) 
 <br/> 7th) [management team](https://www.instagram.com/p/CKvZreGhiWh/)
-<br/> 8,9th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)     
-       * Hosting lectures at the 4th Industrial Revolution Center in Seodaemun-gu   
-       * inviting lectures by incumbent developers from large companies such as Naver and LG      
-       * hosting NVIDIA DLI lectures
+<br/> 8,9th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)       
+       - Hosting lectures at the 4th Industrial Revolution Center in Seodaemun-gu   
+       - inviting lectures by incumbent developers from large companies such as Naver and LG      
+       - hosting NVIDIA DLI lectures
 <br/> [RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
 * **[2021]** [AI Education Center Coding Zone Assistant](https://raw.githubusercontent.com/yerimoh/yerimoh.github.io/main/assets/img/certification.pdf)  
 * **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies
