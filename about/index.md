@@ -9,6 +9,7 @@ comments: false
 <center>Always with Passion and Joy :D</center>
 
 ## Features
+* **[2021 03 ~]** 4th Industrial Revolution Center in Seodaemun-gu After-school instructor for basic IT studies.   
 * **[2021 01 ~]**  Building Transformer-Based Natural Language Processing Applications Instructor Challenge      
 * **[2021 01]** UST - KISTI DLI workshop TA (UST For teachers/students)     
 * **[2021 12]** [NVIDIA DLI Instructor](https://yerimoh.github.io/Instructor/)      
@@ -20,7 +21,7 @@ comments: false
 * **[2019~ing]** [TAVE](https://blog.naver.com/t-ave) _Fourth Industrial Revolution Research
 <br/> 6th) [Data Analysis Project using Python Library](https://yerimoh.github.io/first-project/) 
 <br/> 7th) [management team](https://www.instagram.com/p/CKvZreGhiWh/)
-<br/> 7th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)     
+<br/> 8,9th) [president](https://www.instagram.com/p/CSCHtqLlQcM/)     
        * Hosting lectures at the 4th Industrial Revolution Center in Seodaemun-gu   
        * inviting lectures by incumbent developers from large companies such as Naver and LG      
        * hosting NVIDIA DLI lectures
