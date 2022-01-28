@@ -32,7 +32,7 @@ comments: false
 <br/>major) [GBT](http://hufsgbtgbt.cafe24.com/) Global Business & Technology 
 <br/>double major) [AI Convergence](http://soft.hufs.ac.kr/)  
 [Certificate](https://user-images.githubusercontent.com/76824611/125048882-54cb4780-e0db-11eb-8ed2-cf6b458fa042.png)     
-* **[2016~2018]** Graduated from [Cheongdam High School](http://chungdam.sen.hs.kr/index.do)
+* **[2016~2018]** Graduated from [Cheongdam High School](http://chungdam.sen.hs.kr/index.do) 
      
 
     
