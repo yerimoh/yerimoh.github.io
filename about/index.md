@@ -11,12 +11,13 @@ comments: false
 ## Features
 🖥️ if you want to sum of this, click my [CV](https://github.com/yerimoh/yerimoh.github.io/files/7949354/CV_yerimOh.1.pdf)   
 
-* **[2021 03 ~]** [4th Industrial Revolution Center in Seodaemun-gu](https://lle.jongno.go.kr/site/main/archive/post/%EC%84%9C%EB%8C%80%EB%AC%B8%EA%B5%AC-4%EC%B0%A8-%EC%82%B0%EC%97%85%ED%98%81%EB%AA%85-%EC%8B%9C%EB%8C%80-%EB%8C%80%EB%B9%84-%EA%B5%90%EC%9C%A1%EC%84%BC%ED%84%B0-%EB%A7%8C%EB%93%A0%EB%8B%A4?cp=4&sortDirection=DESC&listType=list&arcSubCategory=LLE&catId=1) After-school instructor for basic IT studies.   
-* **[2021 01 ~]**  [Building Transformer-Based Natural Language Processing Applications]( https://www.nvidia.com/ko-kr/training/instructor-led-workshops/natural-language-processing/) Instructor Challenge      
+* **[2021 04 ~]** [4th Industrial Revolution Center in Seodaemun-gu](https://lle.jongno.go.kr/site/main/archive/post/%EC%84%9C%EB%8C%80%EB%AC%B8%EA%B5%AC-4%EC%B0%A8-%EC%82%B0%EC%97%85%ED%98%81%EB%AA%85-%EC%8B%9C%EB%8C%80-%EB%8C%80%EB%B9%84-%EA%B5%90%EC%9C%A1%EC%84%BC%ED%84%B0-%EB%A7%8C%EB%93%A0%EB%8B%A4?cp=4&sortDirection=DESC&listType=list&arcSubCategory=LLE&catId=1) After-school instructor for basic IT studies.   
+* **[2021 04 ~]**  [Building Transformer-Based Natural Language Processing Applications]( https://www.nvidia.com/ko-kr/training/instructor-led-workshops/natural-language-processing/) Instructor Challenge      
+* **[2021 04]** [NVIDIA DLI Instructor in University of Seoul]           
 * **[2021 03]** [NVIDIA GTC 22 TA](https://www.nvidia.com/ko-kr/) NVIDIA's special event, which includes the disclosure of the latest technologies and demonstrations, announces 500 selected session technologies in AI, data science, and graphics.     
 * **[2021 03]** [3rd AI PARK CHALLENGE](https://bit.ly/34VFbkh) To advance to the finals   
 * **[2021 01]** UST - [KISTI](https://www.kisti.re.kr/) DLI workshop TA (UST For teachers/students)     
-* **[2021 12]** [NVIDIA DLI Instructor](https://yerimoh.github.io/Instructor/)      
+* **[2021 12]** [NVIDIA DLI Instructor in Dongguk University](https://yerimoh.github.io/Instructor/)      
 * **[2021 11]** [NVIDIA GTC 21 TA](https://www.nvidia.com/ko-kr/) NVIDIA's special event, which includes the disclosure of the latest technologies and demonstrations, announces 500 selected session technologies in AI, data science, and graphics.     
 * **[2021 11]** [Advance to the 19th Embedded Software Competition ](https://eswcontest.or.kr/main/main.php) Embedded Sw.System Industry Association President Award   
 * **[2021 10]** [HCLT Publishing](https://yerimoh.github.io/HCLT/) "An Empirical Study of Topic Classification for Korean Newspaper Headlines", HCLT 2021, (2021)  
