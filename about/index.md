@@ -31,7 +31,7 @@ comments: false
        - inviting lectures by incumbent developers from large companies such as Naver and LG      
        - hosting NVIDIA DLI lectures   
        - [MOU with ALPACO](https://corp.alpaco.co.kr/)      
-       - [MOU with READYME](https://www.readyme.kr/)    
+       - [MOU with READYME](https://www.readyme.kr/)
 <br/> [RESEARCH](https://taveresearch.github.io/about/)) Deep Learning and Machine Learning 
 * **[2021]** [AI Education Center Coding Zone Assistant](https://drive.google.com/file/d/12pUaaA1m7bl3LLIiVGWsNkXdR40DU-Y3/view?usp=sharing)  
 * **[2019~ing]** [HUFS](http://www.hufs.ac.kr/) Hankuk University of Foreign Studies
