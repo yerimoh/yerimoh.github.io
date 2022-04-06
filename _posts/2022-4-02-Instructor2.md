@@ -46,6 +46,10 @@ IT 동아리로 현직자부터 석박사, 대학원생 모두가 정말 열정�
 🔹 [blog](https://blog.naver.com/t-ave)    
 🔹[insta](https://www.instagram.com/tave_wave/)       
 
+![image](https://user-images.githubusercontent.com/76824611/161920384-2fbc1f48-1755-4831-82dc-2a0ec8169660.png)
+![image](https://user-images.githubusercontent.com/76824611/161920402-16b07269-1c53-47aa-a7a8-57eb9a0f30a7.png)
+![image](https://user-images.githubusercontent.com/76824611/161920417-57d00035-f7b9-46df-838e-8fca1ad73e58.png)
+![image](https://user-images.githubusercontent.com/76824611/161920429-decbc71d-60c0-4ae0-8b5f-b5ce8ff945fb.png)
 
 
 
