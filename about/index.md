@@ -74,7 +74,7 @@ comments: false
 
 
 
-{% include gallery images=images caption="HUFS / TAVE / NVIDIA" cols=2 %}
+{% include gallery images=images caption="HUFS / TAVE / NVIDIA/Korea University" cols=2 %}
 
 
 
