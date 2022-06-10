@@ -11,7 +11,7 @@ comments: false
 ## Features
 🖥️ if you want to sum of this, click my [CV](https://github.com/yerimoh/yerimoh.github.io/files/7949354/CV_yerimOh.1.pdf)   
 
-* **[2022 06]** [글로벌창업사관학교](https://www.kised.or.kr/menu.es?mid=a10208030000) NVIDIA Fundamentals of Deep Learning  TA    
+* **[2022 06]** [글로벌창업사관학교](https://www.kised.or.kr/menu.es?mid=a10208030000) Fundamentals of Deep Learning  TA    
 * **[2022 05]** [MOU with AlPACO](https://www.getnews.co.kr/news/articleView.html?idxno=585184)    
 * **[2022 04~]** [Korea University Data Intelligence Lab 학부연구생](http://dilab.korea.ac.kr/)   
 * **[2022 04~]**  [Building Transformer-Based Natural Language Processing Applications]( https://www.nvidia.com/ko-kr/training/instructor-led-workshops/natural-language-processing/) Instructor Challenge      
