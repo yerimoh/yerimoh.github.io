@@ -11,8 +11,8 @@ comments: false
 ## Features
 🖥️ if you want to sum of this, click my [CV](https://github.com/yerimoh/yerimoh.github.io/files/7949354/CV_yerimOh.1.pdf)   
 
-* **[2022 08]** [Inha University](https://www.inha.ac.kr/kr/index.do) Deep Learning Basic Natural Language Processing TA     
-* **[2022 07]** [서대문구 4차산업 혁명센터](http://360movie.co.kr/sdm_vr_new) 주강사: [파이썬 기초부터 시작하는 실생활 데이터 분석](https://www.sdm.go.kr/lll/user/lectureinfo/lectureInfoView.do?idx=1597)    
+* **[2022 08(예정)]** [Inha University](https://www.inha.ac.kr/kr/index.do) Deep Learning Basic Natural Language Processing TA     
+* **[2022 07~09]** [서대문구 4차산업 혁명센터](http://360movie.co.kr/sdm_vr_new) 주강사: [파이썬 기초부터 시작하는 실생활 데이터 분석](https://www.sdm.go.kr/lll/user/lectureinfo/lectureInfoView.do?idx=1597)    
 * **[2022 06]** [글로벌창업사관학교](https://www.kised.or.kr/menu.es?mid=a10208030000) Fundamentals of Deep Learning  TA   
 * **[2022 1학기]** [한국외국어대학교 코딩존 조교](https://drive.google.com/file/d/1gvDHBSUpDSntLIi1puqeuRAhd6RthrpC/view?usp=sharing)      
 * **[2022 05]** [MOU with AlPACO](https://www.getnews.co.kr/news/articleView.html?idxno=585184)    
