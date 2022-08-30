@@ -9,99 +9,32 @@ comments: true
 
 ## HTML Elements
 
-Below is just about everything you'll need to style in the theme. Check the source code to see the many embedded elements within paragraphs.
-
-# Heading 1
-
-## Heading 2
-
-### Heading 3
-
-#### Heading 4
-
-##### Heading 5
-
-###### Heading 6
-
-### Body text
-
-Lorem ipsum dolor sit amet, test link adipiscing elit. **This is strong**. Nullam dignissim convallis est. Quisque aliquam.
-
-![Smithsonian Image](https://mmistakes.github.io/minimal-mistakes/images/3953273590_704e3899d5_m.jpg)
-{: .image-right}
-
-*This is emphasized*. Donec faucibus. Nunc iaculis suscipit dui. 53 = 125. Water is H2O. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl. The New York Times (That’s a citation). Underline.Maecenas ornare tortor. Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.
-
-HTML and CSS are our tools. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus. Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.
-
-### Blockquotes
-
-> Lorem ipsum dolor sit amet, test link adipiscing elit. Nullam dignissim convallis est. Quisque aliquam.
-
-## List Types
-
-### Ordered Lists
-
-1. Item one
-   1. sub item one
-   2. sub item two
-   3. sub item three
-2. Item two
-
-### Unordered Lists
-
-* Item one
-* Item two
-* Item three
-
-## Tables
-
-| Header1 | Header2 | Header3 |
-|:--------|:-------:|--------:|
-| cell1   | cell2   | cell3   |
-| cell4   | cell5   | cell6   |
-|----
-| cell1   | cell2   | cell3   |
-| cell4   | cell5   | cell6   |
-|=====
-| Foot1   | Foot2   | Foot3
-{: rules="groups"}
-
-## Code Snippets
-
-{% highlight css %}
-#container {
-  float: left;
-  margin: 0 -240px 0 0;
-  width: 100%;
-}
-{% endhighlight %}
-
-## Buttons
-
-Make any link standout more when applying the `.btn` class.
-
-{% highlight html %}
-<a href="#" class="btn btn-success">Success Button</a>
-{% endhighlight %}
-
-<div markdown="0"><a href="#" class="btn">Primary Button</a></div>
-<div markdown="0"><a href="#" class="btn btn-success">Success Button</a></div>
-<div markdown="0"><a href="#" class="btn btn-warning">Warning Button</a></div>
-<div markdown="0"><a href="#" class="btn btn-danger">Danger Button</a></div>
-<div markdown="0"><a href="#" class="btn btn-info">Info</a></div>
-
-## KBD
-
-You can also use `<kbd>` tag for keyboard buttons.
-
-{% highlight html %}
-<kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
-{% endhighlight %}
-
-Press <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> to move your car. **Midtown Maddness!!**
-
-## Notices
-
-**Watch out!** You can also add notices by appending `{: .notice}` to a paragraph.
-{: .notice}
+A major challenge that hinders the development of task-
+oriented dialog systems is the design of dialog schema, typ-
+ically composed of a set of intents with corresponding slots,
+to capture and handle the domain-specific dialog states. Pre-
+vious work on schema-guided dialog (Rastogi et al. 2020a;
+2020b; Lee et al. 2021) focused on data-efficient joint di-
+alog state modeling across domains and zero-shot general-
+ization to new APIs. However for new emerging domains
+and novel services, the identification of key intents of such
+schema typically requires domain expertise and/or laborious
+analysis of a large volume of conversation transcripts. With
+increasing demand for and adoption of virtual assistants, re-
+cent work has investigated ways to accelerate schema design
+through the automatic induction of intents (Hakkani-Tur et  ̈
+al. 2015; Haponchyk et al. 2018; Perkins and Yang 2019;
+Chatterjee and Sengupta 2020) or the induction of slots and
+dialogue states (Hudecek, Du ˇ sek, and Yu 2021; Min et al. ˇ
+2020). However, a lack of realistic shared benchmarks with
+public datasets, metrics, and task definitions has made it dif-
+ficult to track progress in this area.
+This track aims to evaluate methods for the automatic in-
+duction of customer intents in a realistic setting of customer
+service interactions between human agents and customers.
+As complete conversations will be provided, participants
+can make use of information in both agent and customer
+turns. To further encourage new research directions in the
+automatic discovery of intents, we also propose an open in-
+tent induction task that goes beyond the clustering paradigm
+commonly used for evaluation of intent discovery.
