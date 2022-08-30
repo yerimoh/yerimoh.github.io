@@ -7,21 +7,45 @@
 **[Moon](https://taylantatli.github.io/Moon)** is a minimal, one column jekyll theme.
 
 
+A major challenge that hinders the development of task-
+oriented dialog systems is the design of dialog schema, typ-
+ically composed of a set of intents with corresponding slots,
 
-Model Variations
-To evaluate the importance of different components of the Transformer, we varied our base model
-in different ways, measuring the change in performance on English-to-German translation on the
-development set, newstest2013. We used beam search as described in the previous section, but no
-checkpoint averaging. We present these results in Table 3.
-In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions,
-keeping the amount of computation constant, as described in Section 3.2.2. While single-head
-attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.
-5We used values of 2.8, 3.7, 6.0 and 9.5 TFLOPS for K80, K40, M40 and P100, respectively.
-8
-Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base
-model. All metrics are on the English-to-German translation development set, newstest2013. Listed
-perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to
-per-word perplexities.
+to capture and handle the domain-specific dialog states. Pre-
+vious work on schema-guided dialog (Rastogi et al. 2020a;
+
+2020b; Lee et al. 2021) focused on data-efficient joint di-
+alog state modeling across domains and zero-shot general-
+ization to new APIs. However for new emerging domains
+
+and novel services, the identification of key intents of such
+schema typically requires domain expertise and/or laborious
+analysis of a large volume of conversation transcripts. With
+
+increasing demand for and adoption of virtual assistants, re-
+cent work has investigated ways to accelerate schema design
+
+through the automatic induction of intents (Hakkani-Tur et  ̈
+al. 2015; Haponchyk et al. 2018; Perkins and Yang 2019;
+Chatterjee and Sengupta 2020) or the induction of slots and
+dialogue states (Hudecek, Du ˇ sek, and Yu 2021; Min et al. ˇ
+2020). However, a lack of realistic shared benchmarks with
+
+public datasets, metrics, and task definitions has made it dif-
+ficult to track progress in this area.
+
+This track aims to evaluate methods for the automatic in-
+duction of customer intents in a realistic setting of customer
+
+service interactions between human agents and customers.
+As complete conversations will be provided, participants
+can make use of information in both agent and customer
+turns. To further encourage new research directions in the
+
+automatic discovery of intents, we also propose an open in-
+tent induction task that goes beyond the clustering paradigm
+
+commonly used for evaluation of intent discovery.
 
 ## Features 
 * Minimal, you can focus on your content 
