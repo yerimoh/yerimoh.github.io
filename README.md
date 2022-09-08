@@ -1,10 +1,22 @@
 # Moon Jekyll Theme [![Donate](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.me/taylantatli/0usd)  
    
-## `Sorry guys but there will be no update until I buy a new laptop.`
-    
-######(If you like this theme or using it, please give a :star: for motivation.)
-
-**[Moon](https://taylantatli.github.io/Moon)** is a minimal, one column jekyll theme.
+   
+ ===
+ 
+ Increase in the use of Electronic Health Records
+(EHRs) has facilitated advances in predictive healthcare. However, EHR systems lack
+a unified code system for representing medical concepts. Heterogeneous formats of EHR
+present a barrier for the training and deployment of state-of-the-art deep learning models
+at scale. To overcome this problem, we introduce Description-based Embedding, DescEmb,
+a code-agnostic description-based representation learning framework for predictive modeling
+on EHR. DescEmb takes advantage of the flexibility of neural language models while maintaining a neutral approach that can be combined with prior frameworks for task-specific
+representation learning or predictive modeling.
+We test our model’s capacity on various experiments including prediction tasks, transfer learning and pooled learning. DescEmb shows higher
+performance in overall experiments compared
+to the code-based approach, opening the door
+to a text-based approach in predictive healthcare research that is not constrained by EHR
+structure nor special domain knowledge.
+ ===
 
 
 
