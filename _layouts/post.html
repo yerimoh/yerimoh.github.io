@@ -111,21 +111,20 @@ layout: compress
     }
 
   }, false);
-</script>
-                    
-            "author": {
-                "@type": "Person",
-                "name": "{{ author.display_name }}",
-                {% if author.photo %}
-                "image": "{{ author.photo }}",
-                {% else %}
-                "image": {{ "/assets/img/user.jpg" | prepend: site.baseurl | prepend: site.url }},
-                {% endif %}
-                "jobTitle": "{{ author.position }}",
-                "url": "{{ author.url | prepend: site.baseurl | prepend: site.url }}",
-                "sameAs": [
-                    {{ author_urls | split: "," | join: "," }}
-</script>
+                       
+                                "author": {
+            "@type": "Person",
+            "name": "{{ author.display_name }}",
+            {% if author.photo %}
+            "image": "{{ author.photo }}",
+            {% else %}
+            "image": {{ "/assets/img/user.jpg" | prepend: site.baseurl | prepend: site.url }},
+            {% endif %}
+            "jobTitle": "{{ author.position }}",
+            "url": "{{ author.url | prepend: site.baseurl | prepend: site.url }}",
+            "sameAs": [
+                {{ author_urls | split: "," | join: "," }}
+
                     
             <script src="https://utteranc.es/client.js"
                 repo="yerimoh/blog-comments"
