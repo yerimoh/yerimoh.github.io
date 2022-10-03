@@ -10,7 +10,7 @@ comments: false
 
 ## Features
 🖥️ if you want to sum of this, click my [CV](https://github.com/yerimoh/yerimoh.github.io/files/7949354/CV_yerimOh.1.pdf)   
-
+* **[2022 09]** [제13회 외대재직직원장학금(씨앗)]()
 * **[2022 08]** [Inha University Deep Learning Basic Natural Language Processing TA](https://www.inha.ac.kr/kr/950/subview.do?&enc=Zm5jdDF8QEB8JTJGYmJzJTJGa3IlMkY4JTJGMzE4MDMlMkZhcnRjbFZpZXcuZG8lM0ZwYWdlJTNEMSUyNnNyY2hDb2x1bW4lM0RzaiUyNnNyY2hXcmQlM0QlRUIlOTQlQTUlRUIlOUYlQUMlRUIlOEIlOUQlMjZiYnNDbFNlcSUzRCUyNmJic09wZW5XcmRTZXElM0QlMjZyZ3NCZ25kZVN0ciUzRCUyNnJnc0VuZGRlU3RyJTNEJTI2aXNWaWV3TWluZSUzRGZhbHNlJTI2cGFzc3dvcmQlM0QlMjY=)        
 * **[2022 07~09]** [서대문구 4차산업 혁명센터](http://360movie.co.kr/sdm_vr_new) 주강사: [파이썬 기초부터 시작하는 실생활 데이터 분석](https://www.sdm.go.kr/lll/user/lectureinfo/lectureInfoView.do?idx=1597)    
 * **[2022 06]** [글로벌창업사관학교](https://www.kised.or.kr/menu.es?mid=a10208030000) Fundamentals of Deep Learning  TA   
