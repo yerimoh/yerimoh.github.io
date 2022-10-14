@@ -54,18 +54,18 @@ comments: false
 
 
 ### Development languages that I use
-✓ Python  
-✓ R   
+✓ Python(main)       
 ✓ C   
 ✓ C++    
+✓ R 
 ✓ Java       
 ✓ JavaScript   
 
 
 ### Framework I've Used
+✓ PyTorch(Main)    
 ✓ TensorFlow    
 ✓ Keras   
-✓ PyTorch    
 ✓ OpenCV      
 ✓ Pandas     
 ✓ Pytesseract   
