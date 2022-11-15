@@ -1,6 +1,6 @@
 ---
 title: "NVIDIA DLI 강연 후기 in UNIVERSITY OF SEOUL"
-date:   2021-12-04
+date:   2021-11-12
 excerpt: "NVIDIA DLI 강연 후기 in UNIVERSITY OF SEOUL with TAVE"
 category: [experience]
 layout: post
