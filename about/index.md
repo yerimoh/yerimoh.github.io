@@ -62,8 +62,8 @@ comments: false
 ✓ Python(main)       
 ✓ C   
 ✓ C++    
-✓ R 
-✓ Java       
+✓ R   
+✓ Java           
 ✓ JavaScript   
 
 
