@@ -12,7 +12,7 @@ comments: false
 🖥️ if you want to sum of this, click my [CV](https://github.com/yerimoh/yerimoh.github.io/files/7949354/CV_yerimOh.1.pdf)   
     
 
-* **[2022 12]** NVIDIA 한국 주요 DLI 앰배서더 네트워킹 세션 참석      
+* **[2022 12]** [NVIDIA 한국 주요 DLI 앰배서더 네트워킹 세션 참석](https://yerimoh.github.io/NW/)      
 * **[2022 12]** [LG CNS](https://www.lgcns.com/) [FDL／NLP／CONAI_TA 강의 TA](https://drive.google.com/file/d/1nRQ7kuco_NrWzjY6qIlkHruYxH-6QwYu/view?usp=sharing)      
 * **[2022 12]** [NVIDIA DLI Certificat: Building Conversational AI Applications](https://courses.nvidia.com/certificates/a41d84c0c0054fada342ec5afad402c1/)    
 * **[2022 11]** [SW중심대학 2022 인공지능 아이디어 페스티벌 우수상]()   
