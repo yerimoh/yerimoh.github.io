@@ -9,8 +9,8 @@ comments: false
 <center>Always with Passion and Joy :D</center>
 
 ## Features
-🖥️ if you want to sum of this, click my [CV](https://github.com/yerimoh/yerimoh.github.io/files/7949354/CV_yerimOh.1.pdf)   
-    
+you can find me in [NVIDIA Instructor](https://www.nvidia.com/en-us/training/instructor-directory/bio/?instructorId=0031W00002iBzmBQAS)
+
 * **[2022 12]** GBT 졸업프로젝트 캡스톤프로젝트 대상: 시각장애인을 위한 점자인식 어플 EASY:VIEW    
 * **[2022 12]** [NVIDIA 한국 주요 DLI 앰배서더 네트워킹 세션 참석](https://yerimoh.github.io/NW/)       
 * **[2022 12]** [LG CNS](https://www.lgcns.com/) [FDL／NLP／CONAI_TA 강의 TA](https://drive.google.com/file/d/1nRQ7kuco_NrWzjY6qIlkHruYxH-6QwYu/view?usp=sharing)      
