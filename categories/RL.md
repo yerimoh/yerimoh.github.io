@@ -1,4 +1,4 @@
 ---
 layout: category  
-title: Reinforcement learning
+title: RL
 ---
