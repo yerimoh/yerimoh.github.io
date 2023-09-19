@@ -1,4 +1,4 @@
----
+.---
 title: "Mat2vec: Unsupervised word embeddings capture latent knowledge from materials science literature 정리"
 date:  2023-06-10
 excerpt: "Unsupervised word embeddings capture latent knowledge from materials science literature paper review"
