@@ -11,7 +11,8 @@ comments: false
 ## Features
 you can find me in [NVIDIA Instructor](https://www.nvidia.com/en-us/training/instructor-directory/bio/?instructorId=0031W00002iBzmBQAS)
 
-* **[2022 03]** [NVIDIA DLI Workshop: 데이터 병렬화 : 멀티 GPU를 활용한 딥 러닝 모델 트레이닝 방법](https://www.nvidia.com/ko-kr/gtc/training?ncid=ref-inpa-172251) 영어-한국어 번역 코스 리뷰 참여    
+* **[2024 ~]** 고려대학교 일반대학원 인공지능학과 [DILab](http://dilab.korea.ac.kr/) 석박사통합 입학     
+* **[2023 03]** [NVIDIA DLI Workshop: 데이터 병렬화 : 멀티 GPU를 활용한 딥 러닝 모델 트레이닝 방법](https://www.nvidia.com/ko-kr/gtc/training?ncid=ref-inpa-172251) 영어-한국어 번역 코스 리뷰 참여    
 * **[2022 12]** GBT 졸업프로젝트 캡스톤프로젝트 대상: 시각장애인을 위한 점자인식 어플 EASY:VIEW    
 * **[2022 12]** [NVIDIA 한국 주요 DLI 앰배서더 네트워킹 세션 참석](https://yerimoh.github.io/NW/)       
 * **[2022 12]** [LG CNS](https://www.lgcns.com/) [FDL／NLP／CONAI_TA 강의 TA](https://drive.google.com/file/d/1nRQ7kuco_NrWzjY6qIlkHruYxH-6QwYu/view?usp=sharing)      
