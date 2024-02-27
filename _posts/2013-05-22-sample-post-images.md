@@ -1,37 +1,38 @@
-measuresProperty: indicates the PROPERTY (e.g.,
-ORR activity) that is measured.
-conditionSampleFeatures: indicates the SAMPLE
-or MATERIAL whose property is measured. In
-the above example, the sample is the catalyst.
-usesTechnique: relates to the TECHNIQUE (e.g.,
-linear scan voltammetry) used in a measurement.
-conditionInstrument: refers to the INSTRUMENT
-used to make a measurement, e.g., RDE/rotating
-disk electrode.
-conditionProperty: a property that is a condition
-in the experiment, e.g., scan rate (which in turn
-has the propertyValue of 50 mv/s).
-propertyValue: connects the mention of a PROPERTY and that of its corresponding VALUE. This
-relation may also occur if a mention of a PROPERTY occurs independently of a measurement.
-conditionEnvironment: identifies the MATERIALs (e.g., O2 and HClO4) and VALUEs (e.g.,
-an operating temperature of 30°C) that provide
-the environment of the measurement.
-takenFrom: connects the MEASUREMENT with
-the bibliographic reference CITE from which the
-setup has been inspired or taken over.
+In this work, we equip masked language models (MLMs), e.g., BERT (Devlin et al., 2019),
+with structured knowledge via self-supervised pretraining on raw text. Compared to the first class, we
+expose LMs to structured information only during
+pre-training, thus circumventing costly knowledge
+retrieval and integration in both finetuning and inference. Also the dependency on the performance
+of linking algorithm is greatly reduced. Compared
+to the second class, we learn from free-form text
+through MLMs rather than triples, which fosters
+generalization on other downstream tasks.
 
-Further Relations
 
-hasForm: connects mention of MATERIAL and
-the corresponding FORM annotation.
-usedIn: connects MATERIAL and the DEVICE it
-is used in. In Table 2, MOSFET stands for Metal
-Oxide Semiconductor Field-Effect Transistors.
-usedAs: links a specific MATERIAL mention with
-a more generic one such as catalyst, a material
-class defined by its function.
-dopedBy: indicates dopants (e.g., chlorine), i.e.,
-impurities added to a main material (e.g., SiC).
-usedTogether: connects two MATERIALs if they
-are used together in an experiment, i.e., if the
-materials are part of an assembly or a mixture.
+Specifically, given a corpus of raw text and a
+KG, two KG-guided self-supervision tasks are formulated to inject structured knowledge into MLMs.
+First, taking inspiration from Baidu-ERNIE (Sun
+et al., 2019a), we reformulate the masked language
+modeling objective to an entity-level masking strategy, where entities are identified by linking their
+text mentions to either concepts in a commonsense
+KG or named entities in an ontological KG (Bollacker et al., 2008). The role of KG here is to provide a “vocabulary” of entities to be masked. To
+further exploit implicit relational information underlying raw text, we design a KG-guided masking
+scheme that selects informative entities by considering both document frequency and mutual reachability of the entities detected in the text. In addition to the new entity-level MLM task above,
+a novel distractor-suppressed ranking task is proposed. Negative entity samples are derived from
+the KG and used as distractors for the masked entities to make the learning more effective.
+
+
+Note that our approach never observes the KG
+directly, through triples or other forms. Rather,
+the KG plays a guiding role in the proposed selfsupervised tasks. Its guidance helps the model
+exploit the corpus more effectively as verified in
+the experiments. If a downstream task can benefit
+from explicit exposure to KG, a method by Davison
+et al. (2019) can be used to transform KG triples
+into natural grammatical texts for our model
+
+
+
+We evaluate our method on five benchmarks (including question answering and knowledge base
+completion) and one zero-shot testing. Results
+show our method achieves state-of-the-art or competitive performance on all benchmarks.
