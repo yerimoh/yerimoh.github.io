@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SimulationHub</title>
+<meta name="description" content="에이전트가 쓸 수 있는 재료 시뮬레이션 도구와 도구 사이 관계의 레지스트리">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f6f7f8; --fg:#1f2328; --fg2:#59636e; --bd:#d8dee4; --link:#0b57d0;
+  --pre:#1d4ed8; --cmp:#c2410c; --sub:#047857; --ver:#7e22ce;
+  --ok:#1a7f37; --warn:#9a6700; --bad:#cf222e; --gray:#6e7781;
+  --sans:"Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"Source Code Pro",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0d1117; --bg2:#161b22; --fg:#e6edf3; --fg2:#9198a1; --bd:#30363d; --link:#4493f8;
+  --pre:#6ea8fe; --cmp:#f0883e; --sub:#3fb950; --ver:#bc8cff;
+  --ok:#3fb950; --warn:#d29922; --bad:#f85149; --gray:#8b949e; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14.5px;line-height:1.6}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+code,.mono{font-family:var(--mono);font-size:.92em}
+h1,h2,h3{line-height:1.3;margin:0}
+h1{font-size:22px}
+h2{font-size:18px;margin:28px 0 10px}
+h3{font-size:15px;margin:20px 0 8px}
+p{margin:0 0 10px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 0 max(16px,env(safe-area-inset-right))}
+
+header{border-bottom:1px solid var(--bd);background:var(--bg)}
+.hd{display:flex;align-items:center;gap:24px;height:56px}
+.logo{font-weight:700;font-size:17px;color:var(--fg)}
+.logo:hover{text-decoration:none}
+.hd nav{display:flex;gap:4px;height:100%}
+.hd nav a{display:flex;align-items:center;padding:0 10px;color:var(--fg2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.hd nav a:hover{color:var(--fg);text-decoration:none}
+.hd nav a.on{color:var(--fg);border-bottom-color:var(--fg);font-weight:500}
+.hd .ver{margin-left:auto;font-size:12.5px;color:var(--fg2)}
+
+main.wrap{padding-top:28px;padding-bottom:60px}
+.intro{max-width:760px;color:var(--fg2);margin-bottom:20px}
+.intro p{margin:0}
+.intro b{color:var(--fg);font-weight:500}
+
+/* registry */
+.reg{display:grid;grid-template-columns:210px minmax(0,1fr);gap:32px}
+.side summary{display:none}
+.side h4{font-size:12.5px;font-weight:700;margin:0 0 6px;color:var(--fg)}
+.side fieldset{border:0;padding:0;margin:0 0 22px}
+.side label{display:flex;align-items:center;gap:7px;font-size:13.5px;padding:2px 0;cursor:pointer;color:var(--fg)}
+.side label .c{margin-left:auto;color:var(--fg2);font-size:12px;font-variant-numeric:tabular-nums}
+.side input{margin:0}
+.side button{background:none;border:0;padding:0;color:var(--link);font:inherit;font-size:12.5px;cursor:pointer}
+.search{display:flex;gap:8px;margin-bottom:12px}
+.search input{flex:1;min-width:0;height:36px;padding:0 12px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit}
+.search input:focus{outline:2px solid var(--link);outline-offset:-1px;border-color:transparent}
+.search select{height:36px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit;padding:0 8px}
+.rescount{font-size:13px;color:var(--fg2);margin-bottom:6px}
+.list{border-top:1px solid var(--bd)}
+.item{padding:13px 0;border-bottom:1px solid var(--bd);display:grid;gap:3px}
+.item .t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.item .n{font-weight:700;font-size:15px}
+.item .cat{font-size:12px;color:var(--fg2)}
+.item .d{color:var(--fg)}
+.item .m{font-size:12.5px;color:var(--fg2);display:flex;flex-wrap:wrap;gap:4px 16px}
+.item .m .warn{color:var(--bad)}
+.dot{display:inline-flex;align-items:center;gap:5px}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.s-prod{color:var(--ok)}.s-near{color:var(--sub)}.s-demo{color:var(--warn)}.s-dead{color:var(--gray)}.s-comm{color:var(--pre)}.s-res{color:var(--ver)}.s-gap{color:var(--cmp)}
+.hubtag{font-size:12px}
+.h-take{color:var(--ok)}.h-ref{color:var(--fg2)}.h-excl{color:var(--bad)}
+.more{margin-top:24px;font-size:13.5px;color:var(--fg2)}
+.more p{margin-bottom:6px}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{background:var(--bg2);font-weight:500;font-size:12.5px;color:var(--fg2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover{background:var(--bg2)}
+
+/* node detail */
+.crumb{font-size:13px;color:var(--fg2);margin-bottom:10px}
+.nd{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px}
+dl.kv{display:grid;grid-template-columns:110px minmax(0,1fr);margin:0;border-top:1px solid var(--bd)}
+dl.kv dt,dl.kv dd{padding:8px 0;border-bottom:1px solid var(--bd);margin:0}
+dl.kv dt{color:var(--fg2);font-size:13px}
+.side-box{border:1px solid var(--bd);border-radius:6px;padding:14px 16px;font-size:13.5px;align-self:start}
+.side-box ul{margin:6px 0 0;padding-left:18px}
+.rt{font-size:12px;font-weight:500}
+.rt-pre{color:var(--pre)}.rt-cmp{color:var(--cmp)}.rt-sub{color:var(--sub)}.rt-ver{color:var(--ver)}
+
+/* graph */
+.gwrap{border:1px solid var(--bd);border-radius:6px;overflow-x:auto;background:var(--bg)}
+#graph{display:block;min-width:900px;width:100%;height:auto}
+#graph text{font-family:var(--sans)}
+#graph .node rect{fill:var(--bg);stroke:var(--bd);stroke-width:1}
+#graph .node:hover rect{stroke:var(--fg2)}
+#graph .node.sel rect{stroke:var(--fg);stroke-width:1.6}
+#graph .node .nm{font-size:12.5px;font-weight:500;fill:var(--fg)}
+#graph .node .tr{font-size:11px;fill:var(--fg2)}
+#graph .node{cursor:pointer}
+#graph .colh{font-size:12px;fill:var(--fg2)}
+#graph .fade{opacity:.13}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;margin:10px 0 0;color:var(--fg2)}
+.legend label{display:inline-flex;align-items:center;gap:7px;cursor:pointer;color:var(--fg)}
+.gnote{font-size:13px;color:var(--fg2);margin-top:6px}
+
+.seg{display:inline-flex;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin:4px 0 12px}
+.seg button{border:0;background:var(--bg);color:var(--fg);font:inherit;font-size:13px;padding:6px 12px;cursor:pointer;border-right:1px solid var(--bd)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--bg2);font-weight:500}
+ol.steps{margin:0;padding-left:22px}
+ol.steps li{padding:4px 0}
+ol.steps .why{color:var(--fg2);font-size:13px}
+ol.steps .k{font-size:12px;margin-left:6px}
+ol.steps li.blocked > span:first-child{text-decoration:line-through;color:var(--fg2)}
+.k-ok{color:var(--ok)}.k-silent{color:var(--warn)}.k-blocked{color:var(--bad)}.k-added{color:var(--pre)}
+.res{margin-top:10px;font-size:13.5px}
+
+.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.prose{max-width:760px}
+.prose p{margin-bottom:12px}
+.plain{margin:0;padding-left:20px}
+.plain li{margin:3px 0}
+footer{border-top:1px solid var(--bd);padding:20px 0 40px;font-size:12.5px;color:var(--fg2)}
+
+@media (max-width:860px){
+  .reg,.nd,.cols2{grid-template-columns:1fr}
+  .side[open]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
+  .hd{gap:12px;height:auto;padding:10px 0;flex-wrap:wrap}
+  .hd nav{height:auto;flex-wrap:wrap}
+  .hd nav a{padding:4px 8px}
+  .hd .ver{display:none}
+}
+@media (max-width:860px){.side summary{display:block;cursor:pointer;font-weight:500;padding:8px 12px;border:1px solid var(--bd);border-radius:6px;grid-column:1/-1;margin-bottom:12px}}
+@media (max-width:480px){.side[open]{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hd">
+    <a class="logo" href="#registry">SimulationHub</a>
+    <nav>
+      <a href="#registry" data-p="registry">레지스트리</a>
+      <a href="#tools" data-p="tools">도구</a>
+      <a href="#relations" data-p="relations">관계</a>
+      <a href="#benchmarks" data-p="benchmarks">벤치마크</a>
+      <a href="#about" data-p="about">소개</a>
+    </nav>
+    <span class="ver">데모 · 조사일 2026-10-15</span>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<footer>
+  <div class="wrap">
+    SimulationHub는 MatWorld 연구 제안(v4)의 첫 번째 구성 요소입니다. 이 페이지는 데모이며, 도구 명세 일부는 원문에 없어 일반 문서 기준으로 채웠습니다.
+    · <a href="https://yerimoh.github.io">yerimoh.github.io</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+
+var COLS=[{x:20,label:"데이터, 생성기"},{x:248,label:"빠른 계산기"},{x:476,label:"DFT"},{x:704,label:"후처리 계산기"},{x:932,label:"검사기"}];
+var W=170,H=46;
+var ET={pre:"전제 조건",cmp:"호환성",sub:"대체",ver:"검증"};
+var ETD={pre:"B를 쓰려면 A를 먼저 특정 설정으로 돌려야 함",cmp:"두 결과를 같은 표에 놓거나 이어 붙여도 되는지",sub:"같은 양을 다른 비용과 정확도로 주는 도구",ver:"이 출력은 이 검사를 거쳐야 믿을 수 있음"};
+
+const N=[
+ ["mp",0,56,"Materials Project","데이터 소스","T0",{in:"화학계, 조성, mp-id",out:"구조, 에너지, 밴드갭, 상도",ref:"MP 호환 설정 (PBE/PBE+U, 보정 포함)",lic:"데이터 CC-BY-4.0",env:"mp-api",exec:"바로",fail:"API 오류 재시도"},["MP 공식 MCP","mcp-materials-project","Pipeworx mcp-materials"]],
+ ["optimade",0,124,"OPTIMADE","데이터 소스","T0",{in:"OPTIMADE 필터 문법",out:"여러 DB의 구조와 메타데이터",ref:"출처 DB의 것을 그대로 표기",lic:"표준 (공개)",env:"optimade-python-tools",exec:"바로",fail:"DB별 응답 누락 표기"},["Pipeworx mcp-materials","optimade-mcp-server"]],
+ ["mattergen",0,236,"MatterGen","생성기","T1",{in:"화학계, 목표 물성 조건",out:"완화 전 후보 구조",ref:"해당 없음 (구조만 냄)",lic:"MIT",env:"torch 전용 환경",exec:"바로 (GPU)",fail:"검증 사슬 전체를 반드시 거침"},["MatCreator","MatBrain"]],
+ ["pyxtal",0,304,"PyXtal","생성기","T0",{in:"조성, 공간군",out:"대칭을 지킨 무작위 구조",ref:"해당 없음",lic:"MIT",env:"pymatgen 공용 환경",exec:"바로",fail:"원자 간 거리 하한 검사"},["LLM-MatGen"]],
+ ["subst",0,372,"pymatgen 치환","생성기","T0",{in:"모체 구조, 치환 규칙",out:"조성이 바뀐 구조 (완화 전)",ref:"모체 구조의 것",lic:"MIT",env:"pymatgen 공용 환경",exec:"바로",fail:"전하 중성 검사로 바로 연결"},["K-Dense pymatgen 스킬"]],
+
+ ["mace",1,56,"MACE-MPA-0","기계학습 퍼텐셜","T1",{in:"구조",out:"에너지, 힘(에너지의 미분), 응력",ref:"학습 데이터 MPtrj+sAlex, PBE 계열",lic:"상업 사용 허용 (제안서 3.2)",env:"torch, matcalc",exec:"바로",fail:"최대 힘 수렴 검사"},["compchem-mcp","CrystaLyse.AI","NVIDIA ALCHEMI 스킬","mace-mcp-server","oh-my-mlip"]],
+ ["orbd",1,124,"Orb v3 direct","기계학습 퍼텐셜","T1",{in:"구조",out:"에너지, 힘(직접 예측)",ref:"학습 데이터 OMat24 계열, 힘은 에너지의 미분이 아님",lic:"Apache-2.0",env:"torch, matcalc",exec:"바로",fail:"포논, 탄성, NVE MD에는 호환성 관계로 차단"},["Crystal-Builder","crystal668-hub orb 스킬"]],
+ ["pet",1,192,"PET-OAM","기계학습 퍼텐셜","T1",{in:"구조",out:"에너지, 힘, 응력",ref:"OMat24 기준 에너지 (MP와 기준점 다름)",lic:"상업 사용 허용 (제안서 3.2)",env:"metatomic",exec:"바로",fail:"최대 힘 수렴 검사"},[]],
+ ["matgl",1,260,"matgl 밴드갭","예측 모델","T1",{in:"구조",out:"밴드갭 (오차 약 0.4 eV)",ref:"PBE 밴드갭으로 학습",lic:"BSD-3",env:"matgl 환경",exec:"바로",fail:"훈련 분포 밖 경고"},["MatBrain (MatGL)"]],
+ ["calphad",1,440,"pycalphad","열역학","T0",{in:"조성, 온도, TDB 데이터베이스",out:"상평형, 상태도",ref:"TDB 파일의 평가 출처",lic:"MIT",env:"pycalphad 환경",exec:"바로",fail:"데이터베이스 범위 밖 조성 차단"},["K-Dense pycalphad 스킬","jkitchin/skillz","opencalphad-mcp-compiler (다른 엔진)"]],
+
+ ["vasp",2,56,"VASP","DFT","T3",{in:"구조, INCAR, POTCAR, k점",out:"에너지, 힘, 밴드, WAVECAR",ref:"범함수, +U, 의사퍼텐셜, 분산 보정",lic:"상용 (사용자 보유본을 가리킴)",env:"atomate2, quacc",exec:"제출 후 대기 (jobflow-remote)",fail:"custodian 복구, 수렴 기록 검사"},["CatGo","SciLink","wannier-compass","ChatMaterials","jinzhezenggroup dft-vasp","MatCreator","VASP-Agent"]],
+ ["qe",2,124,"Quantum ESPRESSO","DFT","T3",{in:"구조, 의사퍼텐셜(SSSP 등), k점",out:"에너지, 힘, 밴드",ref:"범함수, 의사퍼텐셜 라이브러리",lic:"GPL-2.0",env:"quacc, AiiDA",exec:"제출 후 대기",fail:"SCF 진동 감지, 수렴 기록 검사"},["SciLink","aiida-mcp","Goldilocks MCP","chemtoolsmcp","TritonDFT","jinzhezenggroup dft-qe"]],
+ ["dfpt",2,192,"DFPT","DFT 선형 응답","T3",{in:"완화된 구조",out:"Born 유효 전하, 유전 텐서",ref:"상위 DFT 설정을 물려받음",lic:"VASP 또는 QE의 것",env:"atomate2",exec:"제출 후 대기",fail:"음향 합규칙 검사"},["aiida-mcp (aiida-vibroscopy)"]],
+ ["hse",2,260,"HSE DFT","혼성 범함수","T3+",{in:"구조, PBE 수렴 결과",out:"밴드갭 (더 정확)",ref:"HSE06",lic:"VASP 또는 QE의 것",env:"atomate2",exec:"제출 후 대기",fail:"수렴 기록 검사"},[]],
+ ["ce",2,440,"클러스터 전개 + MC","통계 열역학","T2",{in:"모체 격자, DFT 학습 구조",out:"유한 온도 상태도",ref:"학습에 쓴 DFT 설정",lic:"카탈로그 확인",env:"별도 환경",exec:"바로",fail:"교차 검증 오차 검사"},[]],
+
+ ["phonopy",3,56,"phonopy","포논","T2",{in:"완화된 구조, 힘 계산기(힘이 에너지의 미분), 슈퍼셀 크기",out:"포논 밴드, 동역학적 안정성(예/아니오), 상태 플래그",ref:"힘 계산 도구의 것을 그대로 물려받음",lic:"BSD-3",env:"phonopy 4.x 환경",exec:"바로",fail:"허수 진동수 검사, 수렴 검사"},["CrystOD","aiida-mcp","CatGo phonopy 스킬","jinzhezenggroup phonopy","GPUMD-skill","fairchem-mcp start_phonons"]],
+ ["phono3py",3,124,"phono3py","열전도","T2",{in:"완화된 구조, 보존력 힘 계산기",out:"격자 열전도도",ref:"힘 계산 도구의 것",lic:"BSD-3",env:"phono3py 환경",exec:"바로 또는 제출",fail:"q점 수렴 검사"},[]],
+ ["lobster",3,192,"LOBSTER","결합 분석","T2",{in:"VASP 파동함수 (대칭 끔, 밴드 수 증가)",out:"COHP, 결합 세기",ref:"상위 VASP 설정",lic:"학술 무료 (독점)",env:"lobsterpy",exec:"바로",fail:"전하 공간 손실(spilling) 검사"},["CatGo (COHP)"]],
+ ["boltz",3,260,"BoltzTraP2","수송","T2",{in:"조밀한 k점 DFT 밴드",out:"Seebeck, 전기전도도",ref:"상위 DFT 설정",lic:"GPL-3.0",env:"BoltzTraP2 환경",exec:"바로",fail:"k점 밀도 부족 경고"},[]],
+ ["wannier",3,328,"Wannier90","전자구조 후처리","T2",{in:"VASP (LWANNIER90) 또는 QE 출력",out:"최대 국소화 Wannier 함수, 보간 밴드",ref:"상위 DFT 설정",lic:"GPL-2.0",env:"Wannier90 바이너리",exec:"바로",fail:"spread 수렴 검사"},["wannier-compass","ChatMaterials"]],
+ ["elastic",3,396,"탄성 상수","역학 물성","T1~T3",{in:"힘 1e-3 eV/Å 이하로 완화된 구조, 보존력 계산기",out:"탄성 텐서, 체적/전단 탄성률",ref:"힘 계산 도구의 것",lic:"pymatgen/matcalc",env:"matcalc",exec:"바로",fail:"Born 안정성 조건 검사"},["fairchem-mcp start_elastic_scan","AtomAgents"]],
+ ["hull",3,464,"상도 · E_hull","안정성","T0",{in:"같은 기준점의 에너지 집합",out:"E_hull, 안정상",ref:"입력 에너지가 모두 같아야 함",lic:"MIT (pymatgen)",env:"pymatgen 공용 환경",exec:"바로",fail:"기준점 불일치 시 차단"},["Pipeworx mcp-oqmd stable_phases","fairchem-mcp start_convex_hull","mcp-materials-project"]],
+
+ ["smact",4,56,"SMACT","검사기 · 전하 중성","T0",{in:"조성",out:"전하 중성 가능 여부",ref:"해당 없음",lic:"MIT",env:"pymatgen 공용 환경",exec:"바로",fail:"해당 없음"},["CrystaLyse.AI"]],
+ ["sm",4,124,"StructureMatcher","검사기 · 중복","T0",{in:"후보 구조, 알려진 구조 집합",out:"중복 여부",ref:"허용 오차 설정",lic:"MIT (pymatgen)",env:"pymatgen 공용 환경",exec:"바로",fail:"해당 없음"},[]],
+ ["spglib",4,192,"spglib","검사기 · 대칭","T0",{in:"구조, 허용 오차",out:"공간군",ref:"허용 오차 설정",lic:"BSD-3",env:"공용",exec:"바로",fail:"해당 없음"},["CrystOD"]],
+ ["imag",4,260,"허수 진동수 검사","검사기 · 포논","T0",{in:"포논 밴드",out:"허수 모드 유무와 위치",ref:"해당 없음",lic:"자체",env:"phonopy 환경",exec:"바로",fail:"Γ점 근처 작은 허수는 수치 잡음으로 분리"},["CrystOD 포논 분석"]],
+ ["conv",4,328,"수렴 기록 검사","검사기 · DFT","T0",{in:"DFT 출력 로그",out:"SCF, 이온 수렴 여부",ref:"해당 없음",lic:"custodian (MIT)",env:"공용",exec:"바로",fail:"가벼운 오류는 자동 복구, 큰 오류는 기록"},["chemtoolsmcp plan_recovery","custodian"]]
+].map(a=>({id:a[0],col:a[1],y:a[2],name:a[3],role:a[4],tier:a[5],spec:a[6],wr:a[7],x:COLS[a[1]].x}));
+var NM={};N.forEach(function(n){NM[n.id]=n});
+const E=[
+ ["vasp","lobster","pre","ISYM=-1, NBANDS 증가","LOBSTER를 쓰려면 VASP를 대칭을 끄고 밴드 수를 늘려 돌려야 한다."],
+ ["vasp","boltz","pre","조밀한 k점","BoltzTraP2는 보간을 위해 조밀한 k점 DFT 밴드가 필요하다."],
+ ["vasp","wannier","pre","LWANNIER90 플래그","Wannier90은 VASP에서 LWANNIER90 플래그를 켜고 돌린 출력이 필요하다."],
+ ["dfpt","phonopy","pre","Born 전하 (LO-TO 분리)","극성 물질에서 포논의 LO-TO 분리를 그리려면 DFPT로 구한 Born 유효 전하가 필요하다."],
+ ["mace","elastic","pre","힘 1e-3 eV/Å 이하 완화","탄성 상수는 힘이 1e-3 eV/Å 이하로 완화된 구조에서 계산해야 한다."],
+ ["mace","phonopy","pre","완화 구조 + 보존력","phonopy는 완화된 구조와, 힘이 에너지의 미분인 힘 계산기를 입력으로 받는다."],
+ ["mace","phono3py","pre","보존력 힘 계산기","phono3py도 힘이 에너지의 미분인 계산기가 필요하다."],
+ ["orbd","phonopy","cmp","금지: 힘이 미분이 아님","힘을 직접 예측하는 모델은 포논에 쓰면 안 된다. 그래프는 이 조합을 선택지에서 뺀다.",1],
+ ["orbd","elastic","cmp","금지: 탄성에 직접 힘","힘을 직접 예측하는 모델은 탄성 상수에도 쓰면 안 된다.",1],
+ ["pet","hull","cmp","금지: OMat24 기준 에너지를 MP 상도에","Materials Project 계열과 OMat24 계열 에너지는 기준점이 달라 같은 상도에 섞지 않는다.",1],
+ ["qe","vasp","cmp","범함수, +U, 의사퍼텐셜 일치 시만","안정성 계산은 범함수, +U, 의사퍼텐셜이 같은 결과끼리만 비교한다. 응력의 단위와 부호는 도구마다 달라 변환한다."],
+ ["matgl","vasp","sub","밴드갭 T1 ↔ T3","밴드갭은 matgl 예측(T1, 오차 약 0.4 eV)과 PBE DFT(T3)가 대체 관계다."],
+ ["vasp","hse","sub","PBE ↔ HSE (더 비쌈)","PBE는 밴드갭을 과소평가한다. 더 정확한 값이 필요하면 HSE로 올라간다."],
+ ["mace","vasp","sub","안정성 T1 ↔ T3","안정성은 기계학습 퍼텐셜(T1)과 DFT(T3)로 볼 수 있다. 정확도별 쌍이 월드모델의 학습 재료가 된다."],
+ ["calphad","ce","sub","상태도 T0 ↔ T2","상태도는 CALPHAD 데이터베이스(T0)와 클러스터 전개 + 몬테카를로(T2)가 대체 관계다."],
+ ["phono3py","vasp","sub","열전도 T2 ↔ T3 이상","열전도는 기계학습 퍼텐셜 + phono3py(T2)와 DFT(T3 이상)가 대체 관계다."],
+ ["mattergen","mace","ver","생성 출력 → 완화","생성 모델의 출력은 먼저 완화를 거친다."],
+ ["mace","hull","ver","완화 → 안정성","완화된 구조로 E_hull을 계산한다."],
+ ["hull","sm","ver","안정성 → 중복 확인","안정한 후보는 알려진 구조와 중복인지 확인한다."],
+ ["sm","spglib","ver","중복 → 대칭","새 구조의 공간군을 확인한다."],
+ ["spglib","smact","ver","대칭 → 전하 중성","마지막으로 전하 중성을 검사한다. v1 분석에서는 존재할 수 없는 조성이 실패의 주원인이라 실제로는 가장 앞에 둔다."],
+ ["phonopy","imag","ver","허수 진동수 검사","포논 결과는 허수 진동수 검사를 거쳐야 동역학적 안정성 라벨이 된다."],
+ ["vasp","conv","ver","수렴 기록","DFT 결과는 수렴 기록 검사를 거친다."],
+ ["qe","conv","ver","수렴 기록","DFT 결과는 수렴 기록 검사를 거친다."]
+].map((a,i)=>({i,from:a[0],to:a[1],type:a[2],short:a[3],detail:a[4],forbid:!!a[5]}));
+const R=[
+["mcp","CatGo (catgo-LRG)","github.com/Hello-QM/catgo-LRG","MCP(HTTP+stdio) + DAG 워크플로 엔진 + SSH/HPC 제출, VASP/ORCA/CP2K/LAMMPS 입력 생성, 스킬 139개 동봉","pip install catgo (1.4.14)","AGPL-3.0","2026-08 · 별 193 · 커밋 751","prod","take"],
+["mcp","SciLink","github.com/ziatdinovmax/SciLink","주기계 DFT(VASP, QE), LAMMPS MD, ForceFieldAgent, MLIP, 구조 파이프라인. scilink serve로 MCP","ASE, atomate2 · pip install scilink[sim]","미표기","2026-09 · 별 94 · 커밋 3,150","prod","take"],
+["mcp","fairchem-mcp","github.com/jkitchin/fairchem-mcp","load_model, start_relaxation, start_md, start_neb, start_phonons, start_elastic_scan, start_convex_hull, get_status, steer. 비동기 잡 패턴","FAIRChem UMA/eSEN, ASE, Sella, LAMMPS","미표기","별 1 · 커밋 5","demo","take"],
+["mcp","compchem-mcp","github.com/ypotheto/compchem-mcp","툴 49개. 주기계 DFT, PySCF, xTB, MLFF 최적화와 MD, NEB, TS 탐색, 슬랩과 흡착, IR","RDKit, PySCF, ASE, CHGNet/MACE, Cantera · Docker","MIT","별 0 · 커밋 21","demo",""],
+["mcp","chemtoolsmcp","github.com/charliecpeterson/chemtoolsmcp","review_input, draft_input, plan_calculation, plan_recovery, launch_run, monitor_run. 개발 표면 약 323툴","NWChem, OpenMolcas, QE, QMCPACK, ORCA","미표기","커밋 235","near","take"],
+["mcp","CrystOD","github.com/ahntaeyoung1212/CrystOD","대칭, irrep, 포논 분석","phonopy, spglib, seekpath · pip install CrystOD","MIT","2026-10-06 · 커밋 315","near","take"],
+["mcp","aiida-mcp","github.com/khsrali/aiida-mcp","install_code, install_pseudopotentials, generate_phonon_script, execute_calculation. AiiDA 위 유일한 MCP","AiiDA, aiida-vibroscopy, QE, phonopy","MIT","별 7 · 커밋 7","demo",""],
+["mcp","Goldilocks MCP (STFC)","github.com/stfc/goldilocks-mcp","QE k점 간격 ML 추정","ALIGNN/RF, SSSP","미표기","별 4","demo",""],
+["mcp","SciMCP","github.com/Nour-elhaq/scimcp","툴 45개. LAMMPS 입력과 파싱, VASP/QE 입력, MP 질의, 포논 분석","LAMMPS, MP API","MIT","별 1","demo",""],
+["mcp","chemaster","github.com/Keith9922/chemaster","툴 54개, 분자 QC","Gaussian, ORCA, psi4, xTB, PySCF","MIT","커밋 57","demo",""],
+["mcp","mcp2pyscf","github.com/lixin19/mcp2pyscf","PySCF","PySCF, geomeTRIC","MIT","별 6","demo",""],
+["mcp","Alchemist-MCP","github.com/Rifat19R/Alchemist_MCP","DFT 데이터셋 검증, MACE와 RuNNer 학습","QE, MACE","없음 (all rights reserved)","별 0","demo","excl"],
+["mcp","wannier-compass","github.com/isinglch/wannier-compass","VASP→Wannier90 가이드와 게이트된 제출","VASP 6, Wannier90","미표기","별 6","demo",""],
+["mcp","LLM-MatGen","github.com/wyz-eceshi/LLM-MatGen","결함, 표면, 계면, 입계, 흡착 구조 생성기 11종","PyXtal, SQS, MP","MIT","별 0","demo",""],
+["mcp","raspa-mcp","github.com/lichman0405/raspa-mcp","툴 28개. GCMC 템플릿, 역장 추천, 등온선. 다공성 재료 유일","RASPA2","MIT","커밋 19","near","take"],
+["mcp","opencalphad-mcp-compiler","github.com/snsevval/opencalphad-mcp-compiler","calculate_equilibrium, compare_alloys. CALPHAD MCP 유일","OpenCalphad","미표기","커밋 83","demo","take"],
+["mcp","mcp-server-cantera","github.com/StepFunctionLLC/mcp-server-cantera","혼합물 물성, 평형, 화염 온도, 점화 지연","Cantera 3","MIT","커밋 204","near",""],
+["mcp","MDEngine","github.com/forcefieldsilicon/mdengine","LAMMPS/ReaxFF 로컬(macOS Metal)과 호스팅 GPU","LAMMPS Kokkos","BUSL-1.1","pre-release","demo",""],
+["mcp","lammps-mcp (gcnwm) [미검증]","lobehub.com/mcp/gcnwm-lammps-mcp","submit_script, read_log, restart","LAMMPS","MIT","v0.2.0","demo",""],
+["mcp","gromacs_mcp (MacromNex)","github.com/MacromNex/gromacs_mcp","워크플로 제출, 배치 분석","GROMACS 2025.4 Docker","LGPL","커밋 12","demo",""],
+["mcp","gromacs-mcp (Alierkn)","github.com/Alierkn/gromacs-mcp","툴 30개, 전체 gmx 파이프라인","gmx · PyPI 0.2.0","MIT","2026-07","near",""],
+["mcp","gmx-vmd-mcp","github.com/egtai/gmx-vmd-mcp","GROMACS + VMD 마이크로서비스","pip","MIT","별 24","demo",""],
+["mcp","ChatMol molecule-mcp","github.com/ChatMol/molecule-mcp","pymol, chimerax, gromacs_copilot","pip","미표기","2026-02","demo",""],
+["mcp","biomolecule-modeling-mcp","github.com/huangjianhuster/biomolecule-modeling-mcp","PDB 수정, OpenMM 완화","OpenMM","MIT","별 0","demo",""],
+["mcp","protein-design-mcp","github.com/jasonkim8652/protein-design-mcp","툴 41개, OpenMM 최소화 (바이오 인접)","OpenMM, PyRosetta · PyPI 1.0.0","Apache-2.0","별 16 · 커밋 214","near",""],
+["mcp","ovito-mcp (wjgoarxiv)","github.com/wjgoarxiv/ovito-mcp","툴 19개. RDF, 배위, 구조 식별, 렌더링","OVITO Python","MIT","커밋 1","demo",""],
+["mcp","ovito-mcp 공식","gitlab.com/ovito-org/ovito-mcp-server","OVITO Pro 세션 구동, 파이프라인, 분석","OVITO Pro 3.16 · pip install ovito-mcp","독점","2026-08 · v2026.1","comm",""],
+["mcp","vmd-hydrate-mcp","github.com/wjgoarxiv/vmd-hydrate-mcp","툴 17개, 하이드레이트 분석","VMD · PyPI 0.2.0","MIT","2026-07","near",""],
+["mcp","yade-mcp","github.com/yusong652/yade-mcp","DEM 코드 실행과 잡 관리 (메조스케일)","YADE · PyPI 0.11.1","MIT","2026-10 · 커밋 225","prod",""],
+["mcp","MS-MCP","github.com/DrYe1109/MS-MCP","Materials Studio Forcite/DMol3/CASTEP 잡 (비공식)","BIOVIA MS","MIT","별 21","near",""],
+["mcp","materials-studio-mcp-moc","github.com/christopher2lllp3t-cell/materials-studio-mcp-moc","툴 53개, MS 입력 준비","MS 2023","미표기","커밋 22","demo",""],
+["mcp","schrodinger-mcp (비공식)","github.com/Nimieeee/schrodinger-mcp","ligprep, glide, jaguar (신약)","Schrödinger Suite","MIT","별 0","demo",""],
+["mcp","rowan-mcp","github.com/k-yenko/rowan-mcp","툴 45개. 에너지, 최적화, 진동, conformer, pKa, TS 탐색","Rowan 클라우드 · PyPI 2.3.2","미표기","별 24 · 커밋 155","prod",""],
+["mcp","SandboxAQ MCP (AQCat)","docs.aisim.sandboxaq.com/mcp-server","흡착 에너지 스크리닝, AQPotency. Claude 커넥터","원격 MCP (OAuth, 과금)","상용","2026-08 GA","comm",""],
+["mcp","NovoMCP","github.com/NovoMCP/novomcp","MD, QM, conformer (신약 지향)","GROMACS, xTB, MACE, ANI-2x","Apache + BSL","별 4","demo",""],
+["mcp","scicomp-molecular-mcp","github.com/andylbrummer/math-mcp","장난감 MD 툴 15개 (교육용)","자체","MIT","별 3","demo","excl"],
+["mcp","Psi-MCP","github.com/manasp21/Psi-MCP","VQE, 분자 해밀토니안","Qiskit, PennyLane, PySCF","MIT","별 1","demo",""],
+["mcp","ChemMCP (OSU-NLP)","github.com/OSU-NLP-Group/ChemMCP","툴 33개. 합성, 역합성, 물성 예측, PubChem","RDKit, Uni-Mol, IBM RXN","Apache-2.0","별 69 · 커밋 120","prod",""],
+["mcp","rdkit-mcp-server","github.com/tandemai-inc/rdkit-mcp-server","RDKit 함수 자동 노출","RDKit","MIT","별 41","near",""],
+["mcp","분자 유틸리티 8종","mcp_rdkit, mcp-molecules, chemdraw-mcp, ketcher …","분자 기술자, 질량, 그리기, 편집. 허브에는 T0 검사기로만","RDKit, CDK","MIT 등","2025~2026","near",""],
+["mcp","MoziChem-MCP","github.com/sinagilassi/mozichem-mcp","EOS(PR/SRK), 플래시 계산, NASA 다항식","MoziChem","MIT","2026-08","near",""],
+["mcp","gnnepcsaft-mcp-server","github.com/wildsonbbl/gnnepcsaft_mcp_server","GNN PC-SAFT 파라미터 → 밀도, 증기압","FeOs · uvx 0.5.10","GPL-3.0","2026-09","near",""],
+["mcp","water-chemistry-mcp","github.com/puran-water/water-chemistry-mcp","용액 화학종, 스케일링 (PHREEQC)","PHREEQC","MIT","2026-03 아카이브","dead","excl"],
+["mcp","Profex-MCP","github.com/PolyXRD/Profex-MCP","XRD 상 동정, COD 검색, Rietveld 정련. XRD 유일","Profex, BGMN","GPL-2.0","커밋 23","near","take"],
+["mcp","shelx-mcp","github.com/stge4code/shelx-mcp","SHELX 구조 해석과 정련","SHELX","MIT","별 1","demo",""],
+["mcp","Crystal-Builder","github.com/JulesOpp/Crystal-Builder","MOF 데스크톱 앱 + HTTP MCP","DFTB+, xTB, MACE, ORB, MatterSim, Zeo++","MIT","커밋 603","near",""],
+["mcp","MatBrain / Mat-MCP (SIAT)","github.com/MAIC-SIAT/matbrain","MP, OQMD, CrystaLLM, MatterGen, MatGL, MatterSim, FairChem, VASP를 Docker MCP로","LangGraph, K8s","미표기","별 1 · 커밋 3","demo",""],
+["mcp","CrystaLyse.AI","github.com/ryannduma/CrystaLyse.AI","chemistry-unified, creative, visualization 서버","SMACT, Chemeleon, MACE-MP-0, pymatgen · pip 1.0.1","MIT","별 24 · 커밋 168","near",""],
+["mcp","CoChem-Agents","github.com/yuxi-TJU/CoChem-Agents","RDKit MCP, MP MCP 래퍼","FastMCP · npm","MIT","별 7","demo",""],
+["mcp","PolyAgent","github.com/BaratiLab/PolyAgent","고분자 역설계 MCP","TransPolymer, OMG","미표기","별 10","demo",""],
+["mcp","materials-agent-toolkit","github.com/calebhaines/materials-agent-toolkit","조성 분석, 탄성률 VRH, 확산. JSON 입출력 스키마, 가정, 출처, 버전 카탈로그","ASE · uv run matkit-mcp","미표기","별 0 · 커밋 12","demo","ref"],
+["mcp","HEA-Bench","github.com/dfieser/hea-bench","고엔트로피 합금 기술자, 규칙, 설계 탐색","matminer · PyPI 2.9.0","MIT","2026-10 · 커밋 202","prod",""],
+["mcp","MolMCP","github.com/MolCrafts/molmcp","시각화, 잡 큐, 실험 플레인","FastMCP 4 · PyPI 0.6.1","BSD-3","2026-08","near",""],
+["mcp","nanohub-mcp","github.com/nanohub/nanohub-mcp","nanoHUB 툴 래핑 프레임워크","nanoHUB · PyPI 0.4.7","MIT","2026-10","prod",""],
+["mcp","alchemite-mcp","pypi.org/project/alchemite-mcp","재료 물성 ML 예측","Alchemite · PyPI 0.7.5","독점","2026-09","comm",""],
+["mcp","FORTHought","github.com/MariosAdamidis/FORTHought","XRD 상 동정, SEM, PL (실험실)","docker","MIT","별 7","demo",""],
+
+["db","Pipeworx mcp-materials","github.com/pipeworx-io/mcp-materials","OPTIMADE 연합 검색(OQMD, MP, NOMAD, Alexandria), OQMD hull","호스팅 게이트웨이 · npm 0.1.2","MIT","2026-09","prod","take"],
+["db","Pipeworx mcp-oqmd","github.com/pipeworx-io/mcp-oqmd","search_materials, get_material, stable_phases","npx","MIT","2026-09","prod","take"],
+["db","Pipeworx mcp-crystallography","github.com/pipeworx-io/mcp-crystallography","COD 검색, CIF","npm 0.2.2","MIT","2026-09","prod","take"],
+["db","mcp-materials-project","github.com/luffysolution-svg/mcp-materials-project","MP 전체 데이터, 상도, 비교, 엑셀 내보내기","PyPI 0.3.3","MIT","2026-01","near",""],
+["db","MP 공식 MCP","docs.materialsproject.org","Materials Project 공식 에이전트용 서버","mp-api","공식","2026","prod","take"],
+["db","소규모 DB 서버 4종","materials-project-mcp-from-scratch, battery-mcp …","MP 검색, 양극재 검증, Catalysis-Hub GraphQL, 합금 데이터시트","","MIT 등","2025~2026","demo",""],
+["db","cellpy-mcp","github.com/cellpy/cellpy-mcp","배터리 셀 데이터","PyPI 0.2.0","MIT","2026-09","near",""],
+["db","materials-mcp-commons","github.com/HeshamFS/materials-mcp-commons","출처 기록이 있는 governed 엔진, OPTIMADE","미제공","Apache-2.0","커밋 34","demo",""],
+["db","labmate-mcp","github.com/JonasRackl/labmate-mcp","툴 81개. COD, MP, NIST, pKa/용해도, 역합성","PyPI 7.3.1","MIT","2026-02","near",""],
+["db","PubChem/ChEMBL 서버 8종","cyanheads, Augmented-Nature, pipeworx, quaat","화합물 조회 (시뮬레이션 아님)","npm/pip","MIT","활발","prod",""],
+
+["pkg","LLaMP (LBNL)","github.com/chiang-yuan/llamp","LangChain ReAct 에이전트, MP API, ASE/atomate2/MACE","mp-api · PyPI 0.0.19","","별 100","res",""],
+["pkg","AtomAgents (MIT)","github.com/lamm-mit/AtomAgents","격자 상수, 탄성, 표면 에너지, 전위, NEB","LAMMPS","","별 104","res",""],
+["pkg","DREAMS","github.com/BattModels/material_agent","LangGraph, QE DFT on HPC, 흡착","ASE, QE","","별 29","res",""],
+["pkg","ChatMOF","github.com/Yeonghun1675/ChatMOF","MOF 검색, 예측, 생성","MOFTransformer","","별 121 · 2024 휴면","dead",""],
+["pkg","SciToolAgent (ZJU)","github.com/HICAI-ZJU/SciToolAgent","바이오, 화학, 재료 툴 500개 이상 (자체 서비스)","","","별 428","res",""],
+["pkg","CACTUS (PNNL)","github.com/pnnl/cactus","RDKit 기술자 툴","RDKit","","별 52","res",""],
+["pkg","DELFIN (KIT)","github.com/ComPlat/DELFIN","양자화학 플랫폼, MCP 클라이언트","ORCA, xTB, CREST, MACE · PyPI 1.1.12","","커밋 2,152","prod",""],
+["pkg","Nanome MCP","nanome.ai","시각화 툴 47개, 도킹","","상용","2026-08","comm",""],
+
+["skill","jinzhezenggroup comp-chem skills","github.com/jinzhezenggroup/computational-chemistry-agent-skills","62개. dft-vasp/qe/cp2k/gpaw/abinit/siesta, xtb, deepmd, dpgen, lammps, phonopy, pymatgen. DeepModeling 공식 스킬의 상류","거의 지시문, .py 3개","LGPL-3.0","2026-09 · 별 150","prod","take"],
+["skill","deepmd-kit in-repo 스킬","github.com/deepmodeling/deepmd-kit","5개. install, train(DPA3), finetune, python-inference, lammps-deepmd","deepmd-kit, LAMMPS","LGPL-3.0","2026-10-14","prod","take"],
+["skill","dpdata / dpgen / dpdispatcher / reacnetgenerator","각 deepmodeling 저장소 skills/","4 / 2 / 1 / 1개 (벤더 배포)","해당 패키지","LGPL-3.0","2026-09~10","prod","take"],
+["skill","NVIDIA ALCHEMI 스킬","github.com/NVIDIA/nvalchemi-toolkit","14개. dynamics API, MEP, 학습, 파인튜닝, 증류 + AGENTS.md","nvalchemi-toolkit 0.2.0, MACE-MPA-0, CUDA","Apache-2.0","2026-10 · 별 160","prod","take"],
+["skill","ChatMaterials (저장소 20개)","github.com/chatmaterials","vasp/qe/abinit/lammps/wannier90 워크플로와 분석. scripts, fixtures, CI 회귀 테스트","VASP, QE, ABINIT, LAMMPS","MIT","2026-03 이후 정지","dead","ref"],
+["skill","Hello-QM/catgo-LRG","github.com/Hello-QM/catgo-LRG","139개. DFT 코드 전반, 구조 생성, 흡착 에너지, COHP, 볼케이노, 수렴 테스트, 트러블슈팅. .py/.sh 102개","전부","AGPL-3.0","2026-09 · 별 195","prod","take"],
+["skill","AI4MS/MatCreator","github.com/AI4MS/MatCreator","41개. vasp, abacus, lammps, deepmd, phonon, mattergen, mattersim, MP, bohrium","VASP/ABACUS, MatterGen, MatterSim","Apache-2.0","2026-10 · 별 17","near",""],
+["skill","Genkai_Agent","github.com/alekseyevich180/Genkai_Agent","44개 (MatCreator 포크 + uma 파인튜닝)","fairchem-core, deepmd, MACE","없음","2026-08 · 별 31","demo","excl"],
+["skill","GPUMD-skill","github.com/GodJh1n/GPUMD-skill","35개. gpumd, nep 학습, dft-*, phonopy. GPUMD 유일","GPUMD, NEP","GPL-3.0","2026-04 · 별 13","demo",""],
+["skill","crystal668-hub/answer-like-a-chemist","github.com/crystal668-hub/answer-like-a-chemist","88개 (중국어). DFT, MLIP, 워크플로, DB 전반. 스크립트 173개 + 검증 벤치. 범위 최대","전부","없음","2026-09 · 커밋 441","demo","ref"],
+["skill","FonaTech/DFT_Skills","github.com/FonaTech/DFT_Skills","1개. DFT→AIMD→MLIP-MD→FEM 스케일 선택","VASP, ASE, MLIP","MIT","2026-08 · 별 14","demo",""],
+["skill","MatClaw [스킬 미검증]","github.com/DingyangLyu/MatClaw","README는 240개, 실제 20개. 불완전 공개","QE, LAMMPS, RASPA3, MACE","Apache-2.0","2026-03 · 별 95","demo","excl"],
+["skill","quantum-chem-skills","github.com/silico-quantum/quantum-chem-skills","9개. pyscf, gaussian, multiwfn, xtb MD (분자)","PySCF, Gaussian16","MIT","2026-08","demo",""],
+["skill","InternScience/ChemClaw","github.com/InternScience/ChemClaw","26개. CIF→XRD, xTB, IR/Raman/UV/NMR 시뮬레이션","xTB, MLatom","MIT","2026-03 · 별 53","demo",""],
+["skill","TB2J in-repo 스킬","github.com/mailhexu/TB2J","1개. 자기 교환 J, DMI","TB2J","BSD-2","2026-08 · 별 101","prod",""],
+["skill","usst1-DFT-codex-skill","github.com/usst-yk/usst1-DFT-codex-skill","1개. SSH, VASPkit, Slurm, Wannier (Codex용)","VASP","없음","2026-05","demo","excl"],
+["skill","VASP-automatization-platform","github.com/carlosraulps/VASP-automatization-platform","3개","VASP, vaspkit","MIT","2026-02","dead",""],
+["skill","agentic-science-worker","github.com/fl-sean03/agentic-science-worker","17개. lammps, qe, mlip, torch-sim","","MIT","2026-07 아카이브","dead","excl"],
+["skill","skill_lammps","github.com/Chenghao-Wu/skill_lammps","LAMMPS 입력 작성","예제만","없음","2026-03 아카이브","dead","excl"],
+["skill","automd-gromacs","github.com/Billwanttobetop/automd-gromacs","GROMACS 전체 (EM, NVT, NPT, FEP, REMD, QM/MM)","GROMACS","MIT","2026-06","near",""],
+["skill","ClawHub 단발 스킬","clawhub.ai","VASP 단계별 워크플로, VASP/CP2K 입력 생성, KMC 촉매","VASP, CP2K","MIT-0","2026-05~07","demo",""],
+
+["gskill","a5c-ai/babysitter","github.com/a5c-ai/babysitter","재료 관련 약 30개. 전부 지시문만, 얕은 LLM 생성 템플릿","","","","demo",""],
+["gskill","wentorai/research-plugins","github.com/wentorai/research-plugins","계산화학, MD, catalysis-hub 가이드 2~3개","","","","demo",""],
+["gskill","Awesome-Scientific-Skills","github.com/InternScience/scp","재료 없음. Simulation & Modeling을 미충족 공백으로 명시","","","","gap",""],
+["gskill","K-Dense scientific-agent-skills","K-Dense","pymatgen, pycalphad 스킬 (복제본 10여 개 존재)","","","","near",""],
+
+["plat","Microsoft Discovery","","다중 에이전트 + 그래프 지식층 + HPC. 공개 MCP 없음","플랫폼 에이전트, 데스크톱 앱","상용","2026-06 GA","comm",""],
+["plat","Bohrium + SciMaster + MatMaster","arxiv.org/abs/2512.20469","capability 레지스트리 + 스케줄러 + 랩 OS. 유일한 대규모 재료 툴 레지스트리 (비공개)","표준 capability 스키마","상용 (무료 티어)","2025-12","comm","ref"],
+["plat","Matlantis (PFN/ENEOS)","","범용 MLIP. 터미널 안 Claude Code와 Codex, 스킬 공개. MCP 없음","스킬","상용","2026-05","comm",""],
+["plat","SandboxAQ AQCat on Claude","","촉매 흡착 에너지 LQM","MCP 커넥터, AWS Marketplace","상용","2026-08 GA","comm",""],
+["plat","Citrine Catalyst / VirtualLab","","실험 설계 워크플로 에이전트. 공개 MCP/API 없음","","상용","2026-07","comm",""],
+["plat","CuspAI MIRA [URL 미검증]","","생성→예측→합성 라우팅, 파트너 랩 35곳","비공개","상용","2026-07","comm",""],
+["plat","COMSOL","","Codex가 Java API로 COMSOL 구동. 공식 MCP 없음","API + 스킬","상용","2026-09","comm",""],
+["plat","Ansys PyAnsys MCP","","ansys-fluent-mcp, ansys-cfx-mcp, ansys-lumerical-mcp, ansys-common-mcp (월 2.8만 다운로드)","공식 MCP","상용","2026-07~09","comm",""],
+["plat","Flexcompute Tidy3D FlexAgent","","광학 FDTD","공식 MCP","상용","2025-11","comm",""],
+["plat","Edison / FutureHouse Kosmos","","문헌과 데이터 분석 공동 과학자","FutureHouse API","","2025-11","prod",""],
+
+["acad","TritonDFT + DFTBench","github.com/Leo9660/TritonDFT","QE 자동화, Pareto 파라미터 추론, 메모리, HITL","파이썬","","2026-03","res",""],
+["acad","AutoDFT (NTU)","arxiv.org/abs/2605.26179","7 에이전트 폐루프 VASP (planner, monitor, recovery, reflector)","코드 없음","","2026-06","res",""],
+["acad","GENIUS (KIT)","github.com/KIT-Workflows/agentic-workflow-framework","QE 지식 그래프 + FSM 오류 복구","REST","","2025-12","res",""],
+["acad","El Agente Sólido","arxiv.org/abs/2602.17886","QE + phonopy + UMA/MACE, 과제 7종","구축 중","","2026-02","res",""],
+["acad","VASP-Agent","github.com/Phoinikas03/VaspAgent_with_Benchmark","워크플로 라이브러리 에이전트, CI-NEB, LLM 6종 벤치","파이썬","","2025-12","res",""],
+["acad","Material Buddy (Matty)","oaepublish.com/articles/jmi.2025.69","LangChain + MCP, VASP/Gaussian/xTB/LAMMPS","MCP","","2026-01","res",""],
+["acad","MDAgent2","arxiv.org/abs/2601.02075","LAMMPS 코드 생성 + 검사","","","2026-01","res",""],
+["acad","OpenAaaS","arxiv.org/abs/2605.13618","Agent-as-a-Service, 원격 데이터 사이트 서브에이전트","MCP 어댑터 14툴","","2026-05","res",""],
+["acad","S1-MatAgent","arxiv.org/abs/2509.14542","MACE 기울기 기반 HEA 촉매 최적화","파이썬","","2025-09","res",""],
+["acad","TopoMAS","arxiv.org/abs/2507.04053","위상 재료 다중 에이전트 + 제일원리 검증","없음","","2025-07","res",""],
+["acad","InternAgent / NovelSeek","arxiv.org/abs/2505.16938","폐루프 자율 연구 프레임워크","파이썬","","2025-07","res",""],
+["acad","2025 LLM 해커톤","arxiv.org/abs/2605.03205","BASIS(QE), DFTPilot, RedoxFlow, LARA-HPC, AgentLearn","프로토타입","","2026-05","res",""],
+["acad","Paimon","arxiv.org/abs/2606.09422","조용한 실패 분류. 허브가 그대로 가져다 씀","","","2026","res","ref"],
+["acad","Masgent","","Pydantic 스키마 기반 에이전트","Pydantic AI","","","res","ref"],
+
+["beyond","openfoam-mcp (0xFFD)","github.com/0xFFD/openfoam-mcp","CFD 툴 25개, 케이스 설정, 실행, 후처리","OpenFOAM","","OSS 초기","demo",""],
+["beyond","openfoam-mcp-server (webworn)","github.com/webworn/openfoam-mcp-server","C++ MCP 12툴","OpenFOAM","","별 114","demo",""],
+["beyond","Foam-Agent, ChatCFD, PhyNiKCE …","arXiv","다중 에이전트 CFD. PhyNiKCE는 340회 실행 스위트","파이썬","","논문","res",""],
+["beyond","dolfinx-mcp / ccFenics-plugin","github.com/ekstanley/ccFenics-plugin","FEM. MCP 38툴 + Claude Code 플러그인 (스킬 37, 에이전트 6)","FEniCSx","","2026-02","demo",""],
+["beyond","agentfem-mcp, PDE-Agents","github.com/haoming-luo/agentfem-mcp","FEniCSx FEM","FEniCSx","","2026","demo",""],
+["beyond","mcp-calculix, FeaGPT","github.com/superWorldSavior/mcp-calculix","STEP → 정적, 모드, 좌굴, 크리프","CalculiX","","OSS","demo",""],
+["beyond","abaqus-mcp","github.com/rutwikg/abaqus-mcp","Abaqus 구동","Abaqus (라이선스 필요)","","OSS","demo",""],
+["beyond","AutoMOOSE, MooseAgent","automoose.readthedocs.io","phase-field MOOSE. MCP 10툴 / 벡터 DB","MOOSE","","2026","demo",""],
+["beyond","ol_dwsim_interop_services","github.com/OntoLedgy/ol_dwsim_interop_services","화공 DWSIM. FastMCP + .NET, Windows","DWSIM","","OSS","demo",""],
+["beyond","Aspen-AI (SARI CAS)","nature.com/articles/s44172-025-00583-3","LangChain + MCP + RAG","Aspen","","요청 시 코드","res",""],
+["beyond","Battery-Sim-Agent (KDD 2026)","github.com/opqrst-chen/Battery-Sim-Agent","DFN 파라미터 추정. MCP 없음","PyBaMM","","OSS","res",""],
+["beyond","AgenticTCAD, zenDot","arXiv","TCAD 파인튜닝 LLM","Sentaurus","","논문","res",""],
+["beyond","science-mcps, nomad-scifm","globus-labs/science-mcps","HPC 전송, 컴퓨트, 과학 기반모델 서빙","인프라","","OSS","near",""],
+
+["std","OPTIMADE v1.3.0","optimade.org","재료 DB REST API와 필터 문법","커뮤니티 MCP (비활성)","","","prod",""],
+["std","QCSchema / QCArchive","github.com/MolSSI/QCSchema","양자화학 입출력 스키마, QC 데이터 서버","파이썬 API","","","prod",""],
+["std","NOMAD Metainfo","cms.nomad-lab.eu/services/metainfo","코드 독립 전자구조/MD 메타데이터 스키마","REST","","","prod",""],
+["std","semantikon (pyiron)","github.com/pyiron/semantikon","온톨로지 주석 타입 힌트 → RDF, pint 단위. 타입 지정 포트의 참고 1순위","","","","near","ref"],
+["std","TWA ontology-to-MCP","github.com/TheWorldAvatar/mcp-tool-layer","온톨로지 T-Box를 제약을 강제하는 MCP 툴로 컴파일. 관계 강제의 유일한 선례","MCP","","2026","res","ref"],
+["std","CWL, RO-Crate","commonwl.org","워크플로 기술, 연구 패키징. 작업 기록 직렬화","","","","prod",""],
+["std","bio.tools / biotoolsSchema","biotools.readthedocs.io","툴 레지스트리 + XSD 50속성 + EDAM 온톨로지. 레지스트리 스키마 모범","REST","","","prod",""],
+["std","Galaxy ToolShed + Rhea","arxiv.org/abs/2508.18489","툴 XML, RAG로 MCP 노출","MCP","","","prod",""],
+["std","EMMO, CMSO, openBIS","","재료 온톨로지, 계산 시료 온톨로지, ELN","","","","near",""],
+["std","공개 재료 툴 레지스트리","","없음. 허브의 자리","","","","gap",""]
+].map(a=>({cat:a[0],name:a[1],url:a[2],what:a[3],backend:a[4],lic:a[5],act:a[6],st:a[7],hub:a[8]}));
+const SC=[
+ {id:"lobster",tab:"LOBSTER 결합 분석",goal:"주어진 산화물 구조의 금속-산소 결합을 COHP로 분석하라.",
+  list:{steps:[["VASP 정적 계산","기본 설정 그대로. 대칭 켬, 기본 밴드 수","ok"],["LOBSTER","대칭으로 줄인 k점과 부족한 밴드를 받아 투영이 불완전함. COHP 곡선은 그대로 그려짐","silent"]],
+   v:["silent","에러 없이 결합 세기 숫자가 나옵니다. 상위 계산의 설정이 틀렸다는 사실은 LOBSTER 출력만 봐서는 보이지 않습니다."]},
+  io:{steps:[["VASP 정적 계산","출력 WAVECAR, 구조. 형식 검사 통과","ok"],["LOBSTER","입력 형식이 맞으므로 연결 허용. 투영은 여전히 불완전","silent"]],
+   v:["silent","형식은 맞으므로 통과합니다. 전제 조건은 파일 형식이 아니라 상위 계산의 설정에 있어서 형식 검사로는 잡히지 않습니다."]},
+  graph:{steps:[["VASP 정적 계산","전제 조건 관계가 ISYM=-1과 NBANDS 증가를 요구해 설정을 바꿔 다시 짬","added"],["LOBSTER","전제 조건 충족 후 실행","ok"],["수렴 기록 검사","검증 관계에 따라 DFT 출력 확인","added"]],
+   v:["ok","전제 조건이 경로를 짤 때 강제되어 상위 계산이 처음부터 올바른 설정으로 돌아갑니다."]}},
+ {id:"gen",tab:"생성 구조의 동역학적 안정성",goal:"MatterGen이 만든 후보 가운데 동역학적으로 안정한 새 물질을 골라라.",
+  list:{steps:[["MatterGen","후보 구조 생성","ok"],["Orb v3 direct","완화 없이 바로 힘 계산. 힘이 에너지의 미분이 아님","silent"],["phonopy","허수 진동수 없음으로 나와 안정으로 판정","silent"]],
+   v:["silent","완화, 안정성, 중복 확인 없이 직접 힘 모델로 포논을 계산했습니다. 알려진 물질이거나 존재할 수 없는 조성일 수도 있는 후보가 안정한 새 물질로 보고됩니다."]},
+  io:{steps:[["MatterGen","출력 Structure","ok"],["Orb v3 direct","Structure → Forces 형식 일치","silent"],["phonopy","Forces 입력 형식 일치","silent"]],
+   v:["silent","모든 연결이 형식상 맞습니다. 힘이 에너지의 미분인지는 타입에 없고 호환성 관계에만 있습니다."]},
+  graph:{steps:[["MatterGen","후보 구조 생성","ok"],["SMACT","검증 관계. 존재할 수 없는 조성을 가장 싸게 먼저 거름","added"],["MACE-MPA-0 완화","검증 관계. 생성 출력은 완화를 거침","added"],["상도 · E_hull","같은 기준점 에너지로만 계산","added"],["StructureMatcher","알려진 구조와 중복 확인","added"],["spglib","공간군 확인","added"],["Orb v3 direct","호환성 관계로 포논 계산기 후보에서 제외","blocked"],["phonopy + MACE-MPA-0","보존력 계산기로 포논","ok"],["허수 진동수 검사","동역학적 안정성 라벨 부여","added"]],
+   v:["ok","생성 모델 출력이 검증 사슬을 모두 거친 뒤에야 안정성 라벨을 받습니다. 금지된 계산기는 선택지에 아예 나타나지 않습니다."]}},
+ {id:"hull",tab:"여러 출처 에너지로 상도",goal:"Materials Project 경쟁 상과 새 후보의 에너지로 후보의 E_hull을 구하라.",
+  list:{steps:[["Materials Project","경쟁 상 에너지 (MP 호환 설정)","ok"],["PET-OAM","후보 에너지 (OMat24 기준)","ok"],["상도 · E_hull","기준점이 다른 두 에너지를 한 상도에 섞음","silent"]],
+   v:["silent","E_hull 숫자가 깔끔하게 나오지만 두 에너지의 기준점이 달라 안정성 판정의 부호까지 바뀔 수 있습니다."]},
+  io:{steps:[["Materials Project","출력 에너지 (eV/atom)","ok"],["PET-OAM","출력 에너지 (eV/atom), 단위 일치","ok"],["상도 · E_hull","형식과 단위가 같아 통과","silent"]],
+   v:["silent","단위까지 같아서 형식 검사로는 구분할 수 없습니다. 기준점은 도구에 붙은 메타데이터에만 있습니다."]},
+  graph:{steps:[["Materials Project","경쟁 상 목록만 가져옴","ok"],["MP 에너지 + PET-OAM 에너지","호환성 관계로 같은 상도에 섞는 것 차단","blocked"],["PET-OAM 경쟁 상 재계산","같은 기준점으로 경쟁 상 전체를 다시 계산 (T1)","added"],["상도 · E_hull","한 기준점 안에서 계산","ok"],["VASP (MP 호환 설정)","대체 관계. 유망 후보만 T3로 확인","added"]],
+   v:["ok","기준점이 섞이는 경로는 실행되지 않습니다. 싼 도구로 고르고 비싼 도구로 확인하는 순서는 대체 관계와 남은 예산으로 정해집니다."]}}
+];
+
+var CAT={mcp:"MCP 서버",db:"데이터베이스 서버",pkg:"툴 패키지",skill:"스킬팩",gskill:"범용 스킬 모음",plat:"상용 플랫폼",acad:"학술 시스템",beyond:"원자 단위 밖",bench:"벤치마크",std:"표준, 스키마"};
+var ST={prod:"prod",near:"prod 근접",demo:"demo",dead:"dead",comm:"상용",res:"연구",gap:"공백"};
+var HUB={take:"노드로 가져옴",ref:"설계 참고",excl:"제외"};
+var relCount=function(id){return E.filter(function(e){return e.from===id||e.to===id}).length};
+
+/* ---------- registry ---------- */
+var F={q:"",cat:{},st:{},hub:"",badlic:false,sort:"default"};
+function countBy(key,val){return R.filter(function(r){return r[key]===val}).length}
+function regPage(){
+  var catBoxes=Object.keys(CAT).filter(function(k){return countBy("cat",k)}).map(function(k){
+    return '<label><input type="checkbox" data-f="cat" value="'+k+'"'+(F.cat[k]?" checked":"")+'>'+CAT[k]+'<span class="c">'+countBy("cat",k)+'</span></label>'}).join("");
+  var stBoxes=["prod","near","demo","dead","comm","res"].map(function(k){
+    return '<label><input type="checkbox" data-f="st" value="'+k+'"'+(F.st[k]?" checked":"")+'><span class="dot s-'+k+'">'+ST[k]+'</span><span class="c">'+countBy("st",k)+'</span></label>'}).join("");
+  var hubBoxes=[["","전체"],["take","노드로 가져옴"],["ref","설계 참고"],["excl","제외"]].map(function(h){
+    return '<label><input type="radio" name="hub" data-f="hub" value="'+h[0]+'"'+(F.hub===h[0]?" checked":"")+'>'+h[1]+(h[0]?'<span class="c">'+countBy("hub",h[0])+'</span>':"")+'</label>'}).join("");
+  return '<div class="intro"><p>에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼(MCP 서버, SKILL.md 스킬팩, 툴 패키지)와 주변 플랫폼, 벤치마크, 표준을 모은 목록입니다. 2026년 10월 15일 기준 재료 시뮬레이션 MCP 서버는 약 130개, 스킬팩은 45개가 있고 이 중 실제로 쓸 만한 서버는 약 25개입니다. 도구 사이의 관계는 <a href="#relations">관계</a> 탭에 따로 정리했습니다.</p></div>'+
+  '<div class="reg"><details class="side" id="side" open><summary>필터</summary>'+
+    '<fieldset><h4>분류</h4>'+catBoxes+'</fieldset>'+
+    '<fieldset><h4>상태</h4>'+stBoxes+'</fieldset>'+
+    '<fieldset><h4>허브 반영</h4>'+hubBoxes+'</fieldset>'+
+    '<fieldset><h4>라이선스</h4><label><input type="checkbox" data-f="badlic"'+(F.badlic?" checked":"")+'>없음 또는 미표기만</label></fieldset>'+
+    '<fieldset><button type="button" id="reset">필터 초기화</button></fieldset>'+
+  '</details><div style="min-width:0">'+
+    '<div class="search"><input id="q" type="search" placeholder="이름, 백엔드, 기능으로 검색 (예: phonopy, LAMMPS, OPTIMADE)" value="'+esc(F.q)+'"><select id="sort" aria-label="정렬"><option value="default">조사 순서</option><option value="name">이름순</option><option value="status">상태순</option></select></div>'+
+    '<div class="rescount" id="rc"></div><div class="list" id="list"></div>'+
+    '<div class="more"><h3>표에 따로 올리지 않은 것</h3>'+
+    '<p>이전 조사에서 확인한 42개는 카탈로그 11절에 세부가 있습니다. AtomisticSkills 2.0, Materials Project 공식 MCP, optimade-mcp-server, mace-mcp-server, VASPilot, ABACUS-agent-tools, MatMaster, TritonDFT, Masgent, LangSim, ChemGraph, MDCrow, ToolUniverse 등입니다.</p>'+
+    '<p>이름만 비슷하고 재료 시뮬레이션과 무관한 것은 제외했습니다. qe2mcp(HTTP 서버), sumo-mcp(교통), espresso-mcp(안드로이드), nomad-mcp(HashiCorp), lattice-mcp(HR), orca-mcp-server(보안), zeo-mcp(KiCad), phonon(업타임 모니터링) 등입니다.</p></div>'+
+  '</div></div>';
+}
+var stOrder={prod:0,near:1,comm:2,res:3,demo:4,dead:5,gap:6};
+function regList(){
+  var q=F.q.trim().toLowerCase(), cats=Object.keys(F.cat).filter(function(k){return F.cat[k]}), sts=Object.keys(F.st).filter(function(k){return F.st[k]});
+  var rows=R.filter(function(r){
+    return (!cats.length||cats.indexOf(r.cat)>=0)&&(!sts.length||sts.indexOf(r.st)>=0)&&(!F.hub||r.hub===F.hub)&&
+      (!F.badlic||/없음|미표기/.test(r.lic))&&(!q||[r.name,r.what,r.backend,r.url].join(" ").toLowerCase().indexOf(q)>=0)});
+  if(F.sort==="name")rows=rows.slice().sort(function(a,b){return a.name.localeCompare(b.name)});
+  if(F.sort==="status")rows=rows.slice().sort(function(a,b){return stOrder[a.st]-stOrder[b.st]});
+  $("#rc").textContent=rows.length+"개 항목"+(rows.length<R.length?" (전체 "+R.length+"개 중)":"");
+  $("#list").innerHTML=rows.map(function(r){
+    var href=r.url&&/\./.test(r.url)&&!/\s/.test(r.url)?(r.url.indexOf("http")===0?r.url:"https://"+r.url):"";
+    var meta=[];
+    meta.push('<span class="dot s-'+r.st+'">'+ST[r.st]+'</span>');
+    if(r.backend)meta.push('<span>'+esc(r.backend)+'</span>');
+    if(r.lic)meta.push('<span class="'+(/없음|미표기/.test(r.lic)?"warn":"")+'">'+esc(r.lic)+'</span>');
+    if(r.act)meta.push('<span>'+esc(r.act)+'</span>');
+    if(r.hub)meta.push('<span class="hubtag h-'+r.hub+'">'+HUB[r.hub]+'</span>');
+    return '<div class="item"><div class="t">'+(href?'<a class="n" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a>':'<span class="n">'+esc(r.name)+'</span>')+
+      '<span class="cat">'+CAT[r.cat]+(href?' · <span class="mono">'+esc(r.url)+'</span>':"")+'</span></div>'+
+      '<div class="d">'+esc(r.what)+'</div><div class="m">'+meta.join("")+'</div></div>'}).join("")||
+    '<p style="padding:20px 0;color:var(--fg2)">조건에 맞는 항목이 없습니다. 필터를 줄이거나 검색어를 바꿔 보세요.</p>';
+}
+function bindReg(){
+  if(window.innerWidth<860&&!Object.keys(F.cat).some(function(k){return F.cat[k]}))$("#side").removeAttribute("open");
+  $("#q").addEventListener("input",function(e){F.q=e.target.value;regList()});
+  $("#sort").value=F.sort;$("#sort").addEventListener("change",function(e){F.sort=e.target.value;regList()});
+  document.querySelectorAll(".side input").forEach(function(i){i.addEventListener("change",function(){
+    var f=i.dataset.f; if(f==="hub")F.hub=i.value; else if(f==="badlic")F.badlic=i.checked; else F[f][i.value]=i.checked; regList()})});
+  $("#reset").addEventListener("click",function(){F={q:"",cat:{},st:{},hub:"",badlic:false,sort:"default"};render()});
+  regList();
+}
+
+/* ---------- tools ---------- */
+function toolsPage(){
+  return '<div class="intro"><p>허브의 노드가 될 시뮬레이션 소프트웨어입니다. 첫 버전 목표는 60에서 80개이고, 아래는 관계 예시에 등장하는 '+N.length+'개입니다. 비용 등급은 T0 밀리초, T1 수십 밀리초에서 초, T2 분, T3 시간에서 일입니다. 래퍼는 이 소프트웨어를 에이전트에 노출하는 레지스트리 항목입니다.</p></div>'+
+  '<div class="tw"><table><thead><tr><th>도구</th><th>역할</th><th>비용</th><th>라이선스</th><th>실행</th><th class="num">래퍼</th><th class="num">관계</th></tr></thead><tbody>'+
+  N.map(function(n){return '<tr class="click" data-id="'+n.id+'"><td><a href="#tool-'+n.id+'">'+esc(n.name)+'</a></td><td>'+esc(n.role)+'</td><td class="mono">'+n.tier+'</td><td>'+esc(n.spec.lic)+'</td><td>'+esc(n.spec.exec)+'</td><td class="num">'+(n.wr.length||'<span style="color:var(--bad)">0</span>')+'</td><td class="num">'+relCount(n.id)+'</td></tr>'}).join("")+
+  '</tbody></table></div><p class="gnote">래퍼가 0인 도구는 허브가 직접 감싸야 합니다. phono3py는 스킬팩 전체에서도 공백으로 확인되었습니다.</p>';
+}
+function toolPage(id){
+  var n=NM[id]; if(!n)return '<p>도구를 찾을 수 없습니다. <a href="#tools">도구 목록</a>으로 돌아가세요.</p>';
+  var s=n.spec, rels=E.filter(function(e){return e.from===id||e.to===id});
+  return '<div class="crumb"><a href="#tools">도구</a> / '+esc(n.name)+'</div><h1>'+esc(n.name)+'</h1><p style="color:var(--fg2);margin:4px 0 18px">'+esc(n.role)+', 비용 등급 '+n.tier+'</p>'+
+  '<div class="nd"><div style="min-width:0"><dl class="kv">'+
+   [["입력",s.in],["출력",s.out],["기준점 정보",s.ref],["비용 등급",n.tier],["라이선스",s.lic],["실행 환경",s.env],["실행 방식",s.exec],["실패 처리",s.fail]].map(function(p){return '<dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd>'}).join("")+
+  '</dl><h2>관계 '+rels.length+'개</h2>'+(rels.length?relTable(rels,id):'<p style="color:var(--fg2)">아직 적힌 관계가 없습니다.</p>')+'</div>'+
+  '<aside class="side-box"><b>이 도구를 노출하는 래퍼</b>'+(n.wr.length?'<ul>'+n.wr.map(function(w){return '<li><a href="#registry" data-q="'+esc(w.split(/[ (]/)[0])+'">'+esc(w)+'</a></li>'}).join("")+'</ul>':'<p style="margin:6px 0 0;color:var(--fg2)">레지스트리에서 찾지 못했습니다. 허브가 직접 감싸야 하는 노드입니다.</p>')+'</aside></div>';
+}
+function relTable(rels,self){
+  return '<div class="tw"><table><thead><tr><th>종류</th><th>A</th><th>B</th><th>내용</th></tr></thead><tbody>'+
+  rels.map(function(e){var a=NM[e.from],b=NM[e.to];
+    var lk=function(n){return n.id===self?'<b>'+esc(n.name)+'</b>':'<a href="#tool-'+n.id+'">'+esc(n.name)+'</a>'};
+    return '<tr><td class="rt rt-'+e.type+'" style="white-space:nowrap">'+ET[e.type]+(e.forbid?", 금지":"")+'</td><td style="white-space:nowrap">'+lk(a)+'</td><td style="white-space:nowrap">'+lk(b)+'</td><td>'+esc(e.detail)+'</td></tr>'}).join("")+
+  '</tbody></table></div>';
+}
+
+/* ---------- relations ---------- */
+var on={pre:true,cmp:true,sub:true,ver:true}, gsel=null, scI=0, mode="graph";
+function relPage(){
+  return '<div class="intro"><p>도구 사이의 관계 네 종류입니다. <b>전제 조건</b>은 B를 쓰려면 A를 먼저 특정 설정으로 돌려야 한다는 것, <b>호환성</b>은 두 결과를 같은 표에 놓거나 이어 붙여도 되는지, <b>대체</b>는 같은 양을 다른 비용과 정확도로 주는 도구, <b>검증</b>은 어떤 출력이 어떤 검사를 거쳐야 믿을 수 있는지입니다. 지금까지 공개된 어떤 레지스트리도 이 관계를 기계가 읽을 수 있게 적지 않았습니다. 에이전트가 경로를 짤 때 입력 형식, 전제 조건, 호환성은 기계적으로 검사되고, 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다.</p></div>'+
+  '<div class="gwrap"><svg id="graph" viewBox="0 0 1180 540" role="img" aria-label="도구 관계 그래프"></svg></div>'+
+  '<div class="legend" id="legend"></div><p class="gnote">도구를 누르면 그 도구에 걸린 관계만 남습니다. 다시 누르면 전체가 보입니다.</p>'+
+  '<h2>관계 목록</h2>'+relTable(E,null)+
+  '<p class="gnote">관계는 세 곳에서 옵니다. 문서와 스킬 본문에 적힌 규칙을 사람이 옮긴 것, 입출력 형식에서 자동으로 나오는 것, 실제로 돌려 보며 조용한 실패를 낸 조합에서 발견되는 것입니다. 첫 버전은 150에서 200개를 사람이 옮길 계획입니다.</p>'+
+  '<h2>게이트 동작 예시</h2><p style="max-width:760px">같은 목표를 받은 에이전트에 도구 목록만 주었을 때, 입출력 형식까지 주었을 때, 관계까지 주었을 때 짜이는 경로입니다. 조용한 실패는 에러 없이 그럴듯한 숫자가 나오지만 물리적으로 틀린 결과를 말합니다. 아래는 규칙이 어떻게 작동하는지 보이려고 쓴 예시이고 측정 결과가 아닙니다.</p>'+
+  '<div class="seg" id="sc"></div><br><div class="seg" id="md"></div><div id="pd"></div>';
+}
+function drawGraph(){
+  var svg=$("#graph"), NS="http://www.w3.org/2000/svg";
+  var mk=function(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+  var defs=mk("defs",{},svg);
+  ["pre","ver","cmp"].forEach(function(t){var m=mk("marker",{id:"m"+t,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"},defs);mk("path",{d:"M0,0L10,5L0,10z",style:"fill:var(--"+t+")"},m)});
+  COLS.forEach(function(c){mk("text",{x:c.x,y:26,class:"colh"},svg).textContent=c.label});
+  var eg=mk("g",{},svg);
+  E.forEach(function(e){
+    var a=NM[e.from],b=NM[e.to],ay=a.y+H/2,by=b.y+H/2,d;
+    if(Math.abs(a.x-b.x)<10){var x=a.x+W,k=36+Math.abs(by-ay)*.18;d="M"+x+","+ay+" C"+(x+k)+","+ay+" "+(x+k)+","+by+" "+x+","+by}
+    else{var x1=b.x>a.x?a.x+W:a.x,x2=b.x>a.x?b.x:b.x+W,dx=(x2-x1)/2;d="M"+x1+","+ay+" C"+(x1+dx)+","+ay+" "+(x2-dx)+","+by+" "+x2+","+by}
+    var g=mk("g",{"data-t":e.type,"data-a":e.from,"data-b":e.to,class:"edge"},eg), c="var(--"+e.type+")";
+    if(e.type==="sub"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:4.5"},g);mk("path",{d:d,style:"fill:none;stroke:var(--bg);stroke-width:1.6"},g)}
+    else if(e.type==="cmp")mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.5;stroke-dasharray:6 4","marker-end":"url(#mcmp)","marker-start":"url(#mcmp)"},g);
+    else if(e.type==="pre")mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.6","marker-end":"url(#mpre)"},g);
+    else mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.5;stroke-dasharray:2 3","marker-end":"url(#mver)"},g);
+    mk("title",{},g).textContent=ET[e.type]+": "+a.name+" → "+b.name+". "+e.short;
+  });
+  var ng=mk("g",{},svg);
+  N.forEach(function(n){
+    var g=mk("g",{class:"node","data-id":n.id,transform:"translate("+n.x+","+n.y+")",tabindex:"0",role:"button"},ng);
+    mk("rect",{width:W,height:H,rx:4},g);
+    mk("text",{x:10,y:20,class:"nm"},g).textContent=n.name;
+    mk("text",{x:10,y:36,class:"tr"},g).textContent=n.tier+"  "+n.role;
+    var act=function(){gsel=gsel===n.id?null:n.id;paint()};
+    g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
+  });
+  $("#legend").innerHTML=Object.keys(ET).map(function(t){
+    var sm={pre:'<line x1="0" y1="6" x2="22" y2="6" stroke="var(--pre)" stroke-width="1.6"/>',cmp:'<line x1="0" y1="6" x2="24" y2="6" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="5 3"/>',sub:'<line x1="0" y1="4" x2="24" y2="4" stroke="var(--sub)" stroke-width="1.4"/><line x1="0" y1="8" x2="24" y2="8" stroke="var(--sub)" stroke-width="1.4"/>',ver:'<line x1="0" y1="6" x2="24" y2="6" stroke="var(--ver)" stroke-width="1.6" stroke-dasharray="2 3"/>'}[t];
+    return '<label><input type="checkbox" data-t="'+t+'" checked><svg width="24" height="12" aria-hidden="true">'+sm+'</svg>'+ET[t]+' <span style="color:var(--fg2)">'+E.filter(function(e){return e.type===t}).length+'</span></label>'}).join("");
+  document.querySelectorAll("#legend input").forEach(function(i){i.addEventListener("change",function(){on[i.dataset.t]=i.checked;paint()})});
+  paint();
+}
+function paint(){
+  var keep={};
+  if(gsel){keep[gsel]=1;E.forEach(function(e){if(on[e.type]&&(e.from===gsel||e.to===gsel)){keep[e.from]=1;keep[e.to]=1}})}
+  document.querySelectorAll("#graph .edge").forEach(function(g){
+    g.style.display=on[g.dataset.t]?"":"none";
+    g.classList.toggle("fade",!!gsel&&g.dataset.a!==gsel&&g.dataset.b!==gsel)});
+  document.querySelectorAll("#graph .node").forEach(function(g){
+    g.classList.toggle("sel",g.dataset.id===gsel);g.classList.toggle("fade",!!gsel&&!keep[g.dataset.id])});
+}
+var KL={ok:"정상",silent:"조용한 실패",blocked:"차단됨",added:"관계가 추가함"};
+function drawPD(){
+  $("#sc").innerHTML=SC.map(function(s,i){return '<button type="button" class="'+(i===scI?"on":"")+'" data-i="'+i+'">'+esc(s.tab)+'</button>'}).join("");
+  $("#md").innerHTML=[["list","도구 목록만"],["io","입출력 형식까지"],["graph","관계까지"]].map(function(m){return '<button type="button" class="'+(m[0]===mode?"on":"")+'" data-m="'+m[0]+'">'+m[1]+'</button>'}).join("");
+  var s=SC[scI],m=s[mode];
+  $("#pd").innerHTML='<p><b>목표.</b> '+esc(s.goal)+'</p><ol class="steps">'+m.steps.map(function(st){
+    return '<li class="'+st[2]+'"><span class="mono">'+esc(st[0])+'</span><span class="k k-'+st[2]+'">'+KL[st[2]]+'</span><br><span class="why">'+esc(st[1])+'</span></li>'}).join("")+
+    '</ol><p class="res"><b class="k-'+(m.v[0]==="ok"?"ok":"silent")+'">'+(m.v[0]==="ok"?"올바른 경로.":"조용한 실패.")+'</b> '+esc(m.v[1])+'</p>';
+  document.querySelectorAll("#sc button").forEach(function(b){b.addEventListener("click",function(){scI=+b.dataset.i;drawPD()})});
+  document.querySelectorAll("#md button").forEach(function(b){b.addEventListener("click",function(){mode=b.dataset.m;drawPD()})});
+}
+
+/* ---------- benchmarks ---------- */
+var BM=[
+ ["DFTBench","github.com/Leo9660/TritonDFT","QE relax, static, bands, DOS를 전문가 수렴값과 비교","68 × 4","2026-03","예"],
+ ["GENIUS 프롬프트 벤치","github.com/KIT-Workflows/agentic-workflow-framework","자연어에서 유효한 QE 입력, 60초 실행 통과","295","2025-12","예"],
+ ["El Agente Sólido","github.com/govlum/Benchmark_Results_El_Agente_Solido","고체 과제 7종 루브릭","7종","2026-02","예"],
+ ["VASP-Agent 벤치","github.com/Phoinikas03/VaspAgent_with_Benchmark","밴드갭과 완화","","2025-12","예"],
+ ["Sol27LC","arxiv.org/abs/2507.14267","격자 상수 DFT 정확도","27 고체","","예"],
+ ["MADE","arxiv.org/abs/2601.20996","폐루프 발견, 오라클 예산 안의 안정성","","2026-01","예 (오라클)"],
+ ["CFDLLMBench, PhyNiKCE, FEABench","","OpenFOAM 케이스, COMSOL Java API","126 / 340 / 215","2025~2026","예"],
+ ["MatToolBench","mattoolbench.github.io","Windows VM 멀티모달. GUI, OriginPro, 코드","204","2026-09","부분"],
+ ["MatTools","github.com/Grenzlinie/MatTools","pymatgen QA와 Docker 툴 사용","69,225 + 138","2025-05","코드 실행"],
+ ["SciAgentGym","github.com/CMarsRover/SciAgentGYM","물리, 화학, 재료, 바이오 다단계 툴 사용 (툴 1,780개)","259","2026-02","툴 실행"],
+ ["CompMat-Bench","arxiv.org/abs/2610.00636","실제 연구의 입력 준비와 출력 분석, 규칙 채점","94","2026-09","아니오"],
+ ["AutoMat","github.com/JHU-CLSP/AutoMat","코딩 에이전트의 논문 주장 재현","85","2026-05","아니오"],
+ ["MatSciBench, ChemBench, LAB-Bench 외","","추론과 QA","","2024~2026","아니오"]
+];
+function benchPage(){
+  return '<div class="intro"><p>에이전트의 도구 사용을 재는 벤치마크입니다. 관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러나므로, 시뮬레이터를 실제로 실행해 채점하는지를 가장 중요한 열로 두었습니다. 입력 준비만 채점하는 CompMat-Bench와 AutoMat은 조용한 실패를 잡지 못합니다.</p></div>'+
+  '<div class="tw"><table><thead><tr><th>이름</th><th>무엇을 재나</th><th>크기</th><th>날짜</th><th>시뮬레이터 실행</th></tr></thead><tbody>'+
+  BM.map(function(b){return '<tr><td style="white-space:nowrap">'+(b[1]?'<a href="https://'+b[1]+'" target="_blank" rel="noopener">'+esc(b[0])+'</a>':esc(b[0]))+'</td><td>'+esc(b[2])+'</td><td class="mono" style="white-space:nowrap">'+esc(b[3])+'</td><td style="white-space:nowrap">'+esc(b[4])+'</td><td style="white-space:nowrap" class="'+(b[5].indexOf("예")===0?"k-ok":b[5]==="아니오"?"k-blocked":"")+'">'+esc(b[5])+'</td></tr>'}).join("")+
+  '</tbody></table></div><p class="gnote">AtomisticSkillsBenchmark는 MatWorld 실험 0에 쓸 예정이지만 별도 벤치 이름이 원 논문 초록에 없어 표에서 뺐습니다.</p>';
+}
+
+/* ---------- about ---------- */
+function aboutPage(){
+  return '<div class="prose"><h1>소개</h1>'+
+  '<p style="margin-top:12px">재료 계산 도구는 이미 충분히 많고, 그것을 에이전트에 노출한 래퍼도 수백 개가 있습니다. 비어 있는 것은 도구를 조합하는 지식입니다. LOBSTER를 쓰려면 VASP를 대칭을 끄고 밴드 수를 늘려 돌려야 한다는 것, 힘을 직접 예측하는 모델은 포논에 쓰면 안 된다는 것, Materials Project 계열과 OMat24 계열 에너지는 기준점이 달라 섞으면 안 된다는 것은 숙련된 연구자는 알지만 어디에도 기계가 읽을 수 있게 적혀 있지 않습니다. 에이전트가 이것을 모른 채 도구를 부르면 에러로 멈추지 않고 그럴듯한 틀린 숫자를 냅니다.</p>'+
+  '<p>SimulationHub는 도구를 노드로, 이런 지식을 네 종류의 관계로 적고 실행 시점에 강제합니다. 관계가 적혀 있으면 에이전트가 사람 없이도 도구를 올바른 순서와 설정으로 조합할 수 있고, 그 조합을 대량으로 돌려 재료 세계의 월드모델을 학습할 데이터를 만들 수 있습니다. 이것이 MatWorld 제안의 첫 단계입니다.</p>'+
+  '<h2>조사 방법</h2><p>MCP 서버와 에이전트 툴 서버, SKILL.md 스킬팩과 플러그인, MCP가 아닌 에이전트 플랫폼과 원자 단위 밖 시뮬레이터와 벤치마크와 표준의 세 갈래로 나눠 조사했습니다. GitHub 페이지, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 직접 클론해 SKILL.md 수와 스크립트 수를 셌습니다. GitHub API와 일부 MCP 디렉터리 사이트는 막혀 있어 PyPI 전체 인덱스를 키워드 150개로 훑고 검색 45회로 보완했습니다. 열지 못한 항목은 [미검증]으로 표시했습니다.</p>'+
+  '<h2>상태 기준</h2><ul class="plain"><li><span class="dot s-prod">prod</span> 패키징되어 있고 릴리스가 2회 이상이며 툴 목록이 실제로 있음</li><li><span class="dot s-demo">demo</span> PoC나 알파</li><li><span class="dot s-dead">dead</span> 아카이브되었거나 명백히 방치됨</li></ul>'+
+  '<h2>주류 패키지의 에이전트 파일 배포</h2><p>직접 스킬을 배포하는 곳은 DeepModeling 생태계(deepmd-kit, dpdata, dpgen, dpdispatcher, reacnetgenerator), NVIDIA ALCHEMI, TB2J뿐입니다. pymatgen, LAMMPS, aiida-core, fairchem, matgl 등은 기여자용 AGENTS.md만 있고, ASE, phonopy, Quantum ESPRESSO, GPAW, atomate2, MACE, MatterGen, CP2K, PySCF 등 42개는 아무것도 없습니다.</p>'+
+  '<h2>공백</h2><div class="tw"><table><thead><tr><th>분야</th><th>에이전트 래퍼</th></tr></thead><tbody>'+
+  [["CFD","OpenFOAM MCP 2종, Ansys Fluent와 CFX 공식 MCP"],["FEM","FEniCSx, CalculiX, Abaqus MCP, COMSOL은 API와 스킬"],["Phase-field","MOOSE는 AutoMOOSE, MooseAgent. PRISMS-PF와 FiPy는 없음"],["kinetic Monte Carlo","Zacros, kmos, KMCLib 없음 (chatMOSP만)"],["광학","Lumerical, Tidy3D 공식. Meep은 없음"],["양자 수송","Kwant, QuantumATK 없음"],["멀티스케일","preCICE 없음"],["배터리","PyBaMM 위 Battery-Sim-Agent, MCP 없음"]].map(function(r){return '<tr><td style="white-space:nowrap">'+r[0]+'</td><td>'+r[1]+'</td></tr>'}).join("")+
+  '</tbody></table></div><p class="gnote">스킬팩 쪽에서도 CALPHAD, phase-field, kMC, FEM 연속체, MOF 스크리닝, ShengBTE와 phono3py, 전기화학은 거의 비어 있습니다.</p>'+
+  '<h2>허브에 반영하는 방식</h2><p>AtomisticSkills MCP 서버, fairchem-mcp의 비동기 잡 패턴, chemtoolsmcp의 실패 복구 계획, CatGo의 DAG 엔진과 HPC 제출, CrystOD, raspa-mcp, opencalphad-mcp, Profex-MCP, Pipeworx OPTIMADE 게이트웨이, MP 공식 MCP, DeepModeling과 NVIDIA의 저장소 내 스킬은 노드 실행기로 가져옵니다. materials-agent-toolkit의 JSON 카탈로그, semantikon의 타입 포트, TWA의 온톨로지에서 MCP로의 컴파일, Bohrium의 capability 스키마는 설계만 참고합니다. 라이선스가 없거나 아카이브되었거나 불완전하게 공개된 것은 제외합니다.</p>'+
+  '<p>관계의 1차 자료는 스킬 본문입니다. jinzhezenggroup 62개, catgo-LRG 139개, crystal668-hub 88개, AtomisticSkills 133개 등 약 500개의 SKILL.md에 "먼저 이걸 돌려라", "이 결과는 믿지 마라"가 자연어로 적혀 있고, 여기서 전제 조건과 호환성을 반자동으로 뽑는 것이 그래프 구축의 첫 단계입니다.</p>'+
+  '<h2>한계</h2><p>관계는 완전하지 않으며 완전하다고 주장하지 않습니다. VASP처럼 상용이거나 학술 전용인 도구는 그래프에 등록하되 공개 배포판에는 감싸는 코드만 넣고 실제 프로그램은 사용자가 가진 것을 가리킵니다. 이 페이지의 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠고, 확실하지 않은 칸은 카탈로그 확인으로 남겼습니다.</p></div>';
+}
+
+/* ---------- router ---------- */
+function render(){
+  var h=(location.hash||"#registry").slice(1), page=h.indexOf("tool-")===0?"tools":h;
+  if(["registry","tools","relations","benchmarks","about"].indexOf(page)<0){page="registry";h="registry"}
+  document.querySelectorAll(".hd nav a").forEach(function(a){a.classList.toggle("on",a.dataset.p===page)});
+  var app=$("#app");
+  if(h==="registry"){app.innerHTML=regPage();bindReg()}
+  else if(h==="tools"){app.innerHTML=toolsPage();document.querySelectorAll("tr.click").forEach(function(tr){tr.addEventListener("click",function(e){if(e.target.tagName!=="A")location.hash="tool-"+tr.dataset.id})})}
+  else if(h.indexOf("tool-")===0){app.innerHTML=toolPage(h.slice(5));document.querySelectorAll("[data-q]").forEach(function(a){a.addEventListener("click",function(){F.q=a.dataset.q})})}
+  else if(h==="relations"){app.innerHTML=relPage();drawGraph();drawPD()}
+  else if(h==="benchmarks")app.innerHTML=benchPage();
+  else app.innerHTML=aboutPage();
+  document.title=(page==="registry"?"":({tools:"도구",relations:"관계",benchmarks:"벤치마크",about:"소개"}[page]+" · "))+"SimulationHub";
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",render);
+render();
+})();
+</script>
+</body>
+</html>
