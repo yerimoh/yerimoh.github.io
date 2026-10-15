@@ -1,26 +1,52 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SimulationHub</title>
-<meta name="description" content="에이전트가 쓸 수 있는 재료 시뮬레이션 도구와 도구 사이 관계의 레지스트리">
+<meta name="description" content="A registry of materials-simulation tools an agent can call, and of the relations between them">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>(function(){try{var t=localStorage.getItem('sh-theme');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('sh-lang');if(l)document.documentElement.setAttribute('lang',l);}catch(e){}})();</script>
 <style>
 :root{
-  --blue:#0866ff;--blue2:#0457cb;--ink:#0a1317;--body:#1c1e21;--muted:#5d6c7b;--faint:#8a97a5;--line:#dadde1;--line2:#e9ecef;--soft:#f5f7f9;--soft2:#eef2f6;
+  --bg:#ffffff;--card:#ffffff;--ink:#0a1317;--body:#1c1e21;--muted:#5d6c7b;--faint:#8a97a5;--line:#dadde1;--line2:#e9ecef;--soft:#f5f7f9;--soft2:#eef2f6;
+  --blue:#0866ff;--blue2:#0457cb;--onblue:#ffffff;
   --green:#059669;--green-bg:#ecfdf5;--red:#ef4444;--red-bg:#fef2f2;--amber:#d97706;--amber-bg:#fffbeb;
   --c-mcp:#0866ff;--c-skill:#059669;--c-db:#0891b2;--c-pkg:#7c3aed;--c-plat:#ea580c;--c-acad:#db2777;--c-beyond:#b45309;--c-std:#475569;--c-gskill:#65a30d;
   --pre:#0866ff;--cmp:#ef4444;--sub:#059669;--ver:#7c3aed;
+  --bp1:#ffffff;--bp2:#e9f1ff;--bp3:#dbe8ff;--bpb:#e3ecfb;
+  --g0:#6f9ee0;--g1:#5cb98f;--g2:#a98ad8;--g3:#8fa3b5;
   --sans:"Onest","Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   --r:16px;--shadow:0 1px 2px rgba(10,19,23,.04),0 8px 24px rgba(10,19,23,.06);
 }
+html[data-theme="dark"]{
+  --bg:#0b0f14;--card:#111820;--ink:#e6edf3;--body:#d5dbe3;--muted:#9aa7b5;--faint:#6f7d8c;--line:#263241;--line2:#1b2531;--soft:#121a24;--soft2:#182230;
+  --blue:#4d8dff;--blue2:#3b7bf0;--onblue:#ffffff;
+  --green:#34d399;--green-bg:#0d2a20;--red:#f87171;--red-bg:#2d1515;--amber:#fbbf24;--amber-bg:#2b2106;
+  --c-mcp:#4d8dff;--c-skill:#34d399;--c-db:#22d3ee;--c-pkg:#a78bfa;--c-plat:#fb923c;--c-acad:#f472b6;--c-beyond:#fbbf24;--c-std:#94a3b8;--c-gskill:#a3e635;
+  --pre:#6aa6ff;--cmp:#ff7b7b;--sub:#3ed598;--ver:#b79bff;
+  --bp1:#111820;--bp2:#13203a;--bp3:#15264a;--bpb:#22304a;
+  --g0:#6f9ee0;--g1:#5cb98f;--g2:#a98ad8;--g3:#8fa3b5;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]){
+  --bg:#0b0f14;--card:#111820;--ink:#e6edf3;--body:#d5dbe3;--muted:#9aa7b5;--faint:#6f7d8c;--line:#263241;--line2:#1b2531;--soft:#121a24;--soft2:#182230;
+  --blue:#4d8dff;--blue2:#3b7bf0;--onblue:#ffffff;
+  --green:#34d399;--green-bg:#0d2a20;--red:#f87171;--red-bg:#2d1515;--amber:#fbbf24;--amber-bg:#2b2106;
+  --c-mcp:#4d8dff;--c-skill:#34d399;--c-db:#22d3ee;--c-pkg:#a78bfa;--c-plat:#fb923c;--c-acad:#f472b6;--c-beyond:#fbbf24;--c-std:#94a3b8;--c-gskill:#a3e635;
+  --pre:#6aa6ff;--cmp:#ff7b7b;--sub:#3ed598;--ver:#b79bff;
+  --bp1:#111820;--bp2:#13203a;--bp3:#15264a;--bpb:#22304a;
+  --g0:#6f9ee0;--g1:#5cb98f;--g2:#a98ad8;--g3:#8fa3b5;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark;
+}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0}
-body{background:#fff;color:var(--body);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--body);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html[lang="en"] .ko{display:none!important}
+html[lang="ko"] .en{display:none!important}
 a{color:inherit;text-decoration:none}
 h1,h2,h3,h4{margin:0;color:var(--ink);letter-spacing:-.02em;line-height:1.15;font-weight:700;word-break:keep-all}
 .sub,.pts li,.scard p,.acc .body{word-break:keep-all}
@@ -39,25 +65,24 @@ section+section{border-top:1px solid var(--line2)}
 .center .eyebrow{justify-content:center}
 h2{font-size:clamp(28px,3.6vw,40px)}
 .sub{color:var(--muted);font-size:17px;max-width:620px;margin:12px auto 0}
-.center .sub{margin-left:auto;margin-right:auto}
-.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font-weight:600;font-size:14px;transition:background .15s}
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:var(--onblue);font-weight:600;font-size:14px;transition:background .15s}
 .btn:hover{background:var(--blue2)}
-.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
 .btn.ghost:hover{background:var(--soft)}
 .btn.sm{height:34px;padding:0 14px;font-size:13px}
 svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-/* nav */
-nav.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line2)}
-nav.top .wrap{display:flex;align-items:center;height:64px;gap:28px}
+nav.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line2)}
+nav.top .wrap{display:flex;align-items:center;height:64px;gap:20px}
 .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;color:var(--ink);letter-spacing:-.02em}
 .logo svg{width:26px;height:26px}
 .links{display:flex;gap:4px;margin-left:8px}
 .links a{padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted)}
 .links a:hover{color:var(--ink);background:var(--soft)}
-nav.top .btn{margin-left:auto}
+.navr{margin-left:auto;display:flex;align-items:center;gap:8px}
+.tb{height:34px;min-width:34px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:12.5px;font-weight:600}
+.tb:hover{color:var(--ink);background:var(--soft)}
 
-/* hero */
 .hero{padding:88px 0 72px;position:relative;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1.2px);background-size:24px 24px;mask-image:radial-gradient(ellipse 70% 70% at 50% 30%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 30%,#000 30%,transparent 75%);pointer-events:none}
 .hero .wrap{position:relative}
@@ -67,14 +92,14 @@ nav.top .btn{margin-left:auto}
 @keyframes blink{50%{opacity:0}}
 .hero .sub{font-size:18px;margin-top:22px}
 .search{max-width:640px;margin:34px auto 0;position:relative}
-.search input{width:100%;height:56px;border:1px solid var(--line);border-radius:14px;padding:0 20px 0 50px;font:inherit;font-size:16px;color:var(--ink);background:#fff;box-shadow:var(--shadow)}
-.search input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(8,102,255,.12)}
+.search input{width:100%;height:56px;border:1px solid var(--line);border-radius:14px;padding:0 20px 0 50px;font:inherit;font-size:16px;color:var(--ink);background:var(--card);box-shadow:var(--shadow)}
+.search input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 14%,transparent)}
 .search svg{position:absolute;left:18px;top:19px;color:var(--faint);width:18px;height:18px}
 .search .cnt{position:absolute;right:16px;top:18px;font-size:13px;color:var(--faint)}
 .hero .tabs{display:flex;gap:4px;justify-content:center;margin-top:30px;flex-wrap:wrap}
 .hero .tabs button{padding:8px 12px;font-size:13.5px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent}
 .hero .tabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
-.codebox{max-width:720px;margin:14px auto 0;text-align:left;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow);overflow:hidden}
+.codebox{max-width:720px;margin:14px auto 0;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--shadow);overflow:hidden}
 .codebox .cap{padding:9px 14px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line2);display:flex;align-items:center;gap:8px}
 .codebox .cap button{margin-left:auto;color:var(--faint);display:inline-flex;align-items:center;gap:5px;font-size:12px}
 .codebox .cap button:hover{color:var(--ink)}
@@ -84,22 +109,20 @@ nav.top .btn{margin-left:auto}
 .hero .note a{color:var(--muted);font-weight:500;border-bottom:1px solid var(--line)}
 .marks{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;margin-top:40px;font-family:var(--mono);font-size:12.5px;color:var(--faint);letter-spacing:.02em}
 
-/* before / after */
 .ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
 .panel{border-radius:var(--r);padding:26px;border:1px solid var(--line2);text-align:left}
-.panel.bad{background:linear-gradient(180deg,#fff7f7,#fff)}
-.panel.good{background:linear-gradient(180deg,#f2fbf7,#fff)}
+.panel.bad{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 6%,var(--card)),var(--card))}
+.panel.good{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 7%,var(--card)),var(--card))}
 .panel .ph{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
 .panel .ph .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff}
-.panel.bad .ic{background:var(--red)}.panel.good .ic{background:var(--ink)}
-.chat{background:#fff;border:1px solid var(--line2);border-radius:12px;padding:14px;display:grid;gap:10px;box-shadow:var(--shadow)}
+.panel.bad .ic{background:var(--red)}.panel.good .ic{background:var(--ink);color:var(--bg)}
+.chat{background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:14px;display:grid;gap:10px;box-shadow:var(--shadow)}
 .msg{display:flex;gap:9px;align-items:flex-start;font-size:13.5px}
 .msg .av{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:10px;font-weight:700;background:var(--soft2);color:var(--muted)}
-.msg.u .av{background:var(--ink);color:#fff}
+.msg.u .av{background:var(--ink);color:var(--bg)}
 .msg .b{padding:7px 11px;border-radius:10px;background:var(--soft);line-height:1.5}
-.msg.u .b{background:var(--ink);color:#fff}
-.msg .b .tool{display:inline-block;font-family:var(--mono);font-size:11.5px;background:var(--green-bg);color:var(--green);padding:1px 7px;border-radius:5px;border:1px solid #bbf0d8;margin:1px 2px 1px 0}
-.msg .b .tool.x{background:var(--red-bg);color:var(--red);border-color:#fbc9c9;text-decoration:line-through}
+.msg.u .b{background:var(--ink);color:var(--bg)}
+.msg .b .tool{display:inline-block;font-family:var(--mono);font-size:11.5px;background:var(--green-bg);color:var(--green);padding:1px 7px;border-radius:5px;border:1px solid color-mix(in srgb,var(--green) 35%,transparent);margin:1px 2px 1px 0}
 .msg .b .warn{color:var(--red);font-weight:600}
 .msg .b .ok{color:var(--green);font-weight:600}
 .pts{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px}
@@ -109,19 +132,18 @@ nav.top .btn{margin-left:auto}
 .pts .v{width:18px;height:18px;border-radius:50%;background:var(--green-bg);color:var(--green);display:grid;place-items:center;margin-top:2px}
 .pts svg{width:11px;height:11px;stroke-width:2.6}
 
-/* examples */
 .cats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:30px}
-.cpill{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted);background:#fff}
+.cpill{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted);background:var(--card)}
 .cpill:hover{border-color:var(--faint);color:var(--ink)}
 .cpill.on{border-color:var(--green);color:var(--green);background:var(--green-bg)}
-.excard{max-width:840px;margin:28px auto 0;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--shadow);overflow:hidden;text-align:left}
+.excard{max-width:840px;margin:28px auto 0;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);overflow:hidden;text-align:left}
 .excard .q{padding:20px 24px;background:var(--soft);border-bottom:1px solid var(--line2)}
 .excard .q .lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;font-family:var(--mono);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .excard .q .t{font-size:16px;font-weight:500;color:var(--ink)}
 .excard .tools{padding:12px 24px;border-bottom:1px solid var(--line2);display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--faint)}
-.excard .tools code{font-size:11.5px;background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:5px;border:1px solid #bbf0d8}
-.excard .tools code.x{background:var(--red-bg);color:var(--red);border-color:#fbc9c9;text-decoration:line-through}
-.excard .tools code.p{background:#eef4ff;color:var(--blue);border-color:#c7dbff}
+.excard .tools code{font-size:11.5px;background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:5px;border:1px solid color-mix(in srgb,var(--green) 35%,transparent)}
+.excard .tools code.x{background:var(--red-bg);color:var(--red);border-color:color-mix(in srgb,var(--red) 35%,transparent);text-decoration:line-through}
+.excard .tools code.p{background:color-mix(in srgb,var(--blue) 10%,var(--card));color:var(--blue);border-color:color-mix(in srgb,var(--blue) 35%,transparent)}
 .excard .res{padding:18px 24px}
 .excard .res b{display:block;color:var(--green);font-size:14px;margin-bottom:8px}
 .excard .res ul{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:14px}
@@ -135,26 +157,26 @@ nav.top .btn{margin-left:auto}
 .exnav .dots i.on{width:18px;background:var(--ink)}
 
 /* graph (layered, orthogonal) */
-.gbox{margin-top:40px;border:1px solid var(--line);border-radius:14px;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) 300px;overflow:hidden;text-align:left}
-.gcanvas{border-right:1px solid var(--line2);background:#fff;padding:6px 10px 0;min-width:0}
+.gbox{margin-top:40px;border:1px solid var(--line);border-radius:14px;background:var(--card);display:grid;grid-template-columns:minmax(0,1fr) 300px;overflow:hidden;text-align:left}
+.gcanvas{border-right:1px solid var(--line2);background:var(--card);padding:6px 10px 0;min-width:0}
 .gscroll{overflow-x:auto}
 #graph{display:block;width:100%;min-width:700px;height:auto}
 #graph .colh{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;fill:var(--faint)}
 #graph .grp{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--faint)}
 #graph .lk{fill:none;stroke-opacity:.75}
 #graph .lk.pre{stroke:var(--pre)}#graph .lk.ver{stroke:var(--ver)}#graph .lk.cmp{stroke:var(--cmp);stroke-dasharray:4 3}
-#graph .lk.sub{stroke:var(--sub);stroke-width:3.4}#graph .lk.sub2{stroke:#fff;stroke-width:1.2;stroke-opacity:1}
+#graph .lk.sub{stroke:var(--sub);stroke-width:3.4}#graph .lk.sub2{stroke:var(--card);stroke-width:1.2;stroke-opacity:1}
 #graph .lk.fade{stroke-opacity:.08}#graph .lk.sub2.fade{stroke-opacity:1}
 #graph .lk.hl{stroke-opacity:1}
 #graph .hit{stroke:transparent;stroke-width:12;fill:none;cursor:pointer}
 #graph .nd{cursor:pointer}
-#graph .nd rect{fill:#fff;stroke:#cfd6dd;stroke-width:1}
+#graph .nd rect{fill:var(--card);stroke:var(--line);stroke-width:1}
 #graph .nd:hover rect{stroke:var(--faint)}
 #graph .nd.sel rect{stroke:var(--ink);stroke-width:1.6}
-#graph .nd text{font-size:12px;fill:var(--ink);font-weight:500;pointer-events:none}
+#graph .nd text{font-size:12px;fill:var(--ink);font-weight:500;pointer-events:none;font-family:var(--sans)}
 #graph .nd.iso rect{stroke-dasharray:3 3}#graph .nd.iso text{fill:var(--faint)}#graph .nd.iso circle{opacity:.45}
 #graph .nd.fade{opacity:.18}
-#graph .xm circle{fill:#fff;stroke:var(--cmp);stroke-width:1.2}#graph .xm path{stroke:var(--cmp);stroke-width:1.4;fill:none}
+#graph .xm circle{fill:var(--card);stroke:var(--cmp);stroke-width:1.2}#graph .xm path{stroke:var(--cmp);stroke-width:1.4;fill:none}
 .gkey{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--muted);padding:8px 14px;border-top:1px solid var(--line2);background:var(--soft)}
 .gkey span{display:inline-flex;align-items:center;gap:5px}
 .gkey i{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -168,20 +190,19 @@ nav.top .btn{margin-left:auto}
 .gside .kv{display:grid;gap:3px;font-size:13px;color:var(--muted)}
 .gside .kv b{color:var(--ink);font-weight:600}
 .gside ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
-.gside li{display:grid;grid-template-columns:62px 1fr;gap:8px;font-size:13px;color:var(--muted);line-height:1.45}
+.gside li{display:grid;grid-template-columns:78px 1fr;gap:8px;font-size:13px;color:var(--muted);line-height:1.45}
 .gside li a{color:var(--ink);font-weight:500;cursor:pointer}
 .gside li a:hover{color:var(--blue)}
 .gside .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 .gside p{color:var(--muted);font-size:13px;line-height:1.55}
 .rt{font-weight:600;font-size:12px;white-space:nowrap}
 .rt-pre{color:var(--pre)}.rt-cmp{color:var(--cmp)}.rt-sub{color:var(--sub)}.rt-ver{color:var(--ver)}
-.gtip{position:fixed;z-index:99;max-width:340px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 11px;box-shadow:0 10px 28px rgba(10,19,23,.16);font-size:12.5px;line-height:1.5;color:var(--body);display:none;pointer-events:none}
+.gtip{position:fixed;z-index:99;max-width:340px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 11px;box-shadow:0 10px 28px rgba(0,0,0,.2);font-size:12.5px;line-height:1.5;color:var(--body);display:none;pointer-events:none}
 .gtip.show{display:block}.gtip .h{font-weight:600;color:var(--ink);margin-bottom:2px}
 @media (max-width:860px){.gbox{grid-template-columns:1fr}.gcanvas{border-right:0;border-bottom:1px solid var(--line2)}.gside{max-height:none}}
 
-/* categories */
 .catgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
-.ccard{border:1px solid var(--line);border-radius:14px;padding:22px;background:#fff;display:grid;gap:10px;align-content:start;position:relative;transition:border-color .15s,box-shadow .15s;text-align:left}
+.ccard{border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--card);display:grid;gap:10px;align-content:start;position:relative;transition:border-color .15s,box-shadow .15s;text-align:left}
 .ccard:hover{border-color:var(--faint);box-shadow:var(--shadow)}
 .ccard .ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;color:#fff}
 .ccard .ic svg{width:18px;height:18px}
@@ -190,17 +211,15 @@ nav.top .btn{margin-left:auto}
 .ccard p{font-size:13px;color:var(--muted);line-height:1.5}
 .ccard .go{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:4px}
 .ccard.on{border-color:var(--ink)}
-
-/* tool cards */
 .tfilt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:56px}
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
-.tcard{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:12px;padding:18px 20px 16px;background:#fff;display:grid;gap:9px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative}
+.tcard{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:12px;padding:18px 20px 16px;background:var(--card);display:grid;gap:9px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative}
 .tcard:hover{box-shadow:var(--shadow);border-color:var(--faint);border-top-color:var(--c)}
 .tcard .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tcard .ct{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);padding:2px 7px;border-radius:5px}
+.tcard .ct{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) 10%,var(--card));padding:2px 7px;border-radius:5px}
 .tcard .st{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600}
 .tcard .st svg{width:12px;height:12px;stroke-width:2.4}
-.st.prod{color:var(--green)}.st.near{color:#0891b2}.st.demo{color:var(--amber)}.st.dead{color:var(--faint)}.st.comm{color:var(--blue)}.st.res{color:#7c3aed}.st.gap{color:var(--red)}
+.st.prod{color:var(--green)}.st.near{color:#0891b2}.st.demo{color:var(--amber)}.st.dead{color:var(--faint)}.st.comm{color:var(--blue)}.st.res{color:var(--ver)}.st.gap{color:var(--red)}
 .tcard h4{font-size:15.5px;letter-spacing:-.01em;line-height:1.3}
 .tcard h4 a:hover{color:var(--blue)}
 .tcard .be{display:flex;flex-wrap:wrap;gap:4px}
@@ -213,7 +232,6 @@ nav.top .btn{margin-left:auto}
 .more{display:flex;justify-content:center;margin-top:28px;gap:10px;align-items:center;color:var(--faint);font-size:13px}
 .empty{padding:40px;text-align:center;color:var(--faint);grid-column:1/-1}
 
-/* features (accordion) */
 .feat{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:40px}
 .acc{border-top:1px solid var(--line)}
 .acc details{border-bottom:1px solid var(--line)}
@@ -229,17 +247,15 @@ nav.top .btn{margin-left:auto}
 .illus svg{width:100%;max-width:420px;height:auto}
 .illus text{font-family:var(--sans);font-size:13px;fill:var(--ink);font-weight:600}
 .illus .sm{font-family:var(--mono);font-size:10.5px;fill:var(--muted);font-weight:400}
-.illus .bx{fill:#fff;stroke:var(--line);stroke-width:1}
+.illus .bx{fill:var(--card);stroke:var(--line);stroke-width:1}
 
-/* two cards */
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
 .scard{background:var(--soft);border-radius:var(--r);padding:28px}
 .scard .h{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:14px;letter-spacing:-.01em}
-.scard .h .ic{width:30px;height:30px;border-radius:50%;background:var(--muted);color:#fff;display:grid;place-items:center;flex:none}
+.scard .h .ic{width:30px;height:30px;border-radius:50%;background:var(--muted);color:var(--bg);display:grid;place-items:center;flex:none}
 .scard p{font-size:14px;color:var(--muted);line-height:1.6}
 
-/* big panel */
-.bigpanel{margin-top:40px;border-radius:24px;background:linear-gradient(180deg,#fff 0%,#e9f1ff 55%,#dbe8ff 100%);padding:90px 40px 70px;text-align:center;border:1px solid #e3ecfb}
+.bigpanel{margin-top:40px;border-radius:24px;background:linear-gradient(180deg,var(--bp1) 0%,var(--bp2) 55%,var(--bp3) 100%);padding:90px 40px 70px;text-align:center;border:1px solid var(--bpb)}
 .bigpanel h3{font-size:clamp(34px,5.4vw,64px);font-weight:700;letter-spacing:-.035em;line-height:1.1}
 .bigpanel h3 .d{color:var(--muted);font-weight:500}
 .stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin-top:44px}
@@ -248,8 +264,7 @@ nav.top .btn{margin-left:auto}
 .stats b.z{color:var(--blue)}
 .stats span{font-size:13px;color:var(--muted)}
 
-/* bench */
-.tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;overflow-x:auto;background:#fff}
+.tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;overflow-x:auto;background:var(--card)}
 table{border-collapse:collapse;width:100%;font-size:14px;min-width:720px}
 th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line2);vertical-align:top}
 th{font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:var(--soft)}
@@ -283,74 +298,84 @@ footer a{color:var(--muted)}
 <body>
 <nav class="top"><div class="wrap">
   <a class="logo" href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 9.8V5.5M14 13.1l3.6 2.1M10 13.1l-3.6 2.1" stroke="currentColor" stroke-width="1.5"/></svg>SimulationHub</a>
-  <div class="links"><a href="#why">왜 관계인가</a><a href="#examples">예시</a><a href="#graph-sec">관계 그래프</a><a href="#tools">도구</a><a href="#bench">벤치마크</a></div>
-  <a class="btn sm" href="#tools">레지스트리 둘러보기</a>
+  <div class="links">
+    <a href="#why"><span class="en">Why relations</span><span class="ko">왜 관계인가</span></a>
+    <a href="#examples"><span class="en">Examples</span><span class="ko">예시</span></a>
+    <a href="#graph-sec"><span class="en">Tool graph</span><span class="ko">관계 그래프</span></a>
+    <a href="#tools"><span class="en">Registry</span><span class="ko">레지스트리</span></a>
+    <a href="#bench"><span class="en">Benchmarks</span><span class="ko">벤치마크</span></a>
+  </div>
+  <div class="navr">
+    <button class="tb" id="langbtn" type="button" aria-label="Switch language"></button>
+    <button class="tb" id="themebtn" type="button" aria-label="Toggle theme"><svg class="i" viewBox="0 0 24 24" id="ti"></svg></button>
+    <a class="btn sm" href="#tools"><span class="en">Browse the registry</span><span class="ko">레지스트리 둘러보기</span></a>
+  </div>
 </div></nav>
 
 <header class="hero center" id="top"><div class="wrap">
-  <h1>SimulationHub:<br>재료 시뮬레이션 도구를<br><span class="acc">관계와 함께</span> 에이전트에게.<span class="cur"></span></h1>
-  <p class="sub">에이전트가 쓸 수 있는 재료 시뮬레이션 도구 130여 개와, 도구 사이의 전제 조건과 호환성과 대체와 검증 관계를 한 곳에 모은 공개 레지스트리.</p>
-  <div class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="도구, 스킬, 백엔드 검색" aria-label="검색"><span class="cnt" id="qcnt"></span></div>
+  <h1><span class="en">SimulationHub:<br>materials simulation tools,<br><span class="acc">with their relations,</span> for agents.<span class="cur"></span></span><span class="ko">SimulationHub:<br>재료 시뮬레이션 도구를<br><span class="acc">관계와 함께</span> 에이전트에게.<span class="cur"></span></span></h1>
+  <p class="sub"><span class="en">An open registry of 130+ materials-simulation tools an agent can call, together with the preconditions, compatibility rules, substitutes and verification chains between them.</span><span class="ko">에이전트가 쓸 수 있는 재료 시뮬레이션 도구 130여 개와, 도구 사이의 전제 조건과 호환성과 대체와 검증 관계를 한 곳에 모은 공개 레지스트리.</span></p>
+  <div class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="" aria-label="Search"><span class="cnt" id="qcnt"></span></div>
   <div class="tabs" id="rtabs"></div>
-  <div class="codebox"><div class="cap"><span id="rcap"></span><button type="button" id="rcopy"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>복사</button></div><pre id="rcode"></pre></div>
-  <p class="note">MatWorld 연구 제안의 첫 구성 요소 · <a href="#about">Vision &amp; Learning Lab, SNU</a> · 조사일 2026-10-15</p>
+  <div class="codebox"><div class="cap"><span id="rcap"></span><button type="button" id="rcopy"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg><span id="rcopyt">Copy</span></button></div><pre id="rcode"></pre></div>
+  <p class="note"><span class="en">First component of the MatWorld proposal · <a href="#about">Vision &amp; Learning Lab, SNU</a> · surveyed 2026-10-15</span><span class="ko">MatWorld 연구 제안의 첫 구성 요소 · <a href="#about">Vision &amp; Learning Lab, SNU</a> · 조사일 2026-10-15</span></p>
   <div class="marks" id="marks"></div>
 </div></header>
 
 <section id="why" class="center"><div class="wrap">
   <span class="eyebrow">Why relations</span>
-  <h2>같은 목표, 다른 경로</h2>
-  <p class="sub">도구 목록만 받은 에이전트는 에러 없이 틀린 숫자를 냅니다. 관계를 받은 에이전트는 전제 조건을 먼저 채우고, 금지된 조합은 처음부터 고르지 않습니다.</p>
+  <h2><span class="en">Same goal, different path</span><span class="ko">같은 목표, 다른 경로</span></h2>
+  <p class="sub"><span class="en">An agent given only a tool list returns wrong numbers without an error. An agent given the relations fills the preconditions first and never picks a forbidden combination.</span><span class="ko">도구 목록만 받은 에이전트는 에러 없이 틀린 숫자를 냅니다. 관계를 받은 에이전트는 전제 조건을 먼저 채우고, 금지된 조합은 처음부터 고르지 않습니다.</span></p>
   <div class="ba">
-    <div class="panel bad"><div class="ph"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.6"><path d="M6 6l12 12M18 6L6 18"/></svg></span>도구 목록만</div>
+    <div class="panel bad"><div class="ph"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.6"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="en">Tool list only</span><span class="ko">도구 목록만</span></div>
       <div class="chat">
-        <div class="msg u"><span class="av">U</span><div class="b">이 산화물의 금속-산소 결합을 COHP로 분석해줘</div></div>
-        <div class="msg"><span class="av">AI</span><div class="b"><span class="tool">vasp.static</span><span class="tool">lobster.cohp</span><br>ICOHP −2.41 eV. 결합이 강합니다. <span class="warn">[투영 손실 큼, 믿을 수 없음]</span></div></div>
+        <div class="msg u"><span class="av">U</span><div class="b"><span class="en">Analyze the metal–oxygen bonding in this oxide with COHP</span><span class="ko">이 산화물의 금속-산소 결합을 COHP로 분석해줘</span></div></div>
+        <div class="msg"><span class="av">AI</span><div class="b"><span class="tool">vasp.static</span><span class="tool">lobster.cohp</span><br><span class="en">ICOHP −2.41 eV. Strong bond. <span class="warn">[large projection loss, not trustworthy]</span></span><span class="ko">ICOHP −2.41 eV. 결합이 강합니다. <span class="warn">[투영 손실 큼, 믿을 수 없음]</span></span></div></div>
       </div>
       <ul class="pts">
-        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>VASP를 기본 설정으로 돌리고 LOBSTER에 넘김<small>대칭을 끄지 않고 밴드 수도 늘리지 않음</small></span></li>
-        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>힘을 직접 예측하는 모델로 포논 계산<small>포논, 탄성, NVE 분자동역학에는 보존력만 써야 함</small></span></li>
-        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>Materials Project 에너지와 OMat24 에너지를 한 상도에<small>기준점이 달라 안정성 부호까지 바뀔 수 있음</small></span></li>
-        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>생성 구조를 완화도 중복 확인도 없이 안정하다고 보고<small>결과는 그럴듯하지만 물리적으로 틀림. 조용한 실패</small></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span><span class="en">Runs VASP with defaults and hands it to LOBSTER<small>Symmetry left on, band count not raised</small></span><span class="ko">VASP를 기본 설정으로 돌리고 LOBSTER에 넘김<small>대칭을 끄지 않고 밴드 수도 늘리지 않음</small></span></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span><span class="en">Computes phonons with a direct-force model<small>Phonons, elasticity and NVE MD need conservative forces</small></span><span class="ko">힘을 직접 예측하는 모델로 포논 계산<small>포논, 탄성, NVE 분자동역학에는 보존력만 써야 함</small></span></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span><span class="en">Mixes Materials Project and OMat24 energies in one hull<small>Different references; even the stability sign can flip</small></span><span class="ko">Materials Project 에너지와 OMat24 에너지를 한 상도에<small>기준점이 달라 안정성 부호까지 바뀔 수 있음</small></span></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span><span class="en">Reports a generated structure as stable without relaxing or deduplicating<small>Plausible output, physically wrong. A silent failure</small></span><span class="ko">생성 구조를 완화도 중복 확인도 없이 안정하다고 보고<small>결과는 그럴듯하지만 물리적으로 틀림. 조용한 실패</small></span></span></li>
       </ul>
     </div>
-    <div class="panel good"><div class="ph"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.6"><path d="M5 12l5 5 9-10"/></svg></span>관계 그래프와 함께</div>
+    <div class="panel good"><div class="ph"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.6"><path d="M5 12l5 5 9-10"/></svg></span><span class="en">With the relation graph</span><span class="ko">관계 그래프와 함께</span></div>
       <div class="chat">
-        <div class="msg u"><span class="av">U</span><div class="b">이 산화물의 금속-산소 결합을 COHP로 분석해줘</div></div>
-        <div class="msg"><span class="av">AI</span><div class="b"><span class="tool">vasp.static(ISYM=-1, NBANDS↑)</span><span class="tool">conv.check</span><span class="tool">lobster.cohp</span><br>ICOHP −2.41 eV, 투영 손실 1.2%. <span class="ok">[전제 조건 충족, 수렴 확인]</span></div></div>
+        <div class="msg u"><span class="av">U</span><div class="b"><span class="en">Analyze the metal–oxygen bonding in this oxide with COHP</span><span class="ko">이 산화물의 금속-산소 결합을 COHP로 분석해줘</span></div></div>
+        <div class="msg"><span class="av">AI</span><div class="b"><span class="tool">vasp.static(ISYM=-1, NBANDS↑)</span><span class="tool">conv.check</span><span class="tool">lobster.cohp</span><br><span class="en">ICOHP −2.41 eV, projection loss 1.2%. <span class="ok">[preconditions met, convergence checked]</span></span><span class="ko">ICOHP −2.41 eV, 투영 손실 1.2%. <span class="ok">[전제 조건 충족, 수렴 확인]</span></span></div></div>
       </div>
       <ul class="pts">
-        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>전제 조건이 상위 계산의 설정을 바꿈<small>LOBSTER를 고르면 VASP 설정이 따라옴</small></span></li>
-        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>호환성에 걸리는 조합은 선택지에 없음<small>직접 힘 모델은 포논 계산기 후보에서 빠짐</small></span></li>
-        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>대체 관계로 싼 도구 먼저, 비싼 도구는 확인용<small>T1 퍼텐셜로 거르고 T3 DFT로 확인</small></span></li>
-        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>검증 사슬을 거친 출력만 라벨을 받음<small>완화, 안정성, 중복, 대칭, 전하 중성</small></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span><span class="en">A precondition changes the upstream settings<small>Choosing LOBSTER pulls in the right VASP settings</small></span><span class="ko">전제 조건이 상위 계산의 설정을 바꿈<small>LOBSTER를 고르면 VASP 설정이 따라옴</small></span></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span><span class="en">Incompatible combinations are not offered<small>Direct-force models drop out of the phonon calculator list</small></span><span class="ko">호환성에 걸리는 조합은 선택지에 없음<small>직접 힘 모델은 포논 계산기 후보에서 빠짐</small></span></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span><span class="en">Substitutes put cheap tools first, expensive ones for confirmation<small>Screen with a T1 potential, confirm with T3 DFT</small></span><span class="ko">대체 관계로 싼 도구 먼저, 비싼 도구는 확인용<small>T1 퍼텐셜로 거르고 T3 DFT로 확인</small></span></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span><span class="en">Only outputs that pass the verification chain get a label<small>Relax, stability, duplicates, symmetry, charge neutrality</small></span><span class="ko">검증 사슬을 거친 출력만 라벨을 받음<small>완화, 안정성, 중복, 대칭, 전하 중성</small></span></span></li>
       </ul>
     </div>
   </div>
-  <p style="margin-top:18px;font-size:12.5px;color:var(--faint)">대화와 숫자는 규칙이 어떻게 작동하는지 보이기 위한 예시입니다.</p>
+  <p style="margin-top:18px;font-size:12.5px;color:var(--faint)"><span class="en">The dialogue and numbers are illustrative, to show how the rules act.</span><span class="ko">대화와 숫자는 규칙이 어떻게 작동하는지 보이기 위한 예시입니다.</span></p>
 </div></section>
 
 <section id="examples" class="center"><div class="wrap">
   <span class="eyebrow">Live examples</span>
-  <h2>무엇을 시킬 수 있나</h2>
-  <p class="sub">목표 하나를 주면 에이전트가 그래프에서 경로를 찾습니다. 전제 조건은 자동으로 채워지고, 금지된 도구는 가려집니다.</p>
+  <h2><span class="en">What can you ask?</span><span class="ko">무엇을 시킬 수 있나</span></h2>
+  <p class="sub"><span class="en">Give one goal and the agent finds a path through the graph. Preconditions are filled automatically; forbidden tools are hidden.</span><span class="ko">목표 하나를 주면 에이전트가 그래프에서 경로를 찾습니다. 전제 조건은 자동으로 채워지고, 금지된 도구는 가려집니다.</span></p>
   <div class="cats" id="excats"></div>
   <div class="excard" id="excard"></div>
-  <div class="exnav"><button class="ar" id="exprev" type="button" aria-label="이전"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><div class="dots" id="exdots"></div><button class="ar" id="exnext" type="button" aria-label="다음"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+  <div class="exnav"><button class="ar" id="exprev" type="button" aria-label="Previous"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><div class="dots" id="exdots"></div><button class="ar" id="exnext" type="button" aria-label="Next"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div></section>
 
 <section id="graph-sec" class="center"><div class="wrap">
   <span class="eyebrow">Demo</span>
-  <h2>도구 그래프</h2>
-  <p class="sub">도구 27개와 관계 24개. 왼쪽에서 오른쪽으로 데이터, 계산기, 후처리, 검사기 순입니다. 선 위에 올리면 내용이, 도구를 누르면 오른쪽에 명세가 열립니다.</p>
+  <h2><span class="en">Tool graph</span><span class="ko">도구 그래프</span></h2>
+  <p class="sub"><span class="en">27 tools and 24 relations, left to right: data, calculators, post-processing, checkers. Hover a line for its rule; click a tool to open its spec on the right.</span><span class="ko">도구 27개와 관계 24개. 왼쪽에서 오른쪽으로 데이터, 계산기, 후처리, 검사기 순입니다. 선 위에 올리면 내용이, 도구를 누르면 오른쪽에 명세가 열립니다.</span></p>
   <div class="gbox">
-    <div class="gcanvas"><div class="gscroll"><svg id="graph" role="img" aria-label="도구 관계 그래프"></svg></div><div class="gkey" id="gkey"></div></div>
+    <div class="gcanvas"><div class="gscroll"><svg id="graph" role="img" aria-label="Tool relation graph"></svg></div><div class="gkey" id="gkey"></div></div>
     <aside class="gside" id="gside"></aside>
   </div>
 </div></section>
 
 <section id="tools"><div class="wrap">
-  <div style="max-width:560px"><span class="eyebrow">Explore by category</span><h2>레지스트리</h2><p class="sub" style="margin-left:0">에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼 146개. 종류를 고르거나 위의 검색창을 쓰세요.</p></div>
+  <div style="max-width:560px"><span class="eyebrow">Explore by category</span><h2><span class="en">Registry</span><span class="ko">레지스트리</span></h2><p class="sub" style="margin-left:0"><span class="en">146 wrappers that expose materials simulation to agents. Pick a category or use the search box above.</span><span class="ko">에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼 146개. 종류를 고르거나 위의 검색창을 쓰세요.</span></p></div>
   <div class="catgrid" id="catgrid"></div>
   <div class="tfilt" id="tfilt"></div>
   <div class="tgrid" id="tgrid"></div>
@@ -358,9 +383,9 @@ footer a{color:var(--muted)}
 </div></section>
 
 <section id="relations"><div class="wrap">
-  <span class="eyebrow blue">관계 네 종류</span>
-  <h2 style="max-width:620px">카탈로그의 주의사항이 전부 선이 됩니다</h2>
-  <p class="sub" style="margin-left:0">숙련된 연구자의 머릿속에만 있던 조합 지식을 기계가 읽을 수 있게 적고, 에이전트가 경로를 짤 때 강제합니다.</p>
+  <span class="eyebrow blue"><span class="en">Four kinds of relation</span><span class="ko">관계 네 종류</span></span>
+  <h2 style="max-width:620px"><span class="en">Every caveat in the catalog becomes an edge</span><span class="ko">카탈로그의 주의사항이 전부 선이 됩니다</span></h2>
+  <p class="sub" style="margin-left:0"><span class="en">Composition knowledge that used to live only in experienced researchers' heads, written so a machine can read it and enforced when the agent plans a path.</span><span class="ko">숙련된 연구자의 머릿속에만 있던 조합 지식을 기계가 읽을 수 있게 적고, 에이전트가 경로를 짤 때 강제합니다.</span></p>
   <div class="feat">
     <div class="acc" id="acc"></div>
     <div class="illus"><svg id="illus" viewBox="0 0 420 260" aria-hidden="true"></svg></div>
@@ -368,32 +393,32 @@ footer a{color:var(--muted)}
 </div></section>
 
 <section id="safety"><div class="wrap">
-  <span class="eyebrow blue">실행 시점에 강제</span>
+  <span class="eyebrow blue"><span class="en">Enforced at run time</span><span class="ko">실행 시점에 강제</span></span>
   <div class="two">
-    <div class="scard"><div class="h"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span>금지된 조합은 선택지에 없다</div><p>입력 형식, 전제 조건, 호환성은 LLM이 아니라 그래프가 기계적으로 검사합니다. 검사를 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다. 남은 선택지 중 어느 대체 도구를 어떤 순서로 쓸지만 비용과 불확실성을 보고 고릅니다.</p></div>
-    <div class="scard"><div class="h"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 12l5 5 9-10"/></svg></span>실패도 기록으로 남는다</div><p>결과마다 상태 플래그가 붙습니다. 정상, 자동 복구된 가벼운 오류, 계산 실패, 그리고 결과는 나왔는데 물리적으로 틀린 조용한 실패. 조용한 실패를 낸 조합은 새 관계로 그래프에 추가되므로, 그래프는 데이터가 쌓이면서 갱신됩니다.</p></div>
+    <div class="scard"><div class="h"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span><span class="en">Forbidden combinations are never on the menu</span><span class="ko">금지된 조합은 선택지에 없다</span></div><p><span class="en">Input types, preconditions and compatibility are checked mechanically by the graph, not by the LLM. A path that fails the check is not executed even if the LLM proposes it. Only the choice among remaining substitutes, and their order, is left to cost and uncertainty.</span><span class="ko">입력 형식, 전제 조건, 호환성은 LLM이 아니라 그래프가 기계적으로 검사합니다. 검사를 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다. 남은 선택지 중 어느 대체 도구를 어떤 순서로 쓸지만 비용과 불확실성을 보고 고릅니다.</span></p></div>
+    <div class="scard"><div class="h"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 12l5 5 9-10"/></svg></span><span class="en">Failures are recorded too</span><span class="ko">실패도 기록으로 남는다</span></div><p><span class="en">Every result carries a status flag: normal, a minor error that was auto-recovered, a failed run, or a silent failure where the output looks fine but is physically wrong. Combinations that produced silent failures are added to the graph as new relations, so the graph is updated as data accumulates.</span><span class="ko">결과마다 상태 플래그가 붙습니다. 정상, 자동 복구된 가벼운 오류, 계산 실패, 그리고 결과는 나왔는데 물리적으로 틀린 조용한 실패. 조용한 실패를 낸 조합은 새 관계로 그래프에 추가되므로, 그래프는 데이터가 쌓이면서 갱신됩니다.</span></p></div>
   </div>
 </div></section>
 
 <section id="stats-sec" style="padding-top:40px"><div class="wrap">
   <div class="bigpanel">
-    <h3>노드는 넘치고,<br><span class="d">관계는 어디에도 없다.</span></h3>
-    <div class="stats"><div><b>~130</b><span>재료 시뮬레이션 MCP 서버</span></div><div><b>~25</b><span>실제로 쓸 만한 서버</span></div><div><b>45</b><span>SKILL.md 스킬팩</span></div><div><b>~500</b><span>관계를 뽑을 스킬 본문</span></div><div><b class="z">0</b><span>관계를 적은 공개 레지스트리</span></div></div>
+    <h3><span class="en">Nodes are everywhere.<br><span class="d">Relations are nowhere.</span></span><span class="ko">노드는 넘치고,<br><span class="d">관계는 어디에도 없다.</span></span></h3>
+    <div class="stats"><div><b>~130</b><span><span class="en">materials-simulation MCP servers</span><span class="ko">재료 시뮬레이션 MCP 서버</span></span></div><div><b>~25</b><span><span class="en">actually usable</span><span class="ko">실제로 쓸 만한 서버</span></span></div><div><b>45</b><span><span class="en">SKILL.md skill packs</span><span class="ko">SKILL.md 스킬팩</span></span></div><div><b>~500</b><span><span class="en">skill files to mine for relations</span><span class="ko">관계를 뽑을 스킬 본문</span></span></div><div><b class="z">0</b><span><span class="en">public registries that record relations</span><span class="ko">관계를 적은 공개 레지스트리</span></span></div></div>
   </div>
 </div></section>
 
 <section id="bench"><div class="wrap">
   <span class="eyebrow">Benchmarks</span>
-  <h2>실제로 돌려서 채점하는가</h2>
-  <p class="sub" style="margin-left:0">관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러납니다. 입력 준비만 채점하는 벤치마크는 조용한 실패를 잡지 못합니다.</p>
-  <div class="tbl"><table><thead><tr><th>벤치마크</th><th>무엇을 재나</th><th>크기</th><th>시뮬레이터 실행</th></tr></thead><tbody id="benchrows"></tbody></table></div>
+  <h2><span class="en">Does it actually run the simulator?</span><span class="ko">실제로 돌려서 채점하는가</span></h2>
+  <p class="sub" style="margin-left:0"><span class="en">The effect of relations only shows when the agent's path is actually executed. Benchmarks that grade input preparation alone cannot catch silent failures.</span><span class="ko">관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러납니다. 입력 준비만 채점하는 벤치마크는 조용한 실패를 잡지 못합니다.</span></p>
+  <div class="tbl"><table><thead><tr><th><span class="en">Benchmark</span><span class="ko">벤치마크</span></th><th><span class="en">What it measures</span><span class="ko">무엇을 재나</span></th><th><span class="en">Size</span><span class="ko">크기</span></th><th><span class="en">Runs the simulator</span><span class="ko">시뮬레이터 실행</span></th></tr></thead><tbody id="benchrows"></tbody></table></div>
 </div></section>
 
 <section id="about"><div class="wrap"><div class="narrow" style="margin-left:0">
   <span class="eyebrow">About</span>
-  <h2>왜 만드나</h2>
-  <p style="margin-top:18px;color:var(--muted);font-size:16px;line-height:1.7">재료 계산 도구는 이미 충분히 많고, 그것을 에이전트에 노출한 래퍼도 수백 개가 있습니다. 비어 있는 것은 도구를 조합하는 지식입니다. 그 지식을 네 종류의 관계로 적어 두면 에이전트가 사람 없이도 도구를 올바른 순서와 설정으로 조합할 수 있고, 그 조합을 대량으로 돌려 재료 세계의 월드모델을 학습할 데이터를 만들 수 있습니다. SimulationHub는 MatWorld 제안의 첫 단계이며, 관계가 완전하다고 주장하지 않고 관계가 있으면 없을 때보다 낫다는 것을 벤치마크에서 보이려 합니다.</p>
-  <p style="margin-top:16px;color:var(--faint);font-size:13px;line-height:1.6">조사는 MCP 서버, SKILL.md 스킬팩, MCP가 아닌 플랫폼과 벤치마크와 표준의 세 갈래로 했습니다. GitHub, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 클론해 셌습니다. 열지 못한 항목은 [미검증]입니다. 이 페이지의 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠습니다.</p>
+  <h2><span class="en">Why build it</span><span class="ko">왜 만드나</span></h2>
+  <p style="margin-top:18px;color:var(--muted);font-size:16px;line-height:1.7"><span class="en">Materials-simulation tools already exist in abundance, and hundreds of wrappers expose them to agents. What is missing is the knowledge of how to combine them. Written down as four kinds of relation, that knowledge lets an agent compose tools in the right order and with the right settings without a human, and running those compositions at scale produces the data needed to learn a world model of the materials world. SimulationHub is the first step of the MatWorld proposal. It does not claim the relations are complete; it aims to show on benchmarks that having them beats not having them.</span><span class="ko">재료 계산 도구는 이미 충분히 많고, 그것을 에이전트에 노출한 래퍼도 수백 개가 있습니다. 비어 있는 것은 도구를 조합하는 지식입니다. 그 지식을 네 종류의 관계로 적어 두면 에이전트가 사람 없이도 도구를 올바른 순서와 설정으로 조합할 수 있고, 그 조합을 대량으로 돌려 재료 세계의 월드모델을 학습할 데이터를 만들 수 있습니다. SimulationHub는 MatWorld 제안의 첫 단계이며, 관계가 완전하다고 주장하지 않고 관계가 있으면 없을 때보다 낫다는 것을 벤치마크에서 보이려 합니다.</span></p>
+  <p style="margin-top:16px;color:var(--faint);font-size:13px;line-height:1.6"><span class="en">The survey covered three strands: MCP servers, SKILL.md skill packs, and non-MCP platforms, benchmarks and standards. Entries were verified on GitHub, through PyPI and npm metadata, and in arXiv and official docs; about 30 skill packs were cloned and counted. Items that could not be opened are marked [unverified]. Except for phonopy, the tool specs on this page had no complete spec in the source and were filled from general documentation.</span><span class="ko">조사는 MCP 서버, SKILL.md 스킬팩, MCP가 아닌 플랫폼과 벤치마크와 표준의 세 갈래로 했습니다. GitHub, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 클론해 셌습니다. 열지 못한 항목은 [미검증]입니다. 이 페이지의 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠습니다.</span></p>
 </div></div></section>
 
 <footer><div class="wrap"><span>SimulationHub · Vision &amp; Learning Lab, SNU · 2026</span><span><a href="https://yerimoh.github.io">yerimoh.github.io</a></span></div></footer>
@@ -403,10 +428,12 @@ footer a{color:var(--muted)}
 (function(){
 "use strict";
 var $=function(s){return document.querySelector(s)};
+function $$(s,root){return Array.prototype.slice.call((root||document).querySelectorAll(s))}
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
-var COLS=[{x:16,label:"Data / generators"},{x:252,label:"Fast calculators"},{x:488,label:"DFT"},{x:724,label:"Post-processing"},{x:960,label:"Checkers"}];
-var W=186,H=46;
-var ET={pre:"전제 조건",cmp:"호환성",sub:"대체",ver:"검증"};
+var L=document.documentElement.getAttribute("lang")==="ko"?"ko":"en";
+var t=function(en,ko){return L==="en"?en:ko};
+var COLS=[{x:16},{x:252},{x:488},{x:724},{x:960}];
+var ET=function(){return L==="en"?{pre:"Precondition",cmp:"Compatibility",sub:"Substitute",ver:"Verification"}:{pre:"전제 조건",cmp:"호환성",sub:"대체",ver:"검증"}};
 
 const N=[
  ["mp",0,56,"Materials Project","데이터 소스","T0",{in:"화학계, 조성, mp-id",out:"구조, 에너지, 밴드갭, 상도",ref:"MP 호환 설정 (PBE/PBE+U, 보정 포함)",lic:"데이터 CC-BY-4.0",env:"mp-api",exec:"바로",fail:"API 오류 재시도"},["MP 공식 MCP","mcp-materials-project","Pipeworx mcp-materials"]],
@@ -441,7 +468,7 @@ const N=[
  ["imag",4,260,"허수 진동수 검사","검사기 · 포논","T0",{in:"포논 밴드",out:"허수 모드 유무와 위치",ref:"해당 없음",lic:"자체",env:"phonopy 환경",exec:"바로",fail:"Γ점 근처 작은 허수는 수치 잡음으로 분리"},["CrystOD 포논 분석"]],
  ["conv",4,328,"수렴 기록 검사","검사기 · DFT","T0",{in:"DFT 출력 로그",out:"SCF, 이온 수렴 여부",ref:"해당 없음",lic:"custodian (MIT)",env:"공용",exec:"바로",fail:"가벼운 오류는 자동 복구, 큰 오류는 기록"},["chemtoolsmcp plan_recovery","custodian"]]
 ].map(a=>({id:a[0],col:a[1],y:a[2],name:a[3],role:a[4],tier:a[5],spec:a[6],wr:a[7],x:COLS[a[1]].x}));
-var NM={};N.forEach(function(n){NM[n.id]=n;n.x=COLS[n.col].x});
+var NM={};N.forEach(function(n){NM[n.id]=n});
 const E=[
  ["vasp","lobster","pre","ISYM=-1, NBANDS 증가","LOBSTER를 쓰려면 VASP를 대칭을 끄고 밴드 수를 늘려 돌려야 한다."],
  ["vasp","boltz","pre","조밀한 k점","BoltzTraP2는 보간을 위해 조밀한 k점 DFT 밴드가 필요하다."],
@@ -624,126 +651,152 @@ const R=[
 ["std","EMMO, CMSO, openBIS","","재료 온톨로지, 계산 시료 온톨로지, ELN","","","","near",""],
 ["std","공개 재료 툴 레지스트리","","없음. 허브의 자리","","","","gap",""]
 ].map(a=>({cat:a[0],name:a[1],url:a[2],what:a[3],backend:a[4],lic:a[5],act:a[6],st:a[7],hub:a[8]}));
+var R_EN={"CatGo (catgo-LRG)": ["", "MCP (HTTP + stdio) + DAG workflow engine + SSH/HPC submission, input generation for VASP/ORCA/CP2K/LAMMPS, ships 139 skills"], "SciLink": ["", "Periodic DFT (VASP, QE), LAMMPS MD, ForceFieldAgent, MLIPs, structure pipelines. MCP via scilink serve"], "fairchem-mcp": ["", "load_model, start_relaxation, start_md, start_neb, start_phonons, start_elastic_scan, start_convex_hull, get_status, steer. Async job pattern"], "compchem-mcp": ["", "49 tools: periodic DFT, PySCF, xTB, MLFF optimization and MD, NEB, TS search, slabs and adsorption, IR"], "chemtoolsmcp": ["", "review_input, draft_input, plan_calculation, plan_recovery, launch_run, monitor_run. About 323 tools on the dev surface"], "CrystOD": ["", "Symmetry, irreps, phonon analysis"], "aiida-mcp": ["", "install_code, install_pseudopotentials, generate_phonon_script, execute_calculation. The only MCP on top of AiiDA"], "Goldilocks MCP (STFC)": ["", "ML estimate of the QE k-point spacing"], "SciMCP": ["", "45 tools: LAMMPS input and parsing, VASP/QE input, MP queries, phonon analysis"], "chemaster": ["", "54 tools, molecular QC"], "mcp2pyscf": ["", "PySCF"], "Alchemist-MCP": ["", "DFT dataset validation, MACE and RuNNer training"], "wannier-compass": ["", "VASP to Wannier90 guide and gated submission"], "LLM-MatGen": ["", "11 generators for defects, surfaces, interfaces, grain boundaries, adsorption"], "raspa-mcp": ["", "28 tools: GCMC templates, force-field recommendation, isotherms. The only one for porous materials"], "opencalphad-mcp-compiler": ["", "calculate_equilibrium, compare_alloys. The only CALPHAD MCP"], "mcp-server-cantera": ["", "Mixture properties, equilibrium, flame temperature, ignition delay"], "MDEngine": ["", "LAMMPS/ReaxFF locally (macOS Metal) and on hosted GPUs"], "lammps-mcp (gcnwm) [미검증]": ["lammps-mcp (gcnwm) [unverified]", "submit_script, read_log, restart"], "gromacs_mcp (MacromNex)": ["", "Workflow submission, batch analysis"], "gromacs-mcp (Alierkn)": ["", "30 tools, full gmx pipeline"], "gmx-vmd-mcp": ["", "GROMACS + VMD microservices"], "ChatMol molecule-mcp": ["", "pymol, chimerax, gromacs_copilot servers"], "biomolecule-modeling-mcp": ["", "PDB editing, OpenMM relaxation"], "protein-design-mcp": ["", "41 tools including OpenMM minimization (adjacent, bio)"], "ovito-mcp (wjgoarxiv)": ["", "19 tools: RDF, coordination, structure identification, rendering"], "ovito-mcp 공식": ["ovito-mcp (official)", "Drives OVITO Pro sessions, pipelines, analysis"], "vmd-hydrate-mcp": ["", "17 tools, hydrate analysis"], "yade-mcp": ["", "Runs DEM code and manages jobs (mesoscale)"], "MS-MCP": ["", "Materials Studio Forcite/DMol3/CASTEP jobs (unofficial)"], "materials-studio-mcp-moc": ["", "53 tools, Materials Studio input preparation"], "schrodinger-mcp (비공식)": ["schrodinger-mcp (unofficial)", "ligprep, glide, jaguar (drug discovery)"], "rowan-mcp": ["", "45 tools: energies, optimization, vibrations, conformers, pKa, TS search"], "SandboxAQ MCP (AQCat)": ["", "Adsorption-energy screening, AQPotency. Available as a Claude connector"], "NovoMCP": ["", "MD, QM, conformers (drug-discovery oriented)"], "scicomp-molecular-mcp": ["", "15 toy MD tools (educational)"], "Psi-MCP": ["", "VQE, molecular Hamiltonians"], "ChemMCP (OSU-NLP)": ["", "33 tools: synthesis, retrosynthesis, property prediction, PubChem"], "rdkit-mcp-server": ["", "Auto-exposes RDKit functions"], "분자 유틸리티 8종": ["8 molecular utilities", "Descriptors, mass, drawing, editing. In the hub only as T0 checkers"], "MoziChem-MCP": ["", "EOS (PR/SRK), flash calculations, NASA polynomials"], "gnnepcsaft-mcp-server": ["", "GNN PC-SAFT parameters to density and vapor pressure"], "water-chemistry-mcp": ["", "Solution speciation, scaling (PHREEQC)"], "Profex-MCP": ["", "XRD phase identification, COD search, Rietveld refinement. The only XRD one"], "shelx-mcp": ["", "SHELX structure solution and refinement"], "Crystal-Builder": ["", "MOF desktop app + HTTP MCP"], "MatBrain / Mat-MCP (SIAT)": ["", "MP, OQMD, CrystaLLM, MatterGen, MatGL, MatterSim, FairChem, VASP as Docker MCPs"], "CrystaLyse.AI": ["", "chemistry-unified, creative and visualization servers"], "CoChem-Agents": ["", "RDKit MCP, MP MCP wrappers"], "PolyAgent": ["", "Polymer inverse-design MCP"], "materials-agent-toolkit": ["", "Composition analysis, VRH moduli, diffusion. JSON I/O schemas, assumptions, provenance, versioned catalog"], "HEA-Bench": ["", "High-entropy alloy descriptors, rules, design search"], "MolMCP": ["", "Visualization, job queue, experiment plane"], "nanohub-mcp": ["", "Framework wrapping nanoHUB tools"], "alchemite-mcp": ["", "ML prediction of materials properties"], "FORTHought": ["", "XRD phase ID, SEM, PL (lab platform)"], "Pipeworx mcp-materials": ["", "Federated OPTIMADE search (OQMD, MP, NOMAD, Alexandria), OQMD hull"], "Pipeworx mcp-oqmd": ["", "search_materials, get_material, stable_phases"], "Pipeworx mcp-crystallography": ["", "COD search, CIF"], "mcp-materials-project": ["", "Full MP data, phase diagrams, comparison, Excel export"], "MP 공식 MCP": ["Materials Project official MCP", "Official agent server from Materials Project"], "소규모 DB 서버 4종": ["4 small DB servers", "MP search, cathode validation, Catalysis-Hub GraphQL, alloy datasheets"], "cellpy-mcp": ["", "Battery cell data"], "materials-mcp-commons": ["", "Governed engine with provenance, OPTIMADE"], "labmate-mcp": ["", "81 tools: COD, MP, NIST, pKa/solubility, retrosynthesis"], "PubChem/ChEMBL 서버 8종": ["8 PubChem/ChEMBL servers", "Compound lookup (not simulation)"], "LLaMP (LBNL)": ["", "LangChain ReAct agent, MP API, ASE/atomate2/MACE"], "AtomAgents (MIT)": ["", "Lattice constants, elasticity, surface energy, dislocations, NEB"], "DREAMS": ["", "LangGraph, QE DFT on HPC, adsorption"], "ChatMOF": ["", "MOF search, prediction, generation"], "SciToolAgent (ZJU)": ["", "500+ bio/chem/materials tools (own service)"], "CACTUS (PNNL)": ["", "RDKit descriptor tools"], "DELFIN (KIT)": ["", "Quantum-chemistry platform, MCP client"], "Nanome MCP": ["", "47 visualization tools, docking"], "jinzhezenggroup comp-chem skills": ["", "62: dft-vasp/qe/cp2k/gpaw/abinit/siesta, xtb, deepmd, dpgen, lammps, phonopy, pymatgen. Upstream of DeepModeling's official skills"], "deepmd-kit in-repo 스킬": ["deepmd-kit in-repo skills", "5: install, train (DPA3), finetune, python-inference, lammps-deepmd"], "dpdata / dpgen / dpdispatcher / reacnetgenerator": ["", "4 / 2 / 1 / 1 (shipped by the vendor)"], "NVIDIA ALCHEMI 스킬": ["NVIDIA ALCHEMI skills", "14: dynamics API, MEP, training, fine-tuning, distillation + AGENTS.md"], "ChatMaterials (저장소 20개)": ["ChatMaterials (20 repos)", "vasp/qe/abinit/lammps/wannier90 workflows and analysis. Scripts, fixtures, CI regression tests"], "Hello-QM/catgo-LRG": ["", "139: DFT codes across the board, structure generation, adsorption energies, COHP, volcano plots, convergence tests, troubleshooting. 102 .py/.sh scripts"], "AI4MS/MatCreator": ["", "41: vasp, abacus, lammps, deepmd, phonon, mattergen, mattersim, MP, bohrium"], "Genkai_Agent": ["", "44 (MatCreator fork + uma fine-tuning)"], "GPUMD-skill": ["", "35: gpumd, nep training, dft-*, phonopy. The only GPUMD one"], "crystal668-hub/answer-like-a-chemist": ["", "88 (Chinese). DFT, MLIPs, workflows, databases across the board. 173 scripts + validation bench. Widest coverage"], "FonaTech/DFT_Skills": ["", "1: DFT to AIMD to MLIP-MD to FEM scale selection"], "MatClaw [스킬 미검증]": ["MatClaw [skills unverified]", "README claims 240, the repo has 20. Incomplete release"], "quantum-chem-skills": ["", "9: pyscf, gaussian, multiwfn, xtb MD (molecular)"], "InternScience/ChemClaw": ["", "26: CIF to XRD, xTB, IR/Raman/UV/NMR simulation"], "TB2J in-repo 스킬": ["TB2J in-repo skill", "1: magnetic exchange J, DMI"], "usst1-DFT-codex-skill": ["", "1: SSH, VASPkit, Slurm, Wannier (for Codex)"], "VASP-automatization-platform": ["", "3 skills"], "agentic-science-worker": ["", "17: lammps, qe, mlip, torch-sim"], "skill_lammps": ["", "LAMMPS input writing"], "automd-gromacs": ["", "Full GROMACS (EM, NVT, NPT, FEP, REMD, QM/MM)"], "ClawHub 단발 스킬": ["ClawHub one-off skills", "VASP step-by-step workflows, VASP/CP2K input generation, KMC catalysis"], "a5c-ai/babysitter": ["", "About 30 materials-related. Instructions only, shallow LLM-generated templates"], "wentorai/research-plugins": ["", "2 to 3 guides on computational chemistry, MD, catalysis-hub"], "Awesome-Scientific-Skills": ["", "No materials. Lists Simulation & Modeling as an unmet gap"], "K-Dense scientific-agent-skills": ["", "pymatgen and pycalphad skills (10+ clones exist)"], "Microsoft Discovery": ["", "Multi-agent + graph knowledge layer + HPC. No public MCP"], "Bohrium + SciMaster + MatMaster": ["", "Capability registry + scheduler + lab OS. The only large materials tool registry (private)"], "Matlantis (PFN/ENEOS)": ["", "Universal MLIP. Claude Code and Codex inside the terminal, skills published. No MCP"], "SandboxAQ AQCat on Claude": ["", "Catalyst adsorption-energy LQM"], "Citrine Catalyst / VirtualLab": ["", "Experiment-design workflow agents. No public MCP or API"], "CuspAI MIRA [URL 미검증]": ["CuspAI MIRA [URL unverified]", "Generate, predict, synthesize routing; 35 partner labs"], "COMSOL": ["", "Codex drives COMSOL through the Java API. No official MCP"], "Ansys PyAnsys MCP": ["", "ansys-fluent-mcp, ansys-cfx-mcp, ansys-lumerical-mcp, ansys-common-mcp (28k downloads a month)"], "Flexcompute Tidy3D FlexAgent": ["", "Optical FDTD"], "Edison / FutureHouse Kosmos": ["", "Co-scientist for literature and data analysis"], "TritonDFT + DFTBench": ["", "QE automation, Pareto parameter inference, memory, HITL"], "AutoDFT (NTU)": ["", "7-agent closed-loop VASP (planner, monitor, recovery, reflector)"], "GENIUS (KIT)": ["", "QE knowledge graph + FSM error recovery"], "El Agente Sólido": ["", "QE + phonopy + UMA/MACE, 7 task types"], "VASP-Agent": ["", "Workflow-library agent, CI-NEB, benchmark across 6 LLMs"], "Material Buddy (Matty)": ["", "LangChain + MCP, VASP/Gaussian/xTB/LAMMPS"], "MDAgent2": ["", "LAMMPS code generation + checking"], "OpenAaaS": ["", "Agent-as-a-Service, sub-agents at remote data sites"], "S1-MatAgent": ["", "MACE gradient-based HEA catalyst optimization"], "TopoMAS": ["", "Topological-materials multi-agent + first-principles verification"], "InternAgent / NovelSeek": ["", "Closed-loop autonomous research framework"], "2025 LLM 해커톤": ["2025 LLM hackathon", "BASIS (QE), DFTPilot, RedoxFlow, LARA-HPC, AgentLearn"], "Paimon": ["", "Silent-failure taxonomy. Reused as-is by the hub"], "Masgent": ["", "Pydantic-schema agent"], "openfoam-mcp (0xFFD)": ["", "25 CFD tools: case setup, run, post-processing"], "openfoam-mcp-server (webworn)": ["", "C++ MCP, 12 tools"], "Foam-Agent, ChatCFD, PhyNiKCE …": ["", "Multi-agent CFD. PhyNiKCE has a 340-run suite"], "dolfinx-mcp / ccFenics-plugin": ["", "FEM. 38-tool MCP + Claude Code plugin (37 skills, 6 agents)"], "agentfem-mcp, PDE-Agents": ["", "FEniCSx FEM"], "mcp-calculix, FeaGPT": ["", "STEP to static, modal, buckling, creep"], "abaqus-mcp": ["", "Drives Abaqus"], "AutoMOOSE, MooseAgent": ["", "Phase-field MOOSE. 10-tool MCP / vector DB"], "ol_dwsim_interop_services": ["", "Process simulation with DWSIM. FastMCP + .NET, Windows"], "Aspen-AI (SARI CAS)": ["", "LangChain + MCP + RAG"], "Battery-Sim-Agent (KDD 2026)": ["", "DFN parameter estimation. No MCP"], "AgenticTCAD, zenDot": ["", "TCAD with fine-tuned LLMs"], "science-mcps, nomad-scifm": ["", "HPC transfer, compute, scientific foundation-model serving"], "OPTIMADE v1.3.0": ["", "REST API and filter grammar for materials databases"], "QCSchema / QCArchive": ["", "Quantum-chemistry I/O schema, QC data server"], "NOMAD Metainfo": ["", "Code-independent electronic-structure and MD metadata schema"], "semantikon (pyiron)": ["", "Ontology-annotated type hints to RDF, pint units. First reference for typed ports"], "TWA ontology-to-MCP": ["", "Compiles an ontology T-Box into constraint-enforcing MCP tools. The only precedent for enforcing relations"], "CWL, RO-Crate": ["", "Workflow description, research packaging. Trace serialization"], "bio.tools / biotoolsSchema": ["", "Tool registry + 50-attribute XSD + EDAM ontology. Model for a registry schema"], "Galaxy ToolShed + Rhea": ["", "Tool XML, exposed as MCP through RAG"], "EMMO, CMSO, openBIS": ["", "Materials ontology, computational-sample ontology, ELN"], "공개 재료 툴 레지스트리": ["Public materials tool registry", "None. This is the hub's slot"]};
+var N_EN={"mp": ["Data source", "Chemical system, composition, mp-id", "Structures, energies, band gaps, phase diagrams", "MP-compatible settings (PBE/PBE+U with corrections)", "Data CC-BY-4.0", "mp-api", "Immediate", "Retry on API errors"], "optimade": ["Data source", "OPTIMADE filter string", "Structures and metadata from many DBs", "Reported as in the source DB", "Open standard", "optimade-python-tools", "Immediate", "Flag missing responses per DB"], "mattergen": ["Generator", "Chemical system, target property conditions", "Unrelaxed candidate structures", "Not applicable (structures only)", "MIT", "torch-only environment", "Immediate (GPU)", "Must pass the full verification chain"], "pyxtal": ["Generator", "Composition, space group", "Random structures obeying symmetry", "Not applicable", "MIT", "shared pymatgen environment", "Immediate", "Minimum interatomic-distance check"], "subst": ["Generator", "Parent structure, substitution rule", "Structure with changed composition (unrelaxed)", "Inherited from the parent", "MIT", "shared pymatgen environment", "Immediate", "Feeds straight into the charge-neutrality check"], "mace": ["ML potential", "Structure", "Energy, forces (energy gradients), stress", "Trained on MPtrj + sAlex, PBE family", "Commercial use allowed (proposal §3.2)", "torch, matcalc", "Immediate", "Max-force convergence check"], "orbd": ["ML potential", "Structure", "Energy, forces (predicted directly)", "Trained on OMat24 family; forces are not energy gradients", "Apache-2.0", "torch, matcalc", "Immediate", "Blocked for phonons, elasticity and NVE MD by compatibility rules"], "pet": ["ML potential", "Structure", "Energy, forces, stress", "OMat24 energy reference (differs from MP)", "Commercial use allowed (proposal §3.2)", "metatomic", "Immediate", "Max-force convergence check"], "matgl": ["Predictive model", "Structure", "Band gap (error about 0.4 eV)", "Trained on PBE gaps", "BSD-3", "matgl environment", "Immediate", "Out-of-distribution warning"], "calphad": ["Thermodynamics", "Composition, temperature, TDB database", "Phase equilibria, phase diagrams", "Assessment source of the TDB file", "MIT", "pycalphad environment", "Immediate", "Blocks compositions outside the database range"], "vasp": ["DFT", "Structure, INCAR, POTCAR, k-points", "Energy, forces, bands, WAVECAR", "Functional, +U, pseudopotentials, dispersion correction", "Commercial (points to the user's copy)", "atomate2, quacc", "Submit and wait (jobflow-remote)", "custodian recovery, convergence-log check"], "qe": ["DFT", "Structure, pseudopotentials (SSSP etc.), k-points", "Energy, forces, bands", "Functional, pseudopotential library", "GPL-2.0", "quacc, AiiDA", "Submit and wait", "SCF oscillation detection, convergence-log check"], "dfpt": ["DFT linear response", "Relaxed structure", "Born effective charges, dielectric tensor", "Inherits the upstream DFT settings", "Same as VASP or QE", "atomate2", "Submit and wait", "Acoustic sum-rule check"], "hse": ["Hybrid functional", "Structure, converged PBE run", "Band gap (more accurate)", "HSE06", "Same as VASP or QE", "atomate2", "Submit and wait", "Convergence-log check"], "ce": ["Statistical thermodynamics", "Parent lattice, DFT training structures", "Finite-temperature phase diagram", "DFT settings used for training", "See catalog", "separate environment", "Immediate", "Cross-validation error check"], "phonopy": ["Phonons", "Relaxed structure, a force calculator (forces must be energy gradients), supercell size", "Phonon bands, dynamic stability (yes/no), status flag", "Inherited from the force calculator", "BSD-3", "phonopy 4.x environment", "Immediate", "Imaginary-mode check, convergence check"], "phono3py": ["Thermal conductivity", "Relaxed structure, conservative-force calculator", "Lattice thermal conductivity", "Inherited from the force calculator", "BSD-3", "phono3py environment", "Immediate or submitted", "q-point convergence check"], "lobster": ["Bonding analysis", "VASP wavefunctions (symmetry off, more bands)", "COHP, bond strengths", "Upstream VASP settings", "Free for academia (proprietary)", "lobsterpy", "Immediate", "Charge spilling check"], "boltz": ["Transport", "Dense-k-mesh DFT bands", "Seebeck, electrical conductivity", "Upstream DFT settings", "GPL-3.0", "BoltzTraP2 environment", "Immediate", "Warns on insufficient k-density"], "wannier": ["Electronic-structure post-processing", "VASP (LWANNIER90) or QE output", "Maximally localized Wannier functions, interpolated bands", "Upstream DFT settings", "GPL-2.0", "Wannier90 binary", "Immediate", "Spread convergence check"], "elastic": ["Mechanical properties", "Structure relaxed to forces below 1e-3 eV/Å, conservative-force calculator", "Elastic tensor, bulk and shear moduli", "Inherited from the force calculator", "pymatgen/matcalc", "matcalc", "Immediate", "Born stability criteria"], "hull": ["Stability", "Set of energies on one reference", "E_hull, stable phases", "All input energies must share a reference", "MIT (pymatgen)", "shared pymatgen environment", "Immediate", "Blocks on mismatched references"], "smact": ["Checker · charge neutrality", "Composition", "Whether a charge-neutral assignment exists", "Not applicable", "MIT", "shared pymatgen environment", "Immediate", "Not applicable"], "sm": ["Checker · duplicates", "Candidate structure, set of known structures", "Duplicate or not", "Tolerance settings", "MIT (pymatgen)", "shared pymatgen environment", "Immediate", "Not applicable"], "spglib": ["Checker · symmetry", "Structure, tolerance", "Space group", "Tolerance settings", "BSD-3", "shared", "Immediate", "Not applicable"], "imag": ["Checker · phonons", "Phonon bands", "Presence and location of imaginary modes", "Not applicable", "in-house", "phonopy environment", "Immediate", "Small imaginary modes near Γ treated as numerical noise"], "conv": ["Checker · DFT", "DFT output logs", "SCF and ionic convergence", "Not applicable", "custodian (MIT)", "shared", "Immediate", "Minor errors auto-recovered, major ones recorded"]};
+var E_EN=[["ISYM=-1, more bands", "To use LOBSTER, VASP must be run with symmetry off and an increased number of bands."], ["dense k-mesh", "BoltzTraP2 needs DFT bands on a dense k-mesh for interpolation."], ["LWANNIER90 flag", "Wannier90 needs VASP output produced with the LWANNIER90 flag."], ["Born charges (LO–TO splitting)", "Drawing LO–TO splitting in polar materials needs Born effective charges from DFPT."], ["relaxed to forces below 1e-3 eV/Å", "Elastic constants must be computed on a structure relaxed to forces below 1e-3 eV/Å."], ["relaxed structure + conservative forces", "phonopy takes a relaxed structure and a force calculator whose forces are energy gradients."], ["conservative-force calculator", "phono3py also needs a calculator whose forces are energy gradients."], ["forbidden: forces are not gradients", "Direct-force models must not be used for phonons. The graph removes this combination from the choices."], ["forbidden: direct forces for elasticity", "Direct-force models must not be used for elastic constants either."], ["forbidden: OMat24-reference energy in an MP hull", "Materials Project and OMat24 energies have different references and are never mixed in one hull."], ["only with matching functional, +U, pseudopotentials", "Stability is compared only among results with the same functional, +U and pseudopotentials. Stress units and signs differ by code and are converted."], ["band gap T1 ↔ T3", "For band gaps, the matgl prediction (T1, error about 0.4 eV) and PBE DFT (T3) are substitutes."], ["PBE ↔ HSE (more expensive)", "PBE underestimates band gaps. When a more accurate value is needed, escalate to HSE."], ["stability T1 ↔ T3", "Stability can be read from an ML potential (T1) or DFT (T3). Fidelity pairs become world-model training data."], ["phase diagram T0 ↔ T2", "Phase diagrams come from a CALPHAD database (T0) or cluster expansion + Monte Carlo (T2)."], ["thermal conductivity T2 ↔ T3+", "Thermal conductivity comes from an ML potential + phono3py (T2) or DFT (T3 and up)."], ["generated output → relax", "Generator output is relaxed first."], ["relax → stability", "E_hull is computed on the relaxed structure."], ["stability → duplicate check", "Stable candidates are checked against known structures."], ["duplicates → symmetry", "The space group of the new structure is determined."], ["symmetry → charge neutrality", "Charge neutrality is checked last here; since impossible compositions dominate failures in v1, in practice it runs first."], ["imaginary-mode check", "Phonon results pass the imaginary-mode check before they become a dynamic-stability label."], ["convergence log", "DFT results pass the convergence-log check."], ["convergence log", "DFT results pass the convergence-log check."]];
+var NAME_EN={"subst": "pymatgen substitution", "ce": "Cluster expansion + MC", "elastic": "Elastic constants", "hull": "Phase diagram · E_hull", "imag": "Imaginary-mode check", "conv": "Convergence-log check", "matgl": "matgl band gap"};
+N.forEach(function(n){if(NAME_EN[n.id])n.name_en=NAME_EN[n.id]});
+N.forEach(function(n){var m=N_EN[n.id];if(m){n.role_en=m[0];n.spec_en={in:m[1],out:m[2],ref:m[3],lic:m[4],env:m[5],exec:m[6],fail:m[7]}}});
+E.forEach(function(e,i){var m=E_EN[i];if(m){e.short_en=m[0];e.detail_en=m[1]}});
+R.forEach(function(r){var m=R_EN[r.name];if(m){r.name_en=m[0]||r.name;r.what_en=m[1]}});
+var TOK=[["미표기","unspecified"],["없음 (all rights reserved)","none (all rights reserved)"],["없음","none"],["별 ","★ "],["커밋 ","commits "],["이후 정지","then stalled"],["아카이브","archived"],["호스팅 게이트웨이","hosted gateway"],["호스팅","hosted"],["독점","proprietary"],["상용 (무료 티어)","commercial (free tier)"],["상용","commercial"],["공식 MCP","official MCP"],["공식","official"],["활발","active"],["미제공","not provided"],["셸 스크립트","shell script"],["설치 스크립트","install script"],["원격 MCP (OAuth, 과금)","remote MCP (OAuth, metered)"],["클라우드","cloud"],["바이너리","binary"],["프로토타입","prototype"],["논문","paper"],["파이썬","Python"],["코드 없음","no code"],["구축 중","in progress"],["요청 시 코드","code on request"],["플랫폼 에이전트, 데스크톱 앱","platform agents, desktop app"],["스킬","skills"],["비공개","private"],["인프라","infra"],["표준 (공개)","open standard"],["순수 파이썬","pure Python"],["각 deepmodeling 저장소 skills/","skills/ in each deepmodeling repo"],["해당 패키지","the package itself"],["전부","all of them"],["거의 지시문, .py 3개","mostly instructions, 3 .py"],["예제만","examples only"],["OSS 초기","early OSS"],["라이선스 필요","license required"],["MCP 어댑터 14툴","MCP adapter, 14 tools"],["문서 참조","see docs"],["Windows 배치","Windows batch"],["제공","available"],["휴면","dormant"]];
+var tr=function(s){if(L==="ko"||!s)return s;TOK.forEach(function(p){s=s.split(p[0]).join(p[1])});return s};
+var nname=function(n){return L==="en"&&n.role_en?n.role_en:n.role};
+var nspec=function(n){return L==="en"&&n.spec_en?n.spec_en:n.spec};
+var rname=function(r){return L==="en"&&r.name_en?r.name_en:r.name};
+var rwhat=function(r){return L==="en"&&r.what_en?r.what_en:r.what};
+var eshort=function(e){return L==="en"&&e.short_en?e.short_en:e.short};
+var edetail=function(e){return L==="en"&&e.detail_en?e.detail_en:e.detail};
 
-var CAT={mcp:["MCP 서버","에이전트가 표준 방식으로 부르는 시뮬레이션 툴 서버"],skill:["스킬팩","SKILL.md 지시문과 스크립트 묶음"],db:["데이터베이스 서버","Materials Project, OQMD, COD 같은 데이터 소스"],pkg:["툴 패키지","MCP가 아닌 에이전트 툴 라이브러리"],plat:["상용 플랫폼","공개 API 유무를 포함한 기업 제품"],acad:["학술 시스템","논문으로 나온 다중 에이전트 시스템"],beyond:["원자 단위 밖","CFD, FEM, phase-field, 공정"],std:["표준, 스키마","입출력 스키마, 온톨로지, 레지스트리 선례"],gskill:["범용 스킬 모음","재료가 일부 들어 있는 범용 팩"]};
+var CAT=function(){return L==="en"?{mcp:["MCP servers","Simulation tool servers an agent calls through the standard protocol"],skill:["Skill packs","SKILL.md instructions and scripts"],db:["Database servers","Data sources such as Materials Project, OQMD, COD"],pkg:["Tool packages","Agent tool libraries that are not MCP"],plat:["Commercial platforms","Vendor products, with or without a public API"],acad:["Academic systems","Multi-agent systems published as papers"],beyond:["Beyond atomistic","CFD, FEM, phase-field, process simulation"],std:["Standards, schemas","I/O schemas, ontologies, registry precedents"],gskill:["General skill collections","General packs with some materials content"]}:
+ {mcp:["MCP 서버","에이전트가 표준 방식으로 부르는 시뮬레이션 툴 서버"],skill:["스킬팩","SKILL.md 지시문과 스크립트 묶음"],db:["데이터베이스 서버","Materials Project, OQMD, COD 같은 데이터 소스"],pkg:["툴 패키지","MCP가 아닌 에이전트 툴 라이브러리"],plat:["상용 플랫폼","공개 API 유무를 포함한 기업 제품"],acad:["학술 시스템","논문으로 나온 다중 에이전트 시스템"],beyond:["원자 단위 밖","CFD, FEM, phase-field, 공정"],std:["표준, 스키마","입출력 스키마, 온톨로지, 레지스트리 선례"],gskill:["범용 스킬 모음","재료가 일부 들어 있는 범용 팩"]}};
 var ICON={mcp:'<path d="M4 6h16v5H4zM4 13h16v5H4zM7 8.5h.01M7 15.5h.01"/>',skill:'<path d="M5 4h11l3 3v13H5z"/><path d="M8 11h8M8 15h6"/>',db:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',pkg:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',plat:'<path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-5h6v5M9 11h.01M15 11h.01"/>',acad:'<path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4c0 1.5 2.2 3 5 3s5-1.5 5-3v-4M21 9v5"/>',beyond:'<path d="M3 17c3-6 6-6 9 0s6 6 9 0"/><path d="M3 10c3-6 6-6 9 0s6 6 9 0"/>',std:'<path d="M4 5h16M4 12h10M4 19h16"/><path d="M18 10l2 2-2 2"/>',gskill:'<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6"/>'};
-var ST={prod:"prod",near:"prod 근접",demo:"demo",dead:"dead",comm:"상용",res:"연구",gap:"공백"};
-var HUB={take:"노드로 가져옴",ref:"설계 참고",excl:"제외"};
+var ST=function(){return L==="en"?{prod:"prod",near:"near prod",demo:"demo",dead:"dead",comm:"commercial",res:"research",gap:"gap"}:{prod:"prod",near:"prod 근접",demo:"demo",dead:"dead",comm:"상용",res:"연구",gap:"공백"}};
+var HUB=function(){return L==="en"?{take:"Adopted as node",ref:"Design reference",excl:"Excluded"}:{take:"노드로 가져옴",ref:"설계 참고",excl:"제외"}};
 var BE=[["VASP",/\bVASP\b/i],["Quantum ESPRESSO",/\bQE\b|Quantum ESPRESSO/i],["LAMMPS",/LAMMPS/i],["GROMACS",/GROMACS|\bgmx\b/i],["phonopy",/phonopy/i],["MACE",/\bMACE\b/i],["ASE",/\bASE\b/i],["pymatgen",/pymatgen/i],["RDKit",/RDKit/i],["OpenMM",/OpenMM/i],["PySCF",/PySCF/i],["xTB",/\bxTB\b/i],["ORCA",/\bORCA\b/i],["CP2K",/CP2K/i],["deepmd",/deepmd|DPA/i],["Materials Project",/Materials Project|\bMP\b|mp-api/],["OPTIMADE",/OPTIMADE/i],["AiiDA",/AiiDA/i],["atomate2",/atomate2/i],["MatterGen",/MatterGen/i],["OVITO",/OVITO/i],["Cantera",/Cantera/i],["OpenFOAM",/OpenFOAM/i],["FEniCSx",/FEniCS/i]];
-R.forEach(function(r){r.text=[r.name,r.what,r.backend,r.url].join(" ").toLowerCase();r.be=BE.filter(function(b){return b[1].test(r.name+" "+r.what+" "+r.backend)}).map(function(b){return b[0]}).slice(0,4);r.date=(r.act.match(/20\d\d(-\d\d)?/)||[])[0]||"";r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1]||""});
+R.forEach(function(r){r.text=[r.name,r.name_en,r.what,r.what_en,r.backend,r.url].join(" ").toLowerCase();r.be=BE.filter(function(b){return b[1].test(r.name+" "+r.what+" "+r.backend)}).map(function(b){return b[0]}).slice(0,4);r.date=(r.act.match(/20\d\d(-\d\d)?/)||[])[0]||"";r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1]||""});
 var relCount=function(id){return E.filter(function(e){return e.from===id||e.to===id}).length};
 
-/* hero relation snippets */
+/* theme + language */
+function curTheme(){var a=document.documentElement.getAttribute("data-theme");if(a)return a;return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}
+function paintTheme(){$("#ti").innerHTML=curTheme()==="dark"?'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>':'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>'}
+$("#themebtn").addEventListener("click",function(){var n=curTheme()==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",n);try{localStorage.setItem("sh-theme",n)}catch(e){}paintTheme()});
+paintTheme();
+function paintLang(){$("#langbtn").textContent=L==="en"?"한국어":"English";$("#q").placeholder=t("Search tools, skills, backends","도구, 스킬, 백엔드 검색");$("#rcopyt").textContent=t("Copy","복사");document.title="SimulationHub"}
+$("#langbtn").addEventListener("click",function(){L=L==="en"?"ko":"en";document.documentElement.setAttribute("lang",L);try{localStorage.setItem("sh-lang",L)}catch(e){}renderAll()});
+
+/* hero snippets */
 var SNIP=[
- ["전제 조건","precondition","# LOBSTER를 쓰려면 VASP를 먼저 이렇게 돌려야 한다\n<k>type</k>: precondition\n<k>from</k>: vasp.static\n<k>to</k>: lobster.cohp\n<k>requires</k>:\n  ISYM: <s>-1</s>          # 대칭 끔\n  NBANDS: <s>\">= 1.5x default\"</s>\n<k>source</k>: <s>LOBSTER docs, catalog §4</s>"],
- ["호환성","compat","# 힘을 직접 예측하는 모델은 포논에 쓰면 안 된다\n<k>type</k>: compatibility\n<k>rule</k>: forces_conservative == true\n<k>applies_to</k>: [phonopy, phono3py, elastic, md.nve]\n<k>blocks</k>: [orb-v3-direct]\n<k>allows</k>: [mace-mpa-0, pet-oam, vasp, qe]\n<k>effect</k>: <s>excluded from agent choices</s>"],
- ["대체","substitute","# 같은 양을 다른 비용과 정확도로 주는 도구\n<k>type</k>: substitute\n<k>quantity</k>: band_gap\n<k>options</k>:\n  - {tool: matgl.bandgap, tier: <s>T1</s>, mae: <s>~0.4 eV</s>}\n  - {tool: vasp.pbe,      tier: <s>T3</s>}\n  - {tool: vasp.hse06,    tier: <s>T3+</s>}\n<k>policy</k>: <s>cheapest first, confirm on budget</s>"],
- ["검증","verify","# 생성 모델 출력이 라벨을 받기까지\n<k>type</k>: verification\n<k>input</k>: mattergen.sample\n<k>chain</k>:\n  - smact.charge_neutral\n  - mace.relax        # max_force < 1e-3 eV/Å\n  - hull.e_above_hull\n  - matcher.dedupe\n  - spglib.symmetry\n<k>on_fail</k>: <s>record status, no label</s>"]];
+ ["precondition",function(){return "# "+t("To use LOBSTER, VASP must be run like this first","LOBSTER를 쓰려면 VASP를 먼저 이렇게 돌려야 한다")+"\n<k>type</k>: precondition\n<k>from</k>: vasp.static\n<k>to</k>: lobster.cohp\n<k>requires</k>:\n  ISYM: <s>-1</s>          # "+t("symmetry off","대칭 끔")+"\n  NBANDS: <s>\">= 1.5x default\"</s>\n<k>source</k>: <s>LOBSTER docs, catalog §4</s>"}],
+ ["compat",function(){return "# "+t("Direct-force models must not be used for phonons","힘을 직접 예측하는 모델은 포논에 쓰면 안 된다")+"\n<k>type</k>: compatibility\n<k>rule</k>: forces_conservative == true\n<k>applies_to</k>: [phonopy, phono3py, elastic, md.nve]\n<k>blocks</k>: [orb-v3-direct]\n<k>allows</k>: [mace-mpa-0, pet-oam, vasp, qe]\n<k>effect</k>: <s>excluded from agent choices</s>"}],
+ ["substitute",function(){return "# "+t("Tools that give the same quantity at different cost and accuracy","같은 양을 다른 비용과 정확도로 주는 도구")+"\n<k>type</k>: substitute\n<k>quantity</k>: band_gap\n<k>options</k>:\n  - {tool: matgl.bandgap, tier: <s>T1</s>, mae: <s>~0.4 eV</s>}\n  - {tool: vasp.pbe,      tier: <s>T3</s>}\n  - {tool: vasp.hse06,    tier: <s>T3+</s>}\n<k>policy</k>: <s>cheapest first, confirm on budget</s>"}],
+ ["verify",function(){return "# "+t("What a generated structure passes through before it gets a label","생성 모델 출력이 라벨을 받기까지")+"\n<k>type</k>: verification\n<k>input</k>: mattergen.sample\n<k>chain</k>:\n  - smact.charge_neutral\n  - mace.relax        # max_force < 1e-3 eV/Å\n  - hull.e_above_hull\n  - matcher.dedupe\n  - spglib.symmetry\n<k>on_fail</k>: <s>record status, no label</s>"}]];
 var rt=0;
 function drawSnip(){
-  $("#rtabs").innerHTML=SNIP.map(function(s,i){return '<button type="button" class="'+(i===rt?"on":"")+'" data-i="'+i+'">'+s[0]+'</button>'}).join("");
+  var et=ET(),names=[et.pre,et.cmp,et.sub,et.ver];
+  $("#rtabs").innerHTML=SNIP.map(function(s,i){return '<button type="button" class="'+(i===rt?"on":"")+'" data-i="'+i+'">'+names[i]+'</button>'}).join("");
   $$("#rtabs button").forEach(function(b){b.addEventListener("click",function(){rt=+b.dataset.i;drawSnip()})});
-  $("#rcap").textContent="관계 항목 예시 · relations/"+SNIP[rt][1]+".yaml";
-  $("#rcode").innerHTML=esc(SNIP[rt][2]).replace(/&lt;k&gt;(.*?)&lt;\/k&gt;/g,'<span class="k">$1</span>').replace(/&lt;s&gt;(.*?)&lt;\/s&gt;/g,'<span class="s">$1</span>').replace(/(#[^\n]*)/g,'<span class="c">$1</span>');
+  $("#rcap").textContent=t("Example relation entry","관계 항목 예시")+" · relations/"+SNIP[rt][0]+".yaml";
+  $("#rcode").innerHTML=esc(SNIP[rt][1]()).replace(/&lt;k&gt;(.*?)&lt;\/k&gt;/g,'<span class="k">$1</span>').replace(/&lt;s&gt;(.*?)&lt;\/s&gt;/g,'<span class="s">$1</span>').replace(/(#[^\n]*)/g,'<span class="c">$1</span>');
 }
-drawSnip();
-$("#rcopy").addEventListener("click",function(){var t=SNIP[rt][2].replace(/<\/?[ks]>/g,"");var b=this;var done=function(){b.lastChild.textContent="복사됨";setTimeout(function(){b.lastChild.textContent="복사"},1200)};if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,function(){});else done()});
+$("#rcopy").addEventListener("click",function(){var s=SNIP[rt][1]().replace(/<\/?[ks]>/g,"");var b=$("#rcopyt");var done=function(){b.textContent=t("Copied","복사됨");setTimeout(function(){b.textContent=t("Copy","복사")},1200)};if(navigator.clipboard)navigator.clipboard.writeText(s).then(done,function(){});else done()});
 $("#marks").innerHTML=["VASP","Quantum ESPRESSO","LAMMPS","phonopy","MACE","pymatgen","ASE","Materials Project","OPTIMADE","AiiDA","atomate2","pycalphad"].map(function(m){return "<span>"+m+"</span>"}).join("");
 
 /* examples */
 var EX=[
- {cat:"포논 안정성",goal:"MatterGen이 만든 후보 가운데 동역학적으로 안정한 새 물질만 골라줘.",
+ {cat:["Phonon stability","포논 안정성"],goal:["Among MatterGen's candidates, keep only the new materials that are dynamically stable.","MatterGen이 만든 후보 가운데 동역학적으로 안정한 새 물질만 골라줘."],
   tools:[["smact.charge_neutral","p"],["mace.relax","p"],["hull.e_above_hull","p"],["matcher.dedupe","p"],["orb-v3-direct","x"],["phonopy.bands(forces=mace)",""],["imag.check","p"]],
-  res:"검증 사슬 통과 후보만 라벨을 받음",lines:["존재할 수 없는 조성은 전하 중성 검사에서 가장 먼저, 가장 싸게 걸러짐","완화, E_hull, 중복, 대칭 순서는 검증 관계가 정함","Orb v3 direct는 힘이 에너지의 미분이 아니라 포논 계산기 후보에서 제외","허수 진동수 검사를 거친 것만 동역학적 안정성 라벨"]},
- {cat:"결합 분석",goal:"이 산화물의 금속-산소 결합 세기를 COHP로 보여줘.",
+  res:["Only candidates that pass the verification chain get a label","검증 사슬 통과 후보만 라벨을 받음"],lines:[["Impossible compositions are filtered first and cheapest, by the charge-neutrality check","존재할 수 없는 조성은 전하 중성 검사에서 가장 먼저, 가장 싸게 걸러짐"],["Relax, E_hull, duplicates, symmetry: the order comes from the verification relations","완화, E_hull, 중복, 대칭 순서는 검증 관계가 정함"],["Orb v3 direct is dropped from the phonon calculator list because its forces are not energy gradients","Orb v3 direct는 힘이 에너지의 미분이 아니라 포논 계산기 후보에서 제외"],["Only outputs that pass the imaginary-mode check get the dynamic-stability label","허수 진동수 검사를 거친 것만 동역학적 안정성 라벨"]]},
+ {cat:["Bonding analysis","결합 분석"],goal:["Show the metal–oxygen bond strength of this oxide with COHP.","이 산화물의 금속-산소 결합 세기를 COHP로 보여줘."],
   tools:[["vasp.static(ISYM=-1, NBANDS↑)","p"],["conv.check","p"],["lobster.cohp",""]],
-  res:"전제 조건이 상위 계산 설정을 바꿈",lines:["LOBSTER를 고르는 순간 VASP가 대칭을 끄고 밴드 수를 늘려 돌아감","수렴 기록 검사를 거친 파동함수만 LOBSTER에 전달","투영 손실(spilling)이 크면 조용한 실패로 기록"]},
- {cat:"상도",goal:"Li-Co-O 계에서 이 후보의 E_hull을 구해줘.",
+  res:["A precondition rewrites the upstream settings","전제 조건이 상위 계산 설정을 바꿈"],lines:[["The moment LOBSTER is chosen, VASP runs with symmetry off and more bands","LOBSTER를 고르는 순간 VASP가 대칭을 끄고 밴드 수를 늘려 돌아감"],["Only wavefunctions that pass the convergence check are handed to LOBSTER","수렴 기록 검사를 거친 파동함수만 LOBSTER에 전달"],["A large projection loss (spilling) is recorded as a silent failure","투영 손실(spilling)이 크면 조용한 실패로 기록"]]},
+ {cat:["Phase diagram","상도"],goal:["Compute E_hull of this candidate in the Li–Co–O system.","Li-Co-O 계에서 이 후보의 E_hull을 구해줘."],
   tools:[["mp.competing_phases","p"],["mp.energy + pet-oam.energy","x"],["pet-oam.energy(all phases)","p"],["hull.e_above_hull",""],["vasp.mp_compatible(top-k)","p"]],
-  res:"기준점이 다른 에너지는 한 상도에 섞이지 않음",lines:["Materials Project 에너지와 OMat24 계열 에너지의 혼합은 호환성 관계가 차단","경쟁 상 전체를 같은 퍼텐셜로 다시 계산해 한 기준점 안에서 상도 작성","유망 후보만 대체 관계를 따라 MP 호환 설정의 DFT로 확인"]},
- {cat:"열전도",goal:"이 반도체의 격자 열전도도를 예산 안에서 추정해줘.",
+  res:["Energies with different references never share a hull","기준점이 다른 에너지는 한 상도에 섞이지 않음"],lines:[["Mixing Materials Project energies with OMat24-family energies is blocked by a compatibility relation","Materials Project 에너지와 OMat24 계열 에너지의 혼합은 호환성 관계가 차단"],["All competing phases are recomputed with the same potential so the hull sits on one reference","경쟁 상 전체를 같은 퍼텐셜로 다시 계산해 한 기준점 안에서 상도 작성"],["Only promising candidates are confirmed with MP-compatible DFT, following the substitute relation","유망 후보만 대체 관계를 따라 MP 호환 설정의 DFT로 확인"]]},
+ {cat:["Thermal conductivity","열전도"],goal:["Estimate the lattice thermal conductivity of this semiconductor within budget.","이 반도체의 격자 열전도도를 예산 안에서 추정해줘."],
   tools:[["mace.relax","p"],["phono3py(forces=mace)",""],["imag.check","p"],["vasp.dfpt(if budget)","p"]],
-  res:"대체 관계가 비용 사다리를 정함",lines:["T2 퍼텐셜 기반 phono3py로 먼저 추정","허수 진동수가 있으면 열전도 계산을 멈추고 상태 플래그 기록","남은 예산이 있을 때만 DFT 포논으로 승격"]},
- {cat:"변형 하의 밴드갭",goal:"2% 이축 변형을 가했을 때 밴드갭이 어떻게 변하는지 알려줘.",
+  res:["Substitute relations define the cost ladder","대체 관계가 비용 사다리를 정함"],lines:[["First estimate with potential-based phono3py (T2)","T2 퍼텐셜 기반 phono3py로 먼저 추정"],["If imaginary modes appear, stop the conductivity run and record the status flag","허수 진동수가 있으면 열전도 계산을 멈추고 상태 플래그 기록"],["Escalate to DFT phonons only if budget remains","남은 예산이 있을 때만 DFT 포논으로 승격"]]},
+ {cat:["Band gap under strain","변형 하의 밴드갭"],goal:["How does the band gap change under 2% biaxial strain?","2% 이축 변형을 가했을 때 밴드갭이 어떻게 변하는지 알려줘."],
   tools:[["strain.apply(2%, biaxial)","p"],["mace.relax(fixed cell)","p"],["matgl.bandgap",""],["vasp.pbe(top-k)","p"],["vasp.hse06(final)","p"]],
-  res:"싼 도구로 경향, 비싼 도구로 확인",lines:["조작 전후 쌍이 같은 도구로 계산되어 변화량 자체가 기록으로 남음","matgl 예측(T1)으로 경향을 보고 PBE(T3)로 확인","PBE가 밴드갭을 과소평가하므로 최종값만 HSE로 승격"]}];
-var exI=0;
+  res:["Cheap tools for the trend, expensive ones for confirmation","싼 도구로 경향, 비싼 도구로 확인"],lines:[["Before/after pairs computed with the same tool, so the change itself becomes a record","조작 전후 쌍이 같은 도구로 계산되어 변화량 자체가 기록으로 남음"],["Trend from matgl (T1), confirmed with PBE (T3)","matgl 예측(T1)으로 경향을 보고 PBE(T3)로 확인"],["PBE underestimates gaps, so only the final value is promoted to HSE","PBE가 밴드갭을 과소평가하므로 최종값만 HSE로 승격"]]}];
+var exI=0,li=function(a){return L==="en"?a[0]:a[1]};
 function drawEx(){
-  $("#excats").innerHTML=EX.map(function(e,i){return '<button type="button" class="cpill'+(i===exI?" on":"")+'" data-i="'+i+'">'+esc(e.cat)+'</button>'}).join("");
+  $("#excats").innerHTML=EX.map(function(e,i){return '<button type="button" class="cpill'+(i===exI?" on":"")+'" data-i="'+i+'">'+esc(li(e.cat))+'</button>'}).join("");
   $$("#excats button").forEach(function(b){b.addEventListener("click",function(){exI=+b.dataset.i;drawEx()})});
   var e=EX[exI];
-  $("#excard").innerHTML='<div class="q"><div class="lab"><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M12 3v18M5 10l7-7 7 7"/></svg>'+esc(e.cat)+'</div><div class="t">"'+esc(e.goal)+'"</div></div>'+
-    '<div class="tools">경로:'+e.tools.map(function(t){return '<code class="'+t[1]+'">'+esc(t[0])+'</code>'}).join("")+'<span style="margin-left:auto;font-size:11px">파랑 = 관계가 추가 · 빨강 = 차단</span></div>'+
-    '<div class="res"><b>'+esc(e.res)+'</b><ul>'+e.lines.map(function(l){return '<li>'+esc(l)+'</li>'}).join("")+'</ul></div>';
+  $("#excard").innerHTML='<div class="q"><div class="lab"><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M12 3v18M5 10l7-7 7 7"/></svg>'+esc(li(e.cat))+'</div><div class="t">"'+esc(li(e.goal))+'"</div></div>'+
+    '<div class="tools">'+t("Path:","경로:")+e.tools.map(function(x){return '<code class="'+x[1]+'">'+esc(x[0])+'</code>'}).join("")+'<span style="margin-left:auto;font-size:11px">'+t("blue = added by a relation · red = blocked","파랑 = 관계가 추가 · 빨강 = 차단")+'</span></div>'+
+    '<div class="res"><b>'+esc(li(e.res))+'</b><ul>'+e.lines.map(function(l){return '<li>'+esc(li(l))+'</li>'}).join("")+'</ul></div>';
   $("#exdots").innerHTML=EX.map(function(_,i){return '<i class="'+(i===exI?"on":"")+'"></i>'}).join("");
 }
-drawEx();
 $("#exprev").addEventListener("click",function(){exI=(exI+EX.length-1)%EX.length;drawEx()});
 $("#exnext").addEventListener("click",function(){exI=(exI+1)%EX.length;drawEx()});
 
 /* graph (layered, orthogonal routing) */
 var on={pre:true,cmp:true,sub:true,ver:true},gsel=null,ghover=null,tip=$("#gtip");
-var COLC=["#6f9ee0","#5cb98f","#a98ad8","#8fa3b5"],COLN=["데이터와 생성기","계산기","후처리","검사기"];
+var COLC=["var(--g0)","var(--g1)","var(--g2)","var(--g3)"],COLN=function(){return L==="en"?["Data and generators","Calculators","Post-processing","Checkers"]:["데이터와 생성기","계산기","후처리","검사기"]};
 function showTip(ev,html){tip.innerHTML=html;tip.classList.add("show");moveTip(ev)}
 function moveTip(ev){var x=ev.clientX+14,y=ev.clientY+14;if(x+360>window.innerWidth)x=ev.clientX-360;if(y+120>window.innerHeight)y=ev.clientY-110;tip.style.left=x+"px";tip.style.top=y+"px"}
 function hideTip(){tip.classList.remove("show")}
 var lw=function(s){var k=(s.match(/[ㄱ-힝]/g)||[]).length;return k*12+(s.length-k)*6.6};
-/* column, row (hand-ordered so that edges do not cross pills) */
 var LAY={mattergen:[0,1],mp:[0,6],optimade:[0,7],pyxtal:[0,8],subst:[0,9],
  matgl:[1,0],mace:[1,1],orbd:[1,2],pet:[1,3],calphad:[1,4],vasp:[1,6],hse:[1,7],qe:[1,8],dfpt:[1,9],ce:[1,10],
  phonopy:[2,1],phono3py:[2,2],elastic:[2,3],hull:[2,4],lobster:[2,6],boltz:[2,7],wannier:[2,8],
  conv:[3,0],imag:[3,1],sm:[3,4],spglib:[3,5],smact:[3,6]};
 var CX=[14,206,398,590],RY=function(r){return 66+r*40},PH=26,GW=740,GH=66+10*40+28;
-var P={};N.forEach(function(n){var l=LAY[n.id];n.gc=l[0];n.gr=l[1];n.w=lw(n.name)+26;n.px=CX[l[0]];n.py=RY(l[1]);n.deg=relCount(n.id);P[n.id]=n});
-var svg=$("#graph"),NS="http://www.w3.org/2000/svg";svg.setAttribute("viewBox","0 0 "+GW+" "+GH);
-var mk=function(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
-var defs=mk("defs",{},svg);
-["pre","ver"].forEach(function(t){var m=mk("marker",{id:"ar-"+t,viewBox:"0 -4 8 8",refX:"7",refY:"0",markerWidth:"6",markerHeight:"6",orient:"auto"},defs);mk("path",{d:"M0,-3.2L8,0L0,3.2z",style:"fill:var(--"+t+")"},m)});
-COLN.forEach(function(c,i){mk("text",{x:CX[i],y:24,class:"colh"},svg).textContent=c.toUpperCase()});
-mk("text",{x:CX[1],y:RY(5)+14,class:"grp"},svg).textContent="DFT · T3";
-mk("text",{x:CX[1],y:RY(-0.5)+4,class:"grp"},svg).textContent="FAST · T0–T1";
-mk("text",{x:CX[0],y:RY(5)+14,class:"grp"},svg).textContent="NO RELATIONS YET";
-var eg=mk("g",{},svg),xg=mk("g",{},svg),ng=mk("g",{},svg);
-/* assign vertical lanes in each gap so parallel edges do not overlap */
-var lanes={},byKey={};E.forEach(function(e){var a=P[e.from],b=P[e.to];var key=a.gc===b.gc?"c"+a.gc:"g"+Math.min(a.gc,b.gc);e.laneN=key;e.span=Math.abs(a.gr-b.gr);(byKey[key]=byKey[key]||[]).push(e)});
-Object.keys(byKey).forEach(function(k){var arr=byKey[k];if(k[0]==="c")arr.sort(function(x,y){return x.span-y.span});arr.forEach(function(e,i){e.lane=i});lanes[k]=arr.length});
-function route(e){
-  var a=P[e.from],b=P[e.to],sy=a.py,ty=b.py,r=8,dir=ty>sy?1:-1,d,mid;
-  if(a.gc===b.gc){ /* same column: bracket on the left side */
-    var x=a.px,bx=x-10-e.lane*7;
-    d="M"+x+","+sy+" L"+(bx+r)+","+sy+" Q"+bx+","+sy+" "+bx+","+(sy+dir*r)+" L"+bx+","+(ty-dir*r)+" Q"+bx+","+ty+" "+(bx+r)+","+ty+" L"+x+","+ty;
-    mid=[bx,(sy+ty)/2];
-  }else{
-    var fwd=b.gc>a.gc,sx=fwd?a.px+a.w:a.px,tx=fwd?b.px:b.px+b.w,g=fwd?a.gc:b.gc,gapL=CX[g]+Math.max.apply(null,N.filter(function(n){return n.gc===g}).map(function(n){return n.w})),gapR=CX[g+1];
-    var vx=gapL+12+((gapR-gapL-24)/Math.max(1,lanes[e.laneN]-1||1))*e.lane*(lanes[e.laneN]>1?1:0);if(lanes[e.laneN]===1)vx=(gapL+gapR)/2;
-    var hx=fwd?1:-1;
-    if(Math.abs(ty-sy)<1){d="M"+sx+","+sy+" L"+tx+","+ty;mid=[(sx+tx)/2,sy]}
-    else{d="M"+sx+","+sy+" L"+(vx-hx*r)+","+sy+" Q"+vx+","+sy+" "+vx+","+(sy+dir*r)+" L"+vx+","+(ty-dir*r)+" Q"+vx+","+ty+" "+(vx+hx*r)+","+ty+" L"+tx+","+ty;mid=[vx,(sy+ty)/2]}
+function layoutCols(){var mw=[0,0,0,0];N.forEach(function(n){var c=LAY[n.id][0],w=lw(dname(n))+26;if(w>mw[c])mw[c]=w});CX=[14];for(var i=0;i<3;i++)CX.push(CX[i]+mw[i]+58);GW=CX[3]+mw[3]+14}
+var dname=function(n){return L==="en"&&n.name_en?n.name_en:n.name};
+var svg=$("#graph"),NS="http://www.w3.org/2000/svg";
+var mk=function(tg,a,p){var e=document.createElementNS(NS,tg);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+function drawGraph(){
+  layoutCols();svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+GW+" "+GH);svg.style.minWidth=Math.round(GW*0.95)+"px";
+  var P={};N.forEach(function(n){var l=LAY[n.id];n.gc=l[0];n.gr=l[1];n.w=lw(dname(n))+26;n.px=CX[l[0]];n.py=RY(l[1]);n.deg=relCount(n.id);P[n.id]=n});
+  var defs=mk("defs",{},svg);
+  ["pre","ver"].forEach(function(k){var m=mk("marker",{id:"ar-"+k,viewBox:"0 -4 8 8",refX:"7",refY:"0",markerWidth:"6",markerHeight:"6",orient:"auto"},defs);mk("path",{d:"M0,-3.2L8,0L0,3.2z",style:"fill:var(--"+k+")"},m)});
+  COLN().forEach(function(c,i){mk("text",{x:CX[i],y:24,class:"colh"},svg).textContent=c.toUpperCase()});
+  mk("text",{x:CX[1],y:RY(5)+14,class:"grp"},svg).textContent="DFT · T3";
+  mk("text",{x:CX[1],y:RY(-0.5)+4,class:"grp"},svg).textContent="FAST · T0–T1";
+  mk("text",{x:CX[0],y:RY(5)+14,class:"grp"},svg).textContent="NO RELATIONS YET";
+  var eg=mk("g",{},svg),xg=mk("g",{},svg),ng=mk("g",{},svg);
+  var lanes={},byKey={};E.forEach(function(e){var a=P[e.from],b=P[e.to];var key=a.gc===b.gc?"c"+a.gc:"g"+Math.min(a.gc,b.gc);e.laneN=key;e.span=Math.abs(a.gr-b.gr);(byKey[key]=byKey[key]||[]).push(e)});
+  Object.keys(byKey).forEach(function(k){var arr=byKey[k];if(k[0]==="c")arr.sort(function(x,y){return x.span-y.span});arr.forEach(function(e,i){e.lane=i});lanes[k]=arr.length});
+  function route(e){
+    var a=P[e.from],b=P[e.to],sy=a.py,ty=b.py,r=8,dir=ty>sy?1:-1,d,mid;
+    if(a.gc===b.gc){var x=a.px,bx=x-10-e.lane*7;d="M"+x+","+sy+" L"+(bx+r)+","+sy+" Q"+bx+","+sy+" "+bx+","+(sy+dir*r)+" L"+bx+","+(ty-dir*r)+" Q"+bx+","+ty+" "+(bx+r)+","+ty+" L"+x+","+ty;mid=[bx,(sy+ty)/2]}
+    else{var fwd=b.gc>a.gc,sx=fwd?a.px+a.w:a.px,tx=fwd?b.px:b.px+b.w,g=fwd?a.gc:b.gc,gapL=CX[g]+Math.max.apply(null,N.filter(function(n){return n.gc===g}).map(function(n){return n.w})),gapR=CX[g+1];
+      var vx=lanes[e.laneN]===1?(gapL+gapR)/2:gapL+12+((gapR-gapL-24)/(lanes[e.laneN]-1))*e.lane,hx=fwd?1:-1;
+      if(Math.abs(ty-sy)<1){d="M"+sx+","+sy+" L"+tx+","+ty;mid=[(sx+tx)/2,sy]}
+      else{d="M"+sx+","+sy+" L"+(vx-hx*r)+","+sy+" Q"+vx+","+sy+" "+vx+","+(sy+dir*r)+" L"+vx+","+(ty-dir*r)+" Q"+vx+","+ty+" "+(vx+hx*r)+","+ty+" L"+tx+","+ty;mid=[vx,(sy+ty)/2]}}
+    return {d:d,mid:mid};
   }
-  return {d:d,mid:mid};
+  E.forEach(function(e){
+    var g=mk("g",{class:"edge"},eg),r0=route(e),et=ET();
+    var p=mk("path",{d:r0.d,class:"lk "+e.type,"stroke-width":e.type==="sub"?3.4:1.4},g);
+    if(e.type==="pre"||e.type==="ver")p.setAttribute("marker-end","url(#ar-"+e.type+")");
+    if(e.type==="sub")mk("path",{d:r0.d,class:"lk sub2"},g);
+    mk("path",{d:r0.d,class:"hit"},g);e.xm=null;
+    if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+r0.mid[0]+","+r0.mid[1]+")"},xg);mk("circle",{r:6},xm);mk("path",{d:"M-2.5,-2.5L2.5,2.5M2.5,-2.5L-2.5,2.5"},xm);e.xm=xm}
+    var a=P[e.from],b=P[e.to],html='<div class="h"><span class="rt rt-'+e.type+'">'+et[e.type]+(e.forbid?t(" · forbidden"," · 금지"):"")+'</span> '+esc(dname(a))+(e.type==="pre"||e.type==="ver"?" → ":" ↔ ")+esc(dname(b))+'</div>'+esc(edetail(e));
+    g.addEventListener("mouseenter",function(ev){showTip(ev,html)});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
+    e.el=g;
+  });
+  N.forEach(function(n){
+    var g=mk("g",{class:"nd"+(n.deg?"":" iso"),"data-id":n.id,transform:"translate("+n.px+","+(n.py-PH/2)+")",tabindex:"0",role:"button"},ng);
+    mk("rect",{width:n.w,height:PH,rx:7},g);
+    mk("circle",{cx:12,cy:PH/2,r:3.5,fill:COLC[n.gc]},g);
+    mk("text",{x:21,y:PH/2+4},g).textContent=dname(n);
+    var act=function(){gsel=gsel===n.id?null:n.id;paint();side()};
+    g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
+    g.addEventListener("mouseenter",function(ev){ghover=n.id;paint();showTip(ev,'<div class="h">'+esc(dname(n))+' · '+n.tier+'</div>'+esc(nspec(n).out)+'<div style="color:var(--faint);margin-top:3px">'+t("relations","관계")+' '+n.deg+' · '+t("wrappers","래퍼")+' '+n.wr.length+' · '+t("click to pin","클릭해서 고정")+'</div>')});
+    g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",function(){ghover=null;paint();hideTip()});
+    n.el=g;
+  });
+  var sm={pre:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--pre)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="4 3"/>',sub:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--sub)" stroke-width="3"/><line x1="0" y1="4" x2="18" y2="4" stroke="var(--card)" stroke-width="1"/>',ver:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--ver)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--ver)"/>'};
+  var et=ET();
+  $("#gkey").innerHTML=COLN().map(function(c,i){return '<span><i style="background:'+COLC[i]+'"></i>'+c+'</span>'}).join("")+'<span style="width:1px;height:12px;background:var(--line)"></span>'+Object.keys(et).map(function(k){return '<label><input type="checkbox" data-t="'+k+'"'+(on[k]?" checked":"")+'><svg viewBox="0 0 18 8">'+sm[k]+'</svg>'+et[k]+'</label>'}).join("");
+  $$("#gkey input").forEach(function(i){i.addEventListener("change",function(){on[i.dataset.t]=i.checked;paint();side()})});
+  paint();side();
 }
-var EL=E.map(function(e){
-  var g=mk("g",{class:"edge","data-t":e.type,"data-a":e.from,"data-b":e.to},eg),rt=route(e);
-  var p=mk("path",{d:rt.d,class:"lk "+e.type,"stroke-width":e.type==="sub"?3.4:1.4},g);
-  if(e.type==="pre"||e.type==="ver")p.setAttribute("marker-end","url(#ar-"+e.type+")");
-  if(e.type==="sub")mk("path",{d:rt.d,class:"lk sub2"},g);
-  mk("path",{d:rt.d,class:"hit"},g);
-  if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+rt.mid[0]+","+rt.mid[1]+")"},xg);mk("circle",{r:6},xm);mk("path",{d:"M-2.5,-2.5L2.5,2.5M2.5,-2.5L-2.5,2.5"},xm);e.xm=xm}
-  var a=P[e.from],b=P[e.to],html='<div class="h"><span class="rt rt-'+e.type+'">'+ET[e.type]+(e.forbid?" · 금지":"")+'</span> '+esc(a.name)+(e.type==="pre"||e.type==="ver"?" → ":" ↔ ")+esc(b.name)+'</div>'+esc(e.detail);
-  g.addEventListener("mouseenter",function(ev){showTip(ev,html)});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
-  e.el=g;return g;
-});
-N.forEach(function(n){
-  var g=mk("g",{class:"nd"+(n.deg?"":" iso"),"data-id":n.id,transform:"translate("+n.px+","+(n.py-PH/2)+")",tabindex:"0",role:"button"},ng);
-  mk("rect",{width:n.w,height:PH,rx:7},g);
-  mk("circle",{cx:12,cy:PH/2,r:3.5,fill:COLC[n.gc]},g);
-  mk("text",{x:21,y:PH/2+4},g).textContent=n.name;
-  var act=function(){gsel=gsel===n.id?null:n.id;paint();side()};
-  g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
-  g.addEventListener("mouseenter",function(ev){ghover=n.id;paint();showTip(ev,'<div class="h">'+esc(n.name)+' · '+n.tier+'</div>'+esc(n.spec.out)+'<div style="color:#8a97a5;margin-top:3px">관계 '+n.deg+'개 · 래퍼 '+n.wr.length+'개 · 클릭해서 고정</div>')});
-  g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",function(){ghover=null;paint();hideTip()});
-  n.el=g;
-});
 function paint(){
   var f=ghover||gsel,keep={};
   if(f){keep[f]=1;E.forEach(function(e){if(on[e.type]&&(e.from===f||e.to===f)){keep[e.from]=1;keep[e.to]=1}})}
@@ -752,73 +805,75 @@ function paint(){
     if(e.xm)e.xm.style.display=vis&&!(f&&!rel)?"":"none"});
   N.forEach(function(n){n.el.classList.toggle("fade",!!f&&!keep[n.id]);n.el.classList.toggle("sel",n.id===gsel)});
 }
-function $$(s,root){return Array.prototype.slice.call((root||document).querySelectorAll(s))}
 function side(){
-  var s=$("#gside");
-  if(!gsel){s.innerHTML='<span class="lab">읽는 법</span><p>왼쪽에서 오른쪽으로 데이터와 생성기, 계산기, 후처리, 검사기입니다. 계산기 열은 위가 빠른 도구(T0에서 T1), 아래가 DFT(T3)입니다. 선 색이 관계의 종류입니다. 화살표가 있는 파랑은 전제 조건, 보라는 검증, 초록 굵은 선은 대체, 빨강 점선은 호환성이고 선 가운데 × 표시는 금지된 조합입니다.</p><p>같은 열 안의 관계(예: VASP와 MACE-MPA-0의 대체)는 열 왼쪽에 꺾쇠로 그렸습니다. 점선 테두리는 아직 관계가 등록되지 않은 도구입니다.</p><span class="lab">관계 종류</span><ul>'+Object.keys(ET).map(function(k){return '<li><span class="rt rt-'+k+'">'+ET[k]+'</span><span>'+E.filter(function(e){return e.type===k}).length+'개</span></li>'}).join("")+'</ul>';return}
-  var n=NM[gsel],rels=E.filter(function(e){return on[e.type]&&(e.from===gsel||e.to===gsel)});
-  s.innerHTML='<div><span class="lab">'+COLN[n.gc]+'</span><h4>'+esc(n.name)+'</h4></div><div class="meta"><span>'+esc(n.role)+'</span><span>'+n.tier+'</span><span>'+esc(n.spec.lic)+'</span><span>'+esc(n.spec.exec)+'</span></div>'+
-    '<div class="kv"><div><b>입력</b> '+esc(n.spec.in)+'</div><div><b>출력</b> '+esc(n.spec.out)+'</div><div><b>기준점</b> '+esc(n.spec.ref)+'</div><div><b>실패 처리</b> '+esc(n.spec.fail)+'</div></div>'+
-    '<div><span class="lab">관계 '+rels.length+'</span><ul style="margin-top:6px">'+rels.map(function(e){var o=e.from===gsel?NM[e.to]:NM[e.from];return '<li><span class="rt rt-'+e.type+'">'+ET[e.type]+'</span><span>'+(e.from===gsel?"→ ":"← ")+'<a data-n="'+o.id+'">'+esc(o.name)+'</a><br>'+esc(e.short)+'</span></li>'}).join("")+'</ul></div>'+
-    '<div><span class="lab">래퍼 '+n.wr.length+'</span><p style="margin-top:4px">'+(n.wr.length?esc(n.wr.join(", ")):"레지스트리에 없음. 허브가 직접 감싸는 노드")+'</p></div>';
+  var s=$("#gside"),et=ET();
+  if(!gsel){s.innerHTML='<span class="lab">'+t("How to read","읽는 법")+'</span><p>'+t("Left to right: data and generators, calculators, post-processing, checkers. In the calculator column the fast tools (T0–T1) sit above DFT (T3). Line color is the relation type: blue with an arrow is a precondition, purple is verification, thick green is a substitute, dashed red is compatibility, and an × on a line marks a forbidden combination.","왼쪽에서 오른쪽으로 데이터와 생성기, 계산기, 후처리, 검사기입니다. 계산기 열은 위가 빠른 도구(T0에서 T1), 아래가 DFT(T3)입니다. 선 색이 관계의 종류입니다. 화살표가 있는 파랑은 전제 조건, 보라는 검증, 초록 굵은 선은 대체, 빨강 점선은 호환성이고 선 가운데 × 표시는 금지된 조합입니다.")+'</p><p>'+t("Relations inside one column (e.g. VASP and MACE-MPA-0 as substitutes) are drawn as brackets on the left of the column. Dashed outlines are tools with no relations registered yet.","같은 열 안의 관계(예: VASP와 MACE-MPA-0의 대체)는 열 왼쪽에 꺾쇠로 그렸습니다. 점선 테두리는 아직 관계가 등록되지 않은 도구입니다.")+'</p><span class="lab">'+t("Relation types","관계 종류")+'</span><ul>'+Object.keys(et).map(function(k){return '<li><span class="rt rt-'+k+'">'+et[k]+'</span><span>'+E.filter(function(e){return e.type===k}).length+'</span></li>'}).join("")+'</ul>';return}
+  var n=NM[gsel],sp=nspec(n),rels=E.filter(function(e){return on[e.type]&&(e.from===gsel||e.to===gsel)});
+  s.innerHTML='<div><span class="lab">'+COLN()[n.gc]+'</span><h4>'+esc(dname(n))+'</h4></div><div class="meta"><span>'+esc(nname(n))+'</span><span>'+n.tier+'</span><span>'+esc(sp.lic)+'</span><span>'+esc(sp.exec)+'</span></div>'+
+    '<div class="kv"><div><b>'+t("Input","입력")+'</b> '+esc(sp.in)+'</div><div><b>'+t("Output","출력")+'</b> '+esc(sp.out)+'</div><div><b>'+t("Reference","기준점")+'</b> '+esc(sp.ref)+'</div><div><b>'+t("On failure","실패 처리")+'</b> '+esc(sp.fail)+'</div></div>'+
+    '<div><span class="lab">'+t("Relations","관계")+' '+rels.length+'</span><ul style="margin-top:6px">'+rels.map(function(e){var o=e.from===gsel?NM[e.to]:NM[e.from];return '<li><span class="rt rt-'+e.type+'">'+et[e.type]+'</span><span>'+(e.from===gsel?"→ ":"← ")+'<a data-n="'+o.id+'">'+esc(dname(o))+'</a><br>'+esc(eshort(e))+'</span></li>'}).join("")+'</ul></div>'+
+    '<div><span class="lab">'+t("Wrappers","래퍼")+' '+n.wr.length+'</span><p style="margin-top:4px">'+(n.wr.length?esc(n.wr.join(", ")):t("None in the registry. The hub wraps this node itself.","레지스트리에 없음. 허브가 직접 감싸는 노드"))+'</p></div>';
   $$("#gside a[data-n]").forEach(function(a){a.addEventListener("click",function(){gsel=a.dataset.n;paint();side()})});
 }
-(function(){var sm={pre:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--pre)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="4 3"/>',sub:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--sub)" stroke-width="3"/><line x1="0" y1="4" x2="18" y2="4" stroke="#fff" stroke-width="1"/>',ver:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--ver)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--ver)"/>'};
-  $("#gkey").innerHTML=COLN.map(function(c,i){return '<span><i style="background:'+COLC[i]+'"></i>'+c+'</span>'}).join("")+'<span style="width:1px;height:12px;background:var(--line)"></span>'+Object.keys(ET).map(function(k){return '<label><input type="checkbox" data-t="'+k+'" checked><svg viewBox="0 0 18 8">'+sm[k]+'</svg>'+ET[k]+'</label>'}).join("");
-  $$("#gkey input").forEach(function(i){i.addEventListener("change",function(){on[i.dataset.t]=i.checked;paint();side()})});
-  paint();side();})();
 
 /* registry */
 var F={cat:"",q:"",st:""},shown=12;
 var cnt=function(fn){return R.filter(fn).length};
 function drawCats(){
-  $("#catgrid").innerHTML=Object.keys(CAT).filter(function(k){return k!=="gskill"}).map(function(k){return '<button type="button" class="ccard'+(F.cat===k?" on":"")+'" data-k="'+k+'"><span class="ic" style="background:var(--c-'+k+')"><svg class="i" viewBox="0 0 24 24">'+ICON[k]+'</svg></span><span class="n">'+String(cnt(function(r){return r.cat===k})).padStart(2,"0")+'</span><h4>'+CAT[k][0]+'</h4><p>'+CAT[k][1]+'</p><span class="go">'+(F.cat===k?"선택됨":"Explore →")+'</span></button>'}).join("");
+  var C=CAT();
+  $("#catgrid").innerHTML=Object.keys(C).filter(function(k){return k!=="gskill"}).map(function(k){return '<button type="button" class="ccard'+(F.cat===k?" on":"")+'" data-k="'+k+'"><span class="ic" style="background:var(--c-'+k+')"><svg class="i" viewBox="0 0 24 24">'+ICON[k]+'</svg></span><span class="n">'+String(cnt(function(r){return r.cat===k})).padStart(2,"0")+'</span><h4>'+C[k][0]+'</h4><p>'+C[k][1]+'</p><span class="go">'+(F.cat===k?t("Selected","선택됨"):"Explore →")+'</span></button>'}).join("");
   $$(".ccard").forEach(function(b){b.addEventListener("click",function(){F.cat=F.cat===b.dataset.k?"":b.dataset.k;shown=12;drawCats();drawTools();$("#tfilt").scrollIntoView({behavior:"smooth",block:"start"})})});
 }
 function drawTools(){
-  var sts=[["","전체"],["prod","prod"],["near","prod 근접"],["demo","demo"],["comm","상용"],["res","연구"],["dead","dead"]];
-  $("#tfilt").innerHTML=sts.map(function(s){return '<button type="button" class="cpill'+(F.st===s[0]?" on":"")+'" data-s="'+s[0]+'">'+s[1]+'</button>'}).join("")+(F.cat?'<button type="button" class="cpill on" data-clear="1">'+CAT[F.cat][0]+' ×</button>':"");
+  var C=CAT(),S=ST(),H=HUB();
+  var sts=[["",t("All","전체")],["prod","prod"],["near",S.near],["demo","demo"],["comm",S.comm],["res",S.res],["dead","dead"]];
+  $("#tfilt").innerHTML=sts.map(function(s){return '<button type="button" class="cpill'+(F.st===s[0]?" on":"")+'" data-s="'+s[0]+'">'+s[1]+'</button>'}).join("")+(F.cat?'<button type="button" class="cpill on" data-clear="1">'+C[F.cat][0]+' ×</button>':"");
   $$("#tfilt button").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.clear){F.cat="";drawCats()}else F.st=b.dataset.s;shown=12;drawTools()})});
   var q=F.q.trim().toLowerCase();
   var rows=R.filter(function(r){return (!F.cat||r.cat===F.cat)&&(!F.st||r.st===F.st)&&(!q||r.text.indexOf(q)>=0)});
-  $("#qcnt").textContent=q?rows.length+"개":R.length+"개";
+  $("#qcnt").textContent=(q?rows.length:R.length)+(L==="en"?"":"개");
   var vis=rows.slice(0,shown);
   $("#tgrid").innerHTML=vis.map(function(r){
     var href=r.url&&/\./.test(r.url)&&!/\s/.test(r.url)?(r.url.indexOf("http")===0?r.url:"https://"+r.url):"";
     var ok=r.st==="prod"||r.st==="near"||r.st==="comm";
-    return '<div class="tcard" style="--c:var(--c-'+r.cat+')"><div class="row"><span class="ct">'+CAT[r.cat][0]+'</span><span class="st '+r.st+'">'+(ok?'<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>':"")+ST[r.st]+'</span></div>'+
-      '<h4>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a>':esc(r.name))+'</h4>'+
+    return '<div class="tcard" style="--c:var(--c-'+r.cat+')"><div class="row"><span class="ct">'+C[r.cat][0]+'</span><span class="st '+r.st+'">'+(ok?'<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>':"")+S[r.st]+'</span></div>'+
+      '<h4>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(rname(r))+'</a>':esc(rname(r)))+'</h4>'+
       (r.be.length?'<div class="be">'+r.be.map(function(b){return "<code>"+esc(b)+"</code>"}).join("")+'</div>':"")+
-      '<p>'+esc(r.what)+'</p><div class="ft">'+(r.date?'<span>'+esc(r.date)+'</span>':"")+(r.stars?'<span>★ '+r.stars+'</span>':"")+(r.lic?'<span class="lic'+(/없음|미표기/.test(r.lic)?" bad":"")+'">'+esc(r.lic)+'</span>':"")+(r.hub?'<span class="hub '+r.hub+'">'+HUB[r.hub]+'</span>':"")+'</div></div>'}).join("")||'<div class="empty">조건에 맞는 항목이 없습니다.</div>';
-  $("#more").innerHTML=rows.length>shown?'<button type="button" class="btn ghost" id="morebtn">'+(rows.length-shown)+'개 더 보기</button>':'<span>'+rows.length+'개 전체 표시</span>';
+      '<p>'+esc(rwhat(r))+'</p><div class="ft">'+(r.date?'<span>'+esc(r.date)+'</span>':"")+(r.stars?'<span>★ '+r.stars+'</span>':"")+(r.lic?'<span class="lic'+(/없음|미표기/.test(r.lic)?" bad":"")+'">'+esc(tr(r.lic))+'</span>':"")+(r.hub?'<span class="hub '+r.hub+'">'+H[r.hub]+'</span>':"")+'</div></div>'}).join("")||'<div class="empty">'+t("Nothing matches.","조건에 맞는 항목이 없습니다.")+'</div>';
+  $("#more").innerHTML=rows.length>shown?'<button type="button" class="btn ghost" id="morebtn">'+t("Show "+(rows.length-shown)+" more",(rows.length-shown)+"개 더 보기")+'</button>':'<span>'+t("All "+rows.length+" shown",rows.length+"개 전체 표시")+'</span>';
   var mb=$("#morebtn");if(mb)mb.addEventListener("click",function(){shown+=12;drawTools()});
 }
-drawCats();drawTools();
 var qt;$("#q").addEventListener("input",function(e){F.q=e.target.value;shown=12;drawTools();clearTimeout(qt);if(F.q.trim())qt=setTimeout(function(){$("#tfilt").scrollIntoView({behavior:"smooth",block:"start"})},600)});
 
 /* accordion + illustration */
 var ACC=[
- {k:"pre",t:"전제 조건",d:"B를 쓰려면 A를 먼저 특정 설정으로 돌려야 합니다. LOBSTER는 VASP를 <code>ISYM=-1</code>에 밴드 수를 늘려 돌린 출력이 필요하고, BoltzTraP2는 조밀한 k점이, 포논의 LO-TO 분리는 DFPT의 Born 전하가 필요합니다. 에이전트가 B를 고르면 A의 설정이 따라옵니다.",a:"VASP",b:"LOBSTER",lab:"ISYM=-1, NBANDS↑"},
- {k:"cmp",t:"호환성",d:"두 결과를 같은 표에 놓거나 한 도구의 출력을 다른 도구의 입력으로 써도 되는지입니다. 안정성은 범함수와 +U와 의사퍼텐셜이 같은 결과끼리만 비교하고, Materials Project 계열과 OMat24 계열 에너지는 섞지 않으며, 포논과 탄성에는 힘이 에너지의 미분인 모델만 씁니다.",a:"Orb v3 direct",b:"phonopy",lab:"forces not conservative",x:true},
- {k:"sub",t:"대체",d:"같은 양을 다른 비용과 정확도로 주는 도구들입니다. 밴드갭은 matgl 예측(T1)과 PBE(T3)와 HSE(T3+)가, 안정성은 퍼텐셜(T1)과 DFT(T3)가, 상태도는 CALPHAD(T0)와 클러스터 전개(T2)가 대체 관계입니다. 어느 쪽을 쓸지는 남은 예산과 불확실성이 정합니다.",a:"matgl · T1",b:"VASP PBE · T3",lab:"band gap, ~0.4 eV vs ref"},
- {k:"ver",t:"검증",d:"어떤 출력은 어떤 검사를 거쳐야 믿을 수 있는지입니다. 생성 모델 출력은 완화, 안정성, 중복 확인, 대칭, 전하 중성을 전부 거치고, 포논은 허수 진동수 검사를, DFT는 수렴 기록 검사를, 분자동역학 궤적은 에너지 드리프트 검사를 거칩니다.",a:"phonopy",b:"허수 진동수 검사",lab:"imaginary modes → no label"}];
-$("#acc").innerHTML=ACC.map(function(a,i){return '<details'+(i===0?" open":"")+' data-k="'+a.k+'"><summary><span><span class="rt rt-'+a.k+'" style="margin-right:10px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase">'+a.k+'</span>'+a.t+'</span><span class="pm"></span></summary><div class="body">'+a.d+'</div></details>'}).join("");
+ {k:"pre",t:["Precondition","전제 조건"],d:["To use B, A must be run first with specific settings. LOBSTER needs VASP output produced with <code>ISYM=-1</code> and more bands, BoltzTraP2 needs a dense k-mesh, and LO–TO splitting in phonons needs Born charges from DFPT. When the agent picks B, A's settings follow.","B를 쓰려면 A를 먼저 특정 설정으로 돌려야 합니다. LOBSTER는 VASP를 <code>ISYM=-1</code>에 밴드 수를 늘려 돌린 출력이 필요하고, BoltzTraP2는 조밀한 k점이, 포논의 LO-TO 분리는 DFPT의 Born 전하가 필요합니다. 에이전트가 B를 고르면 A의 설정이 따라옵니다."],a:"VASP",b:"LOBSTER",lab:"ISYM=-1, NBANDS↑"},
+ {k:"cmp",t:["Compatibility","호환성"],d:["Whether two results may share a table, or one tool's output may feed another. Stability is compared only among results with the same functional, +U and pseudopotentials; Materials Project and OMat24 energies are never mixed; phonons and elasticity use only models whose forces are energy gradients.","두 결과를 같은 표에 놓거나 한 도구의 출력을 다른 도구의 입력으로 써도 되는지입니다. 안정성은 범함수와 +U와 의사퍼텐셜이 같은 결과끼리만 비교하고, Materials Project 계열과 OMat24 계열 에너지는 섞지 않으며, 포논과 탄성에는 힘이 에너지의 미분인 모델만 씁니다."],a:"Orb v3 direct",b:"phonopy",lab:"forces not conservative",x:true},
+ {k:"sub",t:["Substitute","대체"],d:["Tools that give the same quantity at different cost and accuracy. Band gaps: matgl (T1), PBE (T3), HSE (T3+). Stability: a potential (T1) or DFT (T3). Phase diagrams: CALPHAD (T0) or cluster expansion (T2). Which one to use is decided by remaining budget and uncertainty.","같은 양을 다른 비용과 정확도로 주는 도구들입니다. 밴드갭은 matgl 예측(T1)과 PBE(T3)와 HSE(T3+)가, 안정성은 퍼텐셜(T1)과 DFT(T3)가, 상태도는 CALPHAD(T0)와 클러스터 전개(T2)가 대체 관계입니다. 어느 쪽을 쓸지는 남은 예산과 불확실성이 정합니다."],a:"matgl · T1",b:"VASP PBE · T3",lab:"band gap, ~0.4 eV vs ref"},
+ {k:"ver",t:["Verification","검증"],d:["Which checks an output must pass before it can be trusted. Generated structures go through relaxation, stability, deduplication, symmetry and charge neutrality; phonons through the imaginary-mode check; DFT through the convergence log; MD trajectories through the energy-drift check.","어떤 출력은 어떤 검사를 거쳐야 믿을 수 있는지입니다. 생성 모델 출력은 완화, 안정성, 중복 확인, 대칭, 전하 중성을 전부 거치고, 포논은 허수 진동수 검사를, DFT는 수렴 기록 검사를, 분자동역학 궤적은 에너지 드리프트 검사를 거칩니다."],a:"phonopy",b:["Imaginary-mode check","허수 진동수 검사"],lab:"imaginary modes → no label"}];
+function drawAcc(){
+  var openK=($("#acc details[open]")||{}).dataset?$("#acc details[open]").dataset.k:"pre";
+  $("#acc").innerHTML=ACC.map(function(a){return '<details'+(a.k===openK?" open":"")+' data-k="'+a.k+'"><summary><span><span class="rt rt-'+a.k+'" style="margin-right:10px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase">'+a.k+'</span>'+li(a.t)+'</span><span class="pm"></span></summary><div class="body">'+li(a.d)+'</div></details>'}).join("");
+  $$("#acc details").forEach(function(d){d.addEventListener("toggle",function(){if(d.open){$$("#acc details").forEach(function(o){if(o!==d)o.open=false});drawIllus(d.dataset.k)}})});
+  drawIllus(openK);
+}
 function drawIllus(k){
-  var a=ACC.filter(function(x){return x.k===k})[0],c={pre:"#0866ff",cmp:"#ef4444",sub:"#059669",ver:"#7c3aed"}[k];
-  var line=k==="sub"?'<line x1="150" y1="126" x2="270" y2="126" stroke="'+c+'" stroke-width="5"/><line x1="150" y1="126" x2="270" y2="126" stroke="#f5f7f9" stroke-width="1.6"/>':
-    k==="cmp"?'<line x1="150" y1="130" x2="270" y2="130" stroke="'+c+'" stroke-width="2" stroke-dasharray="7 5"/><circle cx="210" cy="130" r="11" fill="#fff" stroke="'+c+'" stroke-width="1.6"/><path d="M205,125L215,135M215,125L205,135" stroke="'+c+'" stroke-width="2"/>':
+  var a=ACC.filter(function(x){return x.k===k})[0],c={pre:"var(--pre)",cmp:"var(--cmp)",sub:"var(--sub)",ver:"var(--ver)"}[k],bn=typeof a.b==="string"?a.b:li(a.b);
+  var line=k==="sub"?'<line x1="150" y1="126" x2="270" y2="126" stroke="'+c+'" stroke-width="5"/><line x1="150" y1="126" x2="270" y2="126" stroke="var(--soft)" stroke-width="1.6"/>':
+    k==="cmp"?'<line x1="150" y1="130" x2="270" y2="130" stroke="'+c+'" stroke-width="2" stroke-dasharray="7 5"/><circle cx="210" cy="130" r="11" fill="var(--card)" stroke="'+c+'" stroke-width="1.6"/><path d="M205,125L215,135M215,125L205,135" stroke="'+c+'" stroke-width="2"/>':
     '<line x1="150" y1="130" x2="262" y2="130" stroke="'+c+'" stroke-width="2"'+(k==="ver"?' stroke-dasharray="3 4"':"")+'/><path d="M260,124L270,130L260,136z" fill="'+c+'"/>';
   $("#illus").innerHTML='<rect class="bx" x="20" y="100" width="130" height="60" rx="10"/><text x="85" y="128" text-anchor="middle">'+esc(a.a)+'</text><text class="sm" x="85" y="146" text-anchor="middle">node</text>'+
-    '<rect class="bx" x="270" y="100" width="130" height="60" rx="10"/><text x="335" y="128" text-anchor="middle">'+esc(a.b)+'</text><text class="sm" x="335" y="146" text-anchor="middle">node</text>'+line+
-    '<text class="sm" x="210" y="112" text-anchor="middle" style="fill:'+c+'">'+esc(a.t)+'</text><text class="sm" x="210" y="170" text-anchor="middle">'+esc(a.lab)+'</text>'+
+    '<rect class="bx" x="270" y="100" width="130" height="60" rx="10"/><text x="335" y="128" text-anchor="middle">'+esc(bn)+'</text><text class="sm" x="335" y="146" text-anchor="middle">node</text>'+line+
+    '<text class="sm" x="210" y="112" text-anchor="middle" style="fill:'+c+'">'+esc(li(a.t))+'</text><text class="sm" x="210" y="170" text-anchor="middle">'+esc(a.lab)+'</text>'+
     (a.x?'<text class="sm" x="210" y="215" text-anchor="middle">excluded from agent choices</text>':'<text class="sm" x="210" y="215" text-anchor="middle">enforced when the agent plans a path</text>');
 }
-drawIllus("pre");
-$$("#acc details").forEach(function(d){d.addEventListener("toggle",function(){if(d.open){$$("#acc details").forEach(function(o){if(o!==d)o.open=false});drawIllus(d.dataset.k)}})});
 
 /* bench */
-var BM=[["DFTBench","QE relax, static, bands, DOS를 전문가 수렴값과 비교","68 × 4","y"],["GENIUS 프롬프트 벤치","자연어에서 유효한 QE 입력, 60초 실행 통과","295","y"],["El Agente Sólido","고체 과제 7종 루브릭","7종","y"],["VASP-Agent 벤치","밴드갭과 완화","","y"],["MADE","폐루프 발견, 오라클 예산 안의 안정성","","y"],["MatToolBench","Windows VM 멀티모달. GUI, OriginPro, 코드","204","p"],["SciAgentGym","물리, 화학, 재료, 바이오 다단계 툴 사용","259 · 툴 1,780","p"],["CompMat-Bench","실제 연구의 입력 준비와 출력 분석, 규칙 채점","94","n"],["AutoMat","코딩 에이전트의 논문 주장 재현","85","n"]];
-$("#benchrows").innerHTML=BM.map(function(b){return '<tr><td><b>'+esc(b[0])+'</b></td><td style="color:var(--muted)">'+esc(b[1])+'</td><td class="mono" style="font-size:12.5px;white-space:nowrap">'+esc(b[2])+'</td><td><span class="pill '+b[3]+'">'+({y:"예",p:"부분",n:"아니오"})[b[3]]+'</span></td></tr>'}).join("");
+var BM=[["DFTBench",["QE relax, static, bands, DOS against expert-converged values","QE relax, static, bands, DOS를 전문가 수렴값과 비교"],"68 × 4","y"],["GENIUS prompt bench",["Natural language to a valid QE input that runs for 60 s","자연어에서 유효한 QE 입력, 60초 실행 통과"],"295","y"],["El Agente Sólido",["Rubrics for 7 solid-state task types","고체 과제 7종 루브릭"],"7","y"],["VASP-Agent bench",["Band gaps and relaxations","밴드갭과 완화"],"","y"],["MADE",["Closed-loop discovery, stability within an oracle budget","폐루프 발견, 오라클 예산 안의 안정성"],"","y"],["MatToolBench",["Windows VM, multimodal: GUI, OriginPro, code","Windows VM 멀티모달. GUI, OriginPro, 코드"],"204","p"],["SciAgentGym",["Multi-step tool use across physics, chemistry, materials, biology","물리, 화학, 재료, 바이오 다단계 툴 사용"],"259 · 1,780 tools","p"],["CompMat-Bench",["Input preparation and output analysis from real studies, rule-graded","실제 연구의 입력 준비와 출력 분석, 규칙 채점"],"94","n"],["AutoMat",["Coding agents reproducing paper claims","코딩 에이전트의 논문 주장 재현"],"85","n"]];
+function drawBench(){var lab={y:t("yes","예"),p:t("partly","부분"),n:t("no","아니오")};$("#benchrows").innerHTML=BM.map(function(b){return '<tr><td><b>'+esc(b[0])+'</b></td><td style="color:var(--muted)">'+esc(li(b[1]))+'</td><td class="mono" style="font-size:12.5px;white-space:nowrap">'+esc(b[2])+'</td><td><span class="pill '+b[3]+'">'+lab[b[3]]+'</span></td></tr>'}).join("")}
+
+function renderAll(){paintLang();drawSnip();drawEx();drawGraph();drawCats();drawTools();drawAcc();drawBench()}
+renderAll();
 })();
 </script>
 </body>
