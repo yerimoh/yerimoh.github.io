@@ -5,179 +5,278 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SimulationHub</title>
 <meta name="description" content="에이전트가 쓸 수 있는 재료 시뮬레이션 도구와 도구 사이 관계의 레지스트리">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>(function(){try{var t=localStorage.getItem('sh-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <style>
 :root{
-  --bg:#ffffff; --bg2:#f6f7f8; --fg:#1f2328; --fg2:#59636e; --bd:#d8dee4; --link:#0b57d0;
-  --pre:#1d4ed8; --cmp:#c2410c; --sub:#047857; --ver:#7e22ce;
-  --ok:#1a7f37; --warn:#9a6700; --bad:#cf222e; --gray:#6e7781;
-  --sans:"Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --mono:"Source Code Pro",ui-monospace,Menlo,Consolas,monospace;
+  --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef0f3;--fg:#111827;--fg2:#4b5563;--fg3:#6b7280;--bd:#e5e7eb;--bd2:#d1d5db;
+  --link:#2563eb;--acc:#2563eb;--acc-bg:#eff6ff;
+  --c-mcp:#2563eb;--c-skill:#16a34a;--c-db:#0d9488;--c-pkg:#7c3aed;--c-plat:#ea580c;--c-acad:#db2777;--c-beyond:#a16207;--c-std:#64748b;--c-gskill:#65a30d;
+  --pre:#2563eb;--cmp:#dc2626;--sub:#059669;--ver:#7c3aed;
+  --ok:#16a34a;--warn:#d97706;--bad:#dc2626;--gray:#9ca3af;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+  --sans:"Source Sans 3","Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
 }
-@media (prefers-color-scheme: dark){:root{
-  --bg:#0d1117; --bg2:#161b22; --fg:#e6edf3; --fg2:#9198a1; --bd:#30363d; --link:#4493f8;
-  --pre:#6ea8fe; --cmp:#f0883e; --sub:#3fb950; --ver:#bc8cff;
-  --ok:#3fb950; --warn:#d29922; --bad:#f85149; --gray:#8b949e; color-scheme:dark}}
+html[data-theme="dark"]{
+  --bg:#0b0f14;--bg2:#111820;--bg3:#1a2230;--fg:#e5e7eb;--fg2:#b4bcc8;--fg3:#8b95a5;--bd:#1f2937;--bd2:#374151;
+  --link:#60a5fa;--acc:#60a5fa;--acc-bg:#172554;
+  --c-mcp:#60a5fa;--c-skill:#4ade80;--c-db:#2dd4bf;--c-pkg:#a78bfa;--c-plat:#fb923c;--c-acad:#f472b6;--c-beyond:#facc15;--c-std:#94a3b8;--c-gskill:#a3e635;
+  --pre:#60a5fa;--cmp:#f87171;--sub:#34d399;--ver:#a78bfa;
+  --ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--gray:#6b7280;
+  --shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}
+@media (prefers-color-scheme:dark){html:not([data-theme="light"]){
+  --bg:#0b0f14;--bg2:#111820;--bg3:#1a2230;--fg:#e5e7eb;--fg2:#b4bcc8;--fg3:#8b95a5;--bd:#1f2937;--bd2:#374151;
+  --link:#60a5fa;--acc:#60a5fa;--acc-bg:#172554;
+  --c-mcp:#60a5fa;--c-skill:#4ade80;--c-db:#2dd4bf;--c-pkg:#a78bfa;--c-plat:#fb923c;--c-acad:#f472b6;--c-beyond:#facc15;--c-std:#94a3b8;--c-gskill:#a3e635;
+  --pre:#60a5fa;--cmp:#f87171;--sub:#34d399;--ver:#a78bfa;
+  --ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--gray:#6b7280;
+  --shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}}
+
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14.5px;line-height:1.6}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
-code,.mono{font-family:var(--mono);font-size:.92em}
-h1,h2,h3{line-height:1.3;margin:0}
-h1{font-size:22px}
-h2{font-size:18px;margin:28px 0 10px}
-h3{font-size:15px;margin:20px 0 8px}
+h1,h2,h3{margin:0;line-height:1.3;letter-spacing:-.01em}
+h1{font-size:24px;font-weight:700}
+h2{font-size:17px;font-weight:600;margin:28px 0 10px}
+h3{font-size:14.5px;font-weight:600;margin:16px 0 6px}
 p{margin:0 0 10px}
-.wrap{max-width:1200px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 0 max(16px,env(safe-area-inset-right))}
+code,.mono{font-family:var(--mono);font-size:.9em}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1280px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
+svg.i{width:14px;height:14px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-header{border-bottom:1px solid var(--bd);background:var(--bg)}
-.hd{display:flex;align-items:center;gap:24px;height:56px}
-.logo{font-weight:700;font-size:17px;color:var(--fg)}
+/* header */
+.hdr{border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:0;z-index:30}
+.hdr .wrap{display:flex;align-items:center;gap:14px;height:54px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;color:var(--fg);white-space:nowrap}
 .logo:hover{text-decoration:none}
-.hd nav{display:flex;gap:4px;height:100%}
-.hd nav a{display:flex;align-items:center;padding:0 10px;color:var(--fg2);border-bottom:2px solid transparent;margin-bottom:-1px}
-.hd nav a:hover{color:var(--fg);text-decoration:none}
-.hd nav a.on{color:var(--fg);border-bottom-color:var(--fg);font-weight:500}
-.hd .ver{margin-left:auto;font-size:12.5px;color:var(--fg2)}
+.logo .mark{width:22px;height:22px}
+.hsearch{flex:1;max-width:460px;position:relative}
+.hsearch input{width:100%;height:34px;padding:0 12px 0 34px;border:1px solid var(--bd);border-radius:8px;background:var(--bg2);color:var(--fg);font:inherit;font-size:13.5px}
+.hsearch input:focus{outline:none;border-color:var(--acc);background:var(--bg)}
+.hsearch svg{position:absolute;left:11px;top:10px;color:var(--fg3)}
+.hnav{display:flex;gap:2px;margin-left:auto}
+.hnav a{padding:6px 10px;border-radius:6px;color:var(--fg2);font-weight:500;font-size:13.5px}
+.hnav a:hover{background:var(--bg2);text-decoration:none;color:var(--fg)}
+.hnav a.on{color:var(--fg);background:var(--bg3)}
+.tbtn{width:34px;height:34px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);display:grid;place-items:center;color:var(--fg2)}
+.tbtn:hover{background:var(--bg2)}
 
-main.wrap{padding-top:28px;padding-bottom:60px}
-.intro{max-width:760px;color:var(--fg2);margin-bottom:20px}
-.intro p{margin:0}
-.intro b{color:var(--fg);font-weight:500}
+main.wrap{padding-top:22px;padding-bottom:64px}
+.lead{color:var(--fg2);max-width:820px;margin-bottom:18px}
+.lead b{color:var(--fg);font-weight:600}
+.statline{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--fg3);margin-bottom:18px}
+.statline b{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums}
+.statline .z b{color:var(--bad)}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid var(--bd);border-radius:999px;background:var(--bg);font-size:12.5px;color:var(--fg2);white-space:nowrap}
+.pill:hover{border-color:var(--bd2);color:var(--fg)}
+.pill.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.pill .n{color:inherit;opacity:.6;font-variant-numeric:tabular-nums;font-size:11.5px}
+.pill .sw{width:8px;height:8px;border-radius:2px;flex:none}
+.pill.on .sw{outline:1px solid var(--bg)}
+.tag{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:5px;font-size:11.5px;font-weight:500;white-space:nowrap;background:var(--bg3);color:var(--fg2)}
+.tag .sw{width:7px;height:7px;border-radius:2px}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-prod{color:var(--ok)}.s-near{color:var(--sub)}.s-demo{color:var(--warn)}.s-dead{color:var(--gray)}.s-comm{color:var(--c-mcp)}.s-res{color:var(--ver)}.s-gap{color:var(--bad)}
 
 /* registry */
-.reg{display:grid;grid-template-columns:210px minmax(0,1fr);gap:32px}
-.side summary{display:none}
-.side h4{font-size:12.5px;font-weight:700;margin:0 0 6px;color:var(--fg)}
-.side fieldset{border:0;padding:0;margin:0 0 22px}
-.side label{display:flex;align-items:center;gap:7px;font-size:13.5px;padding:2px 0;cursor:pointer;color:var(--fg)}
-.side label .c{margin-left:auto;color:var(--fg2);font-size:12px;font-variant-numeric:tabular-nums}
-.side input{margin:0}
-.side button{background:none;border:0;padding:0;color:var(--link);font:inherit;font-size:12.5px;cursor:pointer}
-.search{display:flex;gap:8px;margin-bottom:12px}
-.search input{flex:1;min-width:0;height:36px;padding:0 12px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit}
-.search input:focus{outline:2px solid var(--link);outline-offset:-1px;border-color:transparent}
-.search select{height:36px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit;padding:0 8px}
-.rescount{font-size:13px;color:var(--fg2);margin-bottom:6px}
-.list{border-top:1px solid var(--bd)}
-.item{padding:13px 0;border-bottom:1px solid var(--bd);display:grid;gap:3px}
-.item .t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.item .n{font-weight:700;font-size:15px}
-.item .cat{font-size:12px;color:var(--fg2)}
-.item .d{color:var(--fg)}
-.item .m{font-size:12.5px;color:var(--fg2);display:flex;flex-wrap:wrap;gap:4px 16px}
-.item .m .warn{color:var(--bad)}
-.dot{display:inline-flex;align-items:center;gap:5px}
-.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
-.s-prod{color:var(--ok)}.s-near{color:var(--sub)}.s-demo{color:var(--warn)}.s-dead{color:var(--gray)}.s-comm{color:var(--pre)}.s-res{color:var(--ver)}.s-gap{color:var(--cmp)}
-.hubtag{font-size:12px}
-.h-take{color:var(--ok)}.h-ref{color:var(--fg2)}.h-excl{color:var(--bad)}
-.more{margin-top:24px;font-size:13.5px;color:var(--fg2)}
-.more p{margin-bottom:6px}
+.reg{display:grid;grid-template-columns:232px minmax(0,1fr);gap:28px;align-items:start}
+.side{position:sticky;top:70px;display:grid;gap:18px}
+.side section h4{margin:0 0 7px;font-size:12px;font-weight:600;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em}
+.side .pills{display:flex;flex-wrap:wrap;gap:5px}
+.side .pill{height:24px;font-size:12px;padding:0 9px}
+.side .showmore{background:none;border:0;padding:0;color:var(--link);font-size:12px;margin-top:6px}
+.fbtn{display:none}
+.rhead{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.rhead h1{font-size:18px}
+.rhead h1 span{color:var(--fg3);font-weight:400;margin-left:6px;font-variant-numeric:tabular-nums}
+.rhead .act{display:flex;gap:6px;flex-wrap:wrap}
+.rhead .active .pill{height:24px;font-size:12px;background:var(--acc-bg);border-color:transparent;color:var(--acc)}
+.rhead .active .pill svg{width:11px;height:11px}
+.rhead select{margin-left:auto;height:30px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);color:var(--fg);font:inherit;font-size:13px;padding:0 8px}
+.list{display:grid;gap:8px}
+.row{border:1px solid var(--bd);border-radius:10px;padding:12px 14px;background:var(--bg);display:grid;gap:5px;transition:border-color .12s}
+.row:hover{border-color:var(--bd2);box-shadow:var(--shadow)}
+.row .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row .nm{font-weight:600;font-size:15px;color:var(--fg)}
+.row .nm:hover{color:var(--link)}
+.row .url{font-family:var(--mono);font-size:11.5px;color:var(--fg3)}
+.row .hub{margin-left:auto;font-size:12px;font-weight:500}
+.h-take{color:var(--ok)}.h-ref{color:var(--fg3)}.h-excl{color:var(--bad)}
+.row .desc{color:var(--fg2);font-size:13.5px}
+.row .meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--fg3);align-items:center}
+.row .meta span{display:inline-flex;align-items:center;gap:4px}
+.row .meta .lic.bad{color:var(--bad)}
+.inst{display:inline-flex;align-items:center;gap:6px;margin-left:auto;background:var(--bg2);border:1px solid var(--bd);border-radius:6px;padding:2px 4px 2px 9px;font-family:var(--mono);font-size:11.5px;color:var(--fg2);max-width:100%}
+.inst code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inst button{border:0;background:transparent;color:var(--fg3);width:22px;height:20px;display:grid;place-items:center;border-radius:4px}
+.inst button:hover{background:var(--bg3);color:var(--fg)}
+.inst button.done{color:var(--ok)}
+.empty{padding:40px 0;text-align:center;color:var(--fg3)}
+.foot-note{margin-top:28px;font-size:13px;color:var(--fg3);line-height:1.6}
+.foot-note h3{color:var(--fg2)}
 
 /* tables */
-.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:6px}
-table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
+table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--bd);vertical-align:top}
-th{background:var(--bg2);font-weight:500;font-size:12.5px;color:var(--fg2);white-space:nowrap}
+th{background:var(--bg2);font-weight:600;font-size:12px;color:var(--fg3);white-space:nowrap;position:sticky;top:0}
+th.sort{cursor:pointer;user-select:none}
+th.sort:hover{color:var(--fg)}
+th.sort.asc::after{content:" ↑"}th.sort.desc::after{content:" ↓"}
 tr:last-child td{border-bottom:0}
-td.num{text-align:right;font-variant-numeric:tabular-nums}
-tbody tr.click{cursor:pointer}
-tbody tr.click:hover{background:var(--bg2)}
-
-/* node detail */
-.crumb{font-size:13px;color:var(--fg2);margin-bottom:10px}
-.nd{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px}
-dl.kv{display:grid;grid-template-columns:110px minmax(0,1fr);margin:0;border-top:1px solid var(--bd)}
-dl.kv dt,dl.kv dd{padding:8px 0;border-bottom:1px solid var(--bd);margin:0}
-dl.kv dt{color:var(--fg2);font-size:13px}
-.side-box{border:1px solid var(--bd);border-radius:6px;padding:14px 16px;font-size:13.5px;align-self:start}
-.side-box ul{margin:6px 0 0;padding-left:18px}
-.rt{font-size:12px;font-weight:500}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--bg2)}
+.tier{font-family:var(--mono);font-size:11.5px;padding:1px 6px;border-radius:4px;background:var(--bg3);color:var(--fg2)}
+.rt{font-size:12px;font-weight:600;white-space:nowrap}
 .rt-pre{color:var(--pre)}.rt-cmp{color:var(--cmp)}.rt-sub{color:var(--sub)}.rt-ver{color:var(--ver)}
 
+/* tool detail */
+.crumb{font-size:13px;color:var(--fg3);margin-bottom:8px}
+.dh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.dsub{color:var(--fg3);font-size:13.5px;margin-bottom:14px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--bd);margin-bottom:16px}
+.tabs button{border:0;background:none;padding:8px 12px;color:var(--fg2);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--fg);border-bottom-color:var(--fg)}
+.tabs button .n{color:var(--fg3);font-size:12px;margin-left:4px}
+.nd{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
+dl.kv{display:grid;grid-template-columns:120px minmax(0,1fr);margin:0;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+dl.kv dt,dl.kv dd{padding:9px 12px;border-bottom:1px solid var(--bd);margin:0}
+dl.kv dt{color:var(--fg3);font-size:12.5px;background:var(--bg2)}
+dl.kv dt:nth-last-of-type(1),dl.kv dd:last-child{border-bottom:0}
+.box{border:1px solid var(--bd);border-radius:10px;padding:12px 14px;background:var(--bg)}
+.box h4{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em}
+.box ul{margin:0;padding-left:16px}
+.box li{margin:3px 0}
+
 /* graph */
-.gwrap{border:1px solid var(--bd);border-radius:6px;overflow-x:auto;background:var(--bg)}
-#graph{display:block;min-width:900px;width:100%;height:auto}
+.gcard{border:1px solid var(--bd);border-radius:10px;background:var(--bg);overflow:hidden}
+.gbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--bd);background:var(--bg2)}
+.gbar .lab{font-size:12px;color:var(--fg3);margin-right:4px}
+.gbar .hint{margin-left:auto;font-size:12px;color:var(--fg3)}
+.gscroll{overflow-x:auto}
+#graph{display:block;min-width:960px;width:100%;height:auto}
 #graph text{font-family:var(--sans)}
-#graph .node rect{fill:var(--bg);stroke:var(--bd);stroke-width:1}
-#graph .node:hover rect{stroke:var(--fg2)}
-#graph .node.sel rect{stroke:var(--fg);stroke-width:1.6}
-#graph .node .nm{font-size:12.5px;font-weight:500;fill:var(--fg)}
-#graph .node .tr{font-size:11px;fill:var(--fg2)}
+#graph .colh{font-size:11.5px;font-weight:600;fill:var(--fg3);letter-spacing:.04em}
+#graph .node rect.b{fill:var(--bg);stroke:var(--bd2);stroke-width:1}
+#graph .node rect.s{stroke:none}
+#graph .node:hover rect.b{stroke:var(--fg2)}
+#graph .node.sel rect.b{stroke:var(--acc);stroke-width:1.8}
+#graph .node .nm{font-size:12.5px;font-weight:600;fill:var(--fg)}
+#graph .node .ro{font-size:10.5px;fill:var(--fg3)}
+#graph .node .tr{font-size:10px;fill:var(--fg2);font-family:var(--mono)}
+#graph .node rect.tb{fill:var(--bg3);stroke:none}
 #graph .node{cursor:pointer}
-#graph .colh{font-size:12px;fill:var(--fg2)}
-#graph .fade{opacity:.13}
-.legend{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;margin:10px 0 0;color:var(--fg2)}
-.legend label{display:inline-flex;align-items:center;gap:7px;cursor:pointer;color:var(--fg)}
-.gnote{font-size:13px;color:var(--fg2);margin-top:6px}
+#graph .edge{cursor:pointer}
+#graph .edge .hit{stroke:transparent;stroke-width:12;fill:none}
+#graph .fade{opacity:.1}
+#graph .xm circle{fill:var(--bg);stroke:var(--cmp);stroke-width:1.3}
+#graph .xm path{stroke:var(--cmp);stroke-width:1.5;fill:none}
+.gtip{position:fixed;z-index:99;max-width:380px;background:var(--bg);border:1px solid var(--bd2);border-radius:8px;padding:8px 11px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:12.5px;line-height:1.5;display:none;pointer-events:none}
+.gtip.show{display:block}
+.gtip .h{font-weight:600;margin-bottom:2px}
+.gpanel{border-top:1px solid var(--bd);padding:12px 14px;display:grid;gap:8px;background:var(--bg)}
+.gpanel .ph{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gpanel .ph b{font-size:15px}
+.gpanel ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:13px}
+.gpanel li{display:grid;grid-template-columns:64px 1fr;gap:10px}
+.gnote{font-size:12.5px;color:var(--fg3);margin-top:8px}
 
-.seg{display:inline-flex;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin:4px 0 12px}
-.seg button{border:0;background:var(--bg);color:var(--fg);font:inherit;font-size:13px;padding:6px 12px;cursor:pointer;border-right:1px solid var(--bd)}
+/* gate demo */
+.seg{display:inline-flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:13px;color:var(--fg2);border-right:1px solid var(--bd)}
 .seg button:last-child{border-right:0}
-.seg button.on{background:var(--bg2);font-weight:500}
-ol.steps{margin:0;padding-left:22px}
-ol.steps li{padding:4px 0}
-ol.steps .why{color:var(--fg2);font-size:13px}
-ol.steps .k{font-size:12px;margin-left:6px}
-ol.steps li.blocked > span:first-child{text-decoration:line-through;color:var(--fg2)}
-.k-ok{color:var(--ok)}.k-silent{color:var(--warn)}.k-blocked{color:var(--bad)}.k-added{color:var(--pre)}
-.res{margin-top:10px;font-size:13.5px}
+.seg button.on{background:var(--bg3);color:var(--fg);font-weight:600}
+.segs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+.steps{display:grid;gap:6px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
+.steps li::before{counter-increment:s;content:counter(s);font-size:12px;color:var(--fg3);font-variant-numeric:tabular-nums;padding-top:2px}
+.steps .t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.steps .tool{font-family:var(--mono);font-size:12.5px;font-weight:500}
+.steps .why{color:var(--fg3);font-size:12.5px}
+.steps li.blocked .tool{text-decoration:line-through;color:var(--fg3)}
+.k{font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:5px}
+.k-ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.k-silent{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.k-blocked{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.k-added{color:var(--pre);background:color-mix(in srgb,var(--pre) 12%,transparent)}
+.verdict{margin-top:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--bg2);font-size:13.5px}
+.verdict b{margin-right:6px}
 
-.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
-.prose{max-width:760px}
-.prose p{margin-bottom:12px}
-.plain{margin:0;padding-left:20px}
-.plain li{margin:3px 0}
-footer{border-top:1px solid var(--bd);padding:20px 0 40px;font-size:12.5px;color:var(--fg2)}
+.prose{max-width:780px}
+.prose p{margin-bottom:12px;color:var(--fg)}
+.prose ul{padding-left:20px}
+footer{border-top:1px solid var(--bd);padding:18px 0 40px;font-size:12.5px;color:var(--fg3)}
 
-@media (max-width:860px){
-  .reg,.nd,.cols2{grid-template-columns:1fr}
-  .side[open]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
-  .hd{gap:12px;height:auto;padding:10px 0;flex-wrap:wrap}
-  .hd nav{height:auto;flex-wrap:wrap}
-  .hd nav a{padding:4px 8px}
-  .hd .ver{display:none}
+@media (max-width:900px){
+  .reg,.nd{grid-template-columns:1fr}
+  .side{position:static;display:none}
+  .side.open{display:grid}
+  .fbtn{display:inline-flex}
+  .hsearch{max-width:none}
+  .hnav a{padding:6px 7px;font-size:13px}
 }
-@media (max-width:860px){.side summary{display:block;cursor:pointer;font-weight:500;padding:8px 12px;border:1px solid var(--bd);border-radius:6px;grid-column:1/-1;margin-bottom:12px}}
-@media (max-width:480px){.side[open]{grid-template-columns:1fr}}
+@media (max-width:600px){
+  .hdr .wrap{height:auto;flex-wrap:wrap;padding-top:8px;padding-bottom:8px;gap:8px}
+  .hsearch{order:3;flex-basis:100%}
+  .hnav{margin-left:auto}
+}
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap hd">
-    <a class="logo" href="#registry">SimulationHub</a>
-    <nav>
-      <a href="#registry" data-p="registry">레지스트리</a>
-      <a href="#tools" data-p="tools">도구</a>
-      <a href="#relations" data-p="relations">관계</a>
-      <a href="#benchmarks" data-p="benchmarks">벤치마크</a>
-      <a href="#about" data-p="about">소개</a>
-    </nav>
-    <span class="ver">데모 · 조사일 2026-10-15</span>
-  </div>
-</header>
+<header class="hdr"><div class="wrap">
+  <a class="logo" href="#registry"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 9.8V5.5M14 13.1l3.6 2.1M10 13.1l-3.6 2.1" stroke="currentColor" stroke-width="1.5"/></svg>SimulationHub</a>
+  <div class="hsearch"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="hq" type="search" placeholder="도구, 백엔드, 기능 검색 (phonopy, LAMMPS, OPTIMADE …)" aria-label="검색"></div>
+  <nav class="hnav">
+    <a href="#registry" data-p="registry">레지스트리</a>
+    <a href="#tools" data-p="tools">도구</a>
+    <a href="#relations" data-p="relations">관계 그래프</a>
+    <a href="#benchmarks" data-p="benchmarks">벤치마크</a>
+    <a href="#about" data-p="about">소개</a>
+  </nav>
+  <button class="tbtn" id="theme" type="button" aria-label="테마 전환"><svg class="i" viewBox="0 0 24 24" id="ti"></svg></button>
+</div></header>
 
 <main class="wrap" id="app"></main>
+<div class="gtip" id="gtip"></div>
 
-<footer>
-  <div class="wrap">
-    SimulationHub는 MatWorld 연구 제안(v4)의 첫 번째 구성 요소입니다. 이 페이지는 데모이며, 도구 명세 일부는 원문에 없어 일반 문서 기준으로 채웠습니다.
-    · <a href="https://yerimoh.github.io">yerimoh.github.io</a>
-  </div>
-</footer>
+<footer><div class="wrap">SimulationHub는 MatWorld 연구 제안(v4)의 첫 번째 구성 요소입니다. 조사일 2026-10-15. 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠습니다. · <a href="https://yerimoh.github.io">yerimoh.github.io</a></div></footer>
 
 <script>
 (function(){
 "use strict";
 var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var I={star:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>',
+ commit:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M2 12h6.5M15.5 12H22"/></svg>',
+ cal:'<svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+ scale:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 006 0zM19 7l-3 7a3 3 0 006 0z"/></svg>',
+ box:'<svg class="i" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>',
+ copy:'<svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>',
+ check:'<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>',
+ x:'<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ filter:'<svg class="i" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>'};
 
-var COLS=[{x:20,label:"데이터, 생성기"},{x:248,label:"빠른 계산기"},{x:476,label:"DFT"},{x:704,label:"후처리 계산기"},{x:932,label:"검사기"}];
-var W=170,H=46;
+/* theme */
+function curTheme(){var a=document.documentElement.getAttribute("data-theme");if(a)return a;return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}
+function paintTheme(){$("#ti").innerHTML=curTheme()==="dark"?I.sun:I.moon}
+$("#theme").addEventListener("click",function(){var n=curTheme()==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",n);try{localStorage.setItem("sh-theme",n)}catch(e){}paintTheme()});
+paintTheme();
+
+var COLS=[{x:16,label:"데이터, 생성기"},{x:252,label:"빠른 계산기"},{x:488,label:"DFT"},{x:724,label:"후처리 계산기"},{x:960,label:"검사기"}];
+var W=186,H=46;
 var ET={pre:"전제 조건",cmp:"호환성",sub:"대체",ver:"검증"};
-var ETD={pre:"B를 쓰려면 A를 먼저 특정 설정으로 돌려야 함",cmp:"두 결과를 같은 표에 놓거나 이어 붙여도 되는지",sub:"같은 양을 다른 비용과 정확도로 주는 도구",ver:"이 출력은 이 검사를 거쳐야 믿을 수 있음"};
 
 const N=[
  ["mp",0,56,"Materials Project","데이터 소스","T0",{in:"화학계, 조성, mp-id",out:"구조, 에너지, 밴드갭, 상도",ref:"MP 호환 설정 (PBE/PBE+U, 보정 포함)",lic:"데이터 CC-BY-4.0",env:"mp-api",exec:"바로",fail:"API 오류 재시도"},["MP 공식 MCP","mcp-materials-project","Pipeworx mcp-materials"]],
@@ -212,7 +311,7 @@ const N=[
  ["imag",4,260,"허수 진동수 검사","검사기 · 포논","T0",{in:"포논 밴드",out:"허수 모드 유무와 위치",ref:"해당 없음",lic:"자체",env:"phonopy 환경",exec:"바로",fail:"Γ점 근처 작은 허수는 수치 잡음으로 분리"},["CrystOD 포논 분석"]],
  ["conv",4,328,"수렴 기록 검사","검사기 · DFT","T0",{in:"DFT 출력 로그",out:"SCF, 이온 수렴 여부",ref:"해당 없음",lic:"custodian (MIT)",env:"공용",exec:"바로",fail:"가벼운 오류는 자동 복구, 큰 오류는 기록"},["chemtoolsmcp plan_recovery","custodian"]]
 ].map(a=>({id:a[0],col:a[1],y:a[2],name:a[3],role:a[4],tier:a[5],spec:a[6],wr:a[7],x:COLS[a[1]].x}));
-var NM={};N.forEach(function(n){NM[n.id]=n});
+var NM={};N.forEach(function(n){NM[n.id]=n;n.x=COLS[n.col].x});
 const E=[
  ["vasp","lobster","pre","ISYM=-1, NBANDS 증가","LOBSTER를 쓰려면 VASP를 대칭을 끄고 밴드 수를 늘려 돌려야 한다."],
  ["vasp","boltz","pre","조밀한 k점","BoltzTraP2는 보간을 위해 조밀한 k점 DFT 밴드가 필요하다."],
@@ -419,155 +518,191 @@ const SC=[
    v:["ok","기준점이 섞이는 경로는 실행되지 않습니다. 싼 도구로 고르고 비싼 도구로 확인하는 순서는 대체 관계와 남은 예산으로 정해집니다."]}}
 ];
 
-var CAT={mcp:"MCP 서버",db:"데이터베이스 서버",pkg:"툴 패키지",skill:"스킬팩",gskill:"범용 스킬 모음",plat:"상용 플랫폼",acad:"학술 시스템",beyond:"원자 단위 밖",bench:"벤치마크",std:"표준, 스키마"};
+var CAT={mcp:"MCP 서버",skill:"스킬팩",db:"데이터베이스 서버",pkg:"툴 패키지",plat:"상용 플랫폼",acad:"학술 시스템",beyond:"원자 단위 밖",std:"표준, 스키마",gskill:"범용 스킬 모음"};
 var ST={prod:"prod",near:"prod 근접",demo:"demo",dead:"dead",comm:"상용",res:"연구",gap:"공백"};
 var HUB={take:"노드로 가져옴",ref:"설계 참고",excl:"제외"};
+var BACKENDS=[["VASP",/\bVASP\b/i],["Quantum ESPRESSO",/\bQE\b|Quantum ESPRESSO/i],["LAMMPS",/LAMMPS/i],["GROMACS",/GROMACS|\bgmx\b/i],["phonopy",/phonopy/i],["MACE",/\bMACE\b/i],["ASE",/\bASE\b/i],["pymatgen",/pymatgen/i],["RDKit",/RDKit/i],["OpenMM",/OpenMM/i],["PySCF",/PySCF/i],["xTB",/\bxTB\b/i],["ORCA",/\bORCA\b/i],["CP2K",/CP2K/i],["deepmd",/deepmd|DPA/i],["Materials Project",/Materials Project|\bMP\b|mp-api/],["OPTIMADE",/OPTIMADE/i],["AiiDA",/AiiDA/i],["atomate2",/atomate2/i],["MatterGen",/MatterGen/i],["MatterSim",/MatterSim/i],["OVITO",/OVITO/i],["Cantera",/Cantera/i],["OpenFOAM",/OpenFOAM/i],["FEniCSx",/FEniCS/i],["COMSOL",/COMSOL/i]];
+R.forEach(function(r){r.text=[r.name,r.what,r.backend].join(" ");r.be=BACKENDS.filter(function(b){return b[1].test(r.text)}).map(function(b){return b[0]});
+  var parts=(r.backend||"").split(" · ");r.inst="";parts.forEach(function(p){if(/^(pip |uv |uvx|npm|npx|claude mcp|docker)/i.test(p.trim()))r.inst=p.trim()});
+  r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1];r.commits=(r.act.match(/커밋 ([\d,]+)/)||[])[1];r.date=(r.act.match(/20\d\d(-\d\d(-\d\d)?)?/)||[])[0];
+  r.actRest=r.act.replace(/별 [\d,]+/,"").replace(/커밋 [\d,]+/,"").replace(/20\d\d(-\d\d(-\d\d)?)?/,"").replace(/^[\s·]+|[\s·]+$/g,"").replace(/\s*·\s*·\s*/g," · ")});
 var relCount=function(id){return E.filter(function(e){return e.from===id||e.to===id}).length};
 
 /* ---------- registry ---------- */
-var F={q:"",cat:{},st:{},hub:"",badlic:false,sort:"default"};
-function countBy(key,val){return R.filter(function(r){return r[key]===val}).length}
+var F={q:"",cat:{},st:{},be:{},hub:"",badlic:false,sort:"default"};
+var moreBe=false;
+function cnt(fn){return R.filter(fn).length}
+function pills(key,items,getter){return items.map(function(it){var k=it[0],lab=it[1],n=it[2],sw=it[3];
+  return '<button type="button" class="pill'+(F[key][k]?" on":"")+'" data-k="'+key+'" data-v="'+esc(k)+'">'+(sw?'<span class="sw" style="background:'+sw+'"></span>':"")+esc(lab)+'<span class="n">'+n+'</span></button>'}).join("")}
 function regPage(){
-  var catBoxes=Object.keys(CAT).filter(function(k){return countBy("cat",k)}).map(function(k){
-    return '<label><input type="checkbox" data-f="cat" value="'+k+'"'+(F.cat[k]?" checked":"")+'>'+CAT[k]+'<span class="c">'+countBy("cat",k)+'</span></label>'}).join("");
-  var stBoxes=["prod","near","demo","dead","comm","res"].map(function(k){
-    return '<label><input type="checkbox" data-f="st" value="'+k+'"'+(F.st[k]?" checked":"")+'><span class="dot s-'+k+'">'+ST[k]+'</span><span class="c">'+countBy("st",k)+'</span></label>'}).join("");
-  var hubBoxes=[["","전체"],["take","노드로 가져옴"],["ref","설계 참고"],["excl","제외"]].map(function(h){
-    return '<label><input type="radio" name="hub" data-f="hub" value="'+h[0]+'"'+(F.hub===h[0]?" checked":"")+'>'+h[1]+(h[0]?'<span class="c">'+countBy("hub",h[0])+'</span>':"")+'</label>'}).join("");
-  return '<div class="intro"><p>에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼(MCP 서버, SKILL.md 스킬팩, 툴 패키지)와 주변 플랫폼, 벤치마크, 표준을 모은 목록입니다. 2026년 10월 15일 기준 재료 시뮬레이션 MCP 서버는 약 130개, 스킬팩은 45개가 있고 이 중 실제로 쓸 만한 서버는 약 25개입니다. 도구 사이의 관계는 <a href="#relations">관계</a> 탭에 따로 정리했습니다.</p></div>'+
-  '<div class="reg"><details class="side" id="side" open><summary>필터</summary>'+
-    '<fieldset><h4>분류</h4>'+catBoxes+'</fieldset>'+
-    '<fieldset><h4>상태</h4>'+stBoxes+'</fieldset>'+
-    '<fieldset><h4>허브 반영</h4>'+hubBoxes+'</fieldset>'+
-    '<fieldset><h4>라이선스</h4><label><input type="checkbox" data-f="badlic"'+(F.badlic?" checked":"")+'>없음 또는 미표기만</label></fieldset>'+
-    '<fieldset><button type="button" id="reset">필터 초기화</button></fieldset>'+
-  '</details><div style="min-width:0">'+
-    '<div class="search"><input id="q" type="search" placeholder="이름, 백엔드, 기능으로 검색 (예: phonopy, LAMMPS, OPTIMADE)" value="'+esc(F.q)+'"><select id="sort" aria-label="정렬"><option value="default">조사 순서</option><option value="name">이름순</option><option value="status">상태순</option></select></div>'+
-    '<div class="rescount" id="rc"></div><div class="list" id="list"></div>'+
-    '<div class="more"><h3>표에 따로 올리지 않은 것</h3>'+
-    '<p>이전 조사에서 확인한 42개는 카탈로그 11절에 세부가 있습니다. AtomisticSkills 2.0, Materials Project 공식 MCP, optimade-mcp-server, mace-mcp-server, VASPilot, ABACUS-agent-tools, MatMaster, TritonDFT, Masgent, LangSim, ChemGraph, MDCrow, ToolUniverse 등입니다.</p>'+
-    '<p>이름만 비슷하고 재료 시뮬레이션과 무관한 것은 제외했습니다. qe2mcp(HTTP 서버), sumo-mcp(교통), espresso-mcp(안드로이드), nomad-mcp(HashiCorp), lattice-mcp(HR), orca-mcp-server(보안), zeo-mcp(KiCad), phonon(업타임 모니터링) 등입니다.</p></div>'+
-  '</div></div>';
+  var catItems=Object.keys(CAT).map(function(k){return [k,CAT[k],cnt(function(r){return r.cat===k}),"var(--c-"+k+")"]}).filter(function(i){return i[2]});
+  var stItems=["prod","near","demo","dead","comm","res"].map(function(k){return [k,ST[k],cnt(function(r){return r.st===k})]});
+  var beAll=BACKENDS.map(function(b){return [b[0],b[0],cnt(function(r){return r.be.indexOf(b[0])>=0})]}).filter(function(i){return i[2]}).sort(function(a,b){return b[2]-a[2]});
+  var beItems=moreBe?beAll:beAll.slice(0,10);
+  var hubItems=["take","ref","excl"].map(function(k){return [k,HUB[k],cnt(function(r){return r.hub===k})]});
+  return '<p class="lead">에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼(MCP 서버, SKILL.md 스킬팩, 툴 패키지)와 주변 플랫폼, 벤치마크, 표준의 목록입니다. 도구 사이의 관계는 <a href="#relations">관계 그래프</a>에 따로 있습니다.</p>'+
+  '<div class="statline"><span>재료 시뮬레이션 MCP 서버 <b>약 130</b></span><span>그중 쓸 만한 것 <b>약 25</b></span><span>스킬팩 <b>45</b></span><span>SKILL.md 본문 <b>약 500</b></span><span class="z">도구 관계를 적은 공개 레지스트리 <b>0</b></span></div>'+
+  '<div class="reg"><aside class="side" id="side">'+
+    '<section><h4>종류</h4><div class="pills">'+pills("cat",catItems)+'</div></section>'+
+    '<section><h4>백엔드</h4><div class="pills">'+pills("be",beItems)+'</div><button type="button" class="showmore" id="morebe">'+(moreBe?"접기":"더 보기 ("+(beAll.length-10)+")")+'</button></section>'+
+    '<section><h4>상태</h4><div class="pills">'+pills("st",stItems)+'</div></section>'+
+    '<section><h4>허브 반영</h4><div class="pills">'+hubItems.map(function(h){return '<button type="button" class="pill'+(F.hub===h[0]?" on":"")+'" data-k="hub" data-v="'+h[0]+'">'+h[1]+'<span class="n">'+h[2]+'</span></button>'}).join("")+'</div></section>'+
+    '<section><h4>라이선스</h4><div class="pills"><button type="button" class="pill'+(F.badlic?" on":"")+'" data-k="badlic" data-v="1">없음 또는 미표기<span class="n">'+cnt(function(r){return /없음|미표기/.test(r.lic)})+'</span></button></div></section>'+
+  '</aside><div style="min-width:0"><div class="rhead"><h1>레지스트리<span id="rc"></span></h1><button type="button" class="pill fbtn" id="fbtn">'+I.filter+'필터</button><div class="act active" id="active"></div><select id="sort" aria-label="정렬"><option value="default">조사 순서</option><option value="name">이름순</option><option value="status">상태순</option><option value="stars">별 많은 순</option><option value="date">최근 활동순</option></select></div><div class="list" id="list"></div>'+
+  '<div class="foot-note"><h3>표에 따로 올리지 않은 것</h3><p>이전 조사에서 확인한 42개는 카탈로그 11절에 세부가 있습니다. AtomisticSkills 2.0, Materials Project 공식 MCP, optimade-mcp-server, mace-mcp-server, VASPilot, ABACUS-agent-tools, MatMaster, TritonDFT, Masgent, LangSim, ChemGraph, MDCrow, ToolUniverse 등입니다.</p><p>이름만 비슷하고 재료 시뮬레이션과 무관한 것은 뺐습니다. qe2mcp(HTTP 서버), sumo-mcp(교통), espresso-mcp(안드로이드), nomad-mcp(HashiCorp), lattice-mcp(HR), orca-mcp-server(보안), zeo-mcp(KiCad), phonon(업타임 모니터링).</p></div></div></div>';
 }
 var stOrder={prod:0,near:1,comm:2,res:3,demo:4,dead:5,gap:6};
 function regList(){
-  var q=F.q.trim().toLowerCase(), cats=Object.keys(F.cat).filter(function(k){return F.cat[k]}), sts=Object.keys(F.st).filter(function(k){return F.st[k]});
-  var rows=R.filter(function(r){
-    return (!cats.length||cats.indexOf(r.cat)>=0)&&(!sts.length||sts.indexOf(r.st)>=0)&&(!F.hub||r.hub===F.hub)&&
-      (!F.badlic||/없음|미표기/.test(r.lic))&&(!q||[r.name,r.what,r.backend,r.url].join(" ").toLowerCase().indexOf(q)>=0)});
+  var q=F.q.trim().toLowerCase(),on=function(o){return Object.keys(o).filter(function(k){return o[k]})};
+  var cats=on(F.cat),sts=on(F.st),bes=on(F.be);
+  var rows=R.filter(function(r){return (!cats.length||cats.indexOf(r.cat)>=0)&&(!sts.length||sts.indexOf(r.st)>=0)&&(!bes.length||bes.every(function(b){return r.be.indexOf(b)>=0}))&&(!F.hub||r.hub===F.hub)&&(!F.badlic||/없음|미표기/.test(r.lic))&&(!q||(r.text+" "+r.url).toLowerCase().indexOf(q)>=0)});
+  var num=function(s){return s?+String(s).replace(/,/g,""):-1};
   if(F.sort==="name")rows=rows.slice().sort(function(a,b){return a.name.localeCompare(b.name)});
   if(F.sort==="status")rows=rows.slice().sort(function(a,b){return stOrder[a.st]-stOrder[b.st]});
-  $("#rc").textContent=rows.length+"개 항목"+(rows.length<R.length?" (전체 "+R.length+"개 중)":"");
+  if(F.sort==="stars")rows=rows.slice().sort(function(a,b){return num(b.stars)-num(a.stars)});
+  if(F.sort==="date")rows=rows.slice().sort(function(a,b){return (b.date||"").localeCompare(a.date||"")});
+  $("#rc").textContent=rows.length+(rows.length<R.length?" / "+R.length:"");
+  var act=[];cats.forEach(function(k){act.push(["cat",k,CAT[k]])});bes.forEach(function(k){act.push(["be",k,k])});sts.forEach(function(k){act.push(["st",k,ST[k]])});if(F.hub)act.push(["hub",F.hub,HUB[F.hub]]);if(F.badlic)act.push(["badlic","1","라이선스 없음"]);if(q)act.push(["q","","검색: "+F.q]);
+  $("#active").innerHTML=act.map(function(a){return '<button type="button" class="pill" data-k="'+a[0]+'" data-v="'+esc(a[1])+'">'+esc(a[2])+I.x+'</button>'}).join("")+(act.length>1?'<button type="button" class="pill" data-k="reset">모두 지우기</button>':"");
+  $$("#active .pill").forEach(function(b){b.addEventListener("click",function(){toggle(b.dataset.k,b.dataset.v,true)})});
   $("#list").innerHTML=rows.map(function(r){
     var href=r.url&&/\./.test(r.url)&&!/\s/.test(r.url)?(r.url.indexOf("http")===0?r.url:"https://"+r.url):"";
     var meta=[];
-    meta.push('<span class="dot s-'+r.st+'">'+ST[r.st]+'</span>');
-    if(r.backend)meta.push('<span>'+esc(r.backend)+'</span>');
-    if(r.lic)meta.push('<span class="'+(/없음|미표기/.test(r.lic)?"warn":"")+'">'+esc(r.lic)+'</span>');
-    if(r.act)meta.push('<span>'+esc(r.act)+'</span>');
-    if(r.hub)meta.push('<span class="hubtag h-'+r.hub+'">'+HUB[r.hub]+'</span>');
-    return '<div class="item"><div class="t">'+(href?'<a class="n" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a>':'<span class="n">'+esc(r.name)+'</span>')+
-      '<span class="cat">'+CAT[r.cat]+(href?' · <span class="mono">'+esc(r.url)+'</span>':"")+'</span></div>'+
-      '<div class="d">'+esc(r.what)+'</div><div class="m">'+meta.join("")+'</div></div>'}).join("")||
-    '<p style="padding:20px 0;color:var(--fg2)">조건에 맞는 항목이 없습니다. 필터를 줄이거나 검색어를 바꿔 보세요.</p>';
+    meta.push('<span class="st s-'+r.st+'">'+ST[r.st]+'</span>');
+    if(r.stars)meta.push('<span>'+I.star+r.stars+'</span>');
+    if(r.commits)meta.push('<span>'+I.commit+r.commits+'</span>');
+    if(r.date)meta.push('<span>'+I.cal+r.date+'</span>');
+    if(r.lic)meta.push('<span class="lic'+(/없음|미표기/.test(r.lic)?" bad":"")+'">'+I.scale+esc(r.lic)+'</span>');
+    var bk=(r.backend||"").split(" · ").filter(function(p){return p.trim()!==r.inst});
+    if(bk.length&&bk[0])meta.push('<span>'+I.box+esc(bk.join(", "))+'</span>');
+    if(r.actRest)meta.push('<span>'+esc(r.actRest)+'</span>');
+    if(r.inst)meta.push('<span class="inst"><code>'+esc(r.inst)+'</code><button type="button" data-c="'+esc(r.inst)+'" aria-label="복사">'+I.copy+'</button></span>');
+    return '<div class="row"><div class="top">'+(href?'<a class="nm" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a>':'<span class="nm">'+esc(r.name)+'</span>')+
+      '<span class="tag"><span class="sw" style="background:var(--c-'+r.cat+')"></span>'+CAT[r.cat]+'</span>'+(href?'<span class="url">'+esc(r.url)+'</span>':"")+(r.hub?'<span class="hub h-'+r.hub+'">'+HUB[r.hub]+'</span>':"")+'</div>'+
+      '<div class="desc">'+esc(r.what)+'</div><div class="meta">'+meta.join("")+'</div></div>'}).join("")||'<div class="empty">조건에 맞는 항목이 없습니다.</div>';
+  $$(".inst button").forEach(function(b){b.addEventListener("click",function(){var t=b.dataset.c,done=function(){b.innerHTML=I.check;b.classList.add("done");setTimeout(function(){b.innerHTML=I.copy;b.classList.remove("done")},1200)};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,function(){});else done()})});
+}
+function toggle(k,v,off){
+  if(k==="reset"){F={q:"",cat:{},st:{},be:{},hub:"",badlic:false,sort:F.sort};$("#hq").value=""}
+  else if(k==="q"){F.q="";$("#hq").value=""}
+  else if(k==="hub")F.hub=(off||F.hub===v)?"":v;
+  else if(k==="badlic")F.badlic=off?false:!F.badlic;
+  else F[k][v]=off?false:!F[k][v];
+  render();
 }
 function bindReg(){
-  if(window.innerWidth<860&&!Object.keys(F.cat).some(function(k){return F.cat[k]}))$("#side").removeAttribute("open");
-  $("#q").addEventListener("input",function(e){F.q=e.target.value;regList()});
+  $$(".side .pill").forEach(function(b){b.addEventListener("click",function(){toggle(b.dataset.k,b.dataset.v)})});
+  $("#morebe").addEventListener("click",function(){moreBe=!moreBe;render()});
   $("#sort").value=F.sort;$("#sort").addEventListener("change",function(e){F.sort=e.target.value;regList()});
-  document.querySelectorAll(".side input").forEach(function(i){i.addEventListener("change",function(){
-    var f=i.dataset.f; if(f==="hub")F.hub=i.value; else if(f==="badlic")F.badlic=i.checked; else F[f][i.value]=i.checked; regList()})});
-  $("#reset").addEventListener("click",function(){F={q:"",cat:{},st:{},hub:"",badlic:false,sort:"default"};render()});
+  $("#fbtn").addEventListener("click",function(){$("#side").classList.toggle("open")});
   regList();
 }
+$("#hq").addEventListener("input",function(e){F.q=e.target.value;if(location.hash&&location.hash!=="#registry")location.hash="registry";else regList()});
 
 /* ---------- tools ---------- */
+var tsort={k:"default",d:1};
 function toolsPage(){
-  return '<div class="intro"><p>허브의 노드가 될 시뮬레이션 소프트웨어입니다. 첫 버전 목표는 60에서 80개이고, 아래는 관계 예시에 등장하는 '+N.length+'개입니다. 비용 등급은 T0 밀리초, T1 수십 밀리초에서 초, T2 분, T3 시간에서 일입니다. 래퍼는 이 소프트웨어를 에이전트에 노출하는 레지스트리 항목입니다.</p></div>'+
-  '<div class="tw"><table><thead><tr><th>도구</th><th>역할</th><th>비용</th><th>라이선스</th><th>실행</th><th class="num">래퍼</th><th class="num">관계</th></tr></thead><tbody>'+
-  N.map(function(n){return '<tr class="click" data-id="'+n.id+'"><td><a href="#tool-'+n.id+'">'+esc(n.name)+'</a></td><td>'+esc(n.role)+'</td><td class="mono">'+n.tier+'</td><td>'+esc(n.spec.lic)+'</td><td>'+esc(n.spec.exec)+'</td><td class="num">'+(n.wr.length||'<span style="color:var(--bad)">0</span>')+'</td><td class="num">'+relCount(n.id)+'</td></tr>'}).join("")+
-  '</tbody></table></div><p class="gnote">래퍼가 0인 도구는 허브가 직접 감싸야 합니다. phono3py는 스킬팩 전체에서도 공백으로 확인되었습니다.</p>';
+  var rows=N.slice();
+  if(tsort.k==="name")rows.sort(function(a,b){return a.name.localeCompare(b.name)*tsort.d});
+  if(tsort.k==="tier")rows.sort(function(a,b){return a.tier.localeCompare(b.tier)*tsort.d});
+  if(tsort.k==="wr")rows.sort(function(a,b){return (a.wr.length-b.wr.length)*tsort.d});
+  if(tsort.k==="rel")rows.sort(function(a,b){return (relCount(a.id)-relCount(b.id))*tsort.d});
+  var th=function(k,l,num){return '<th class="sort'+(tsort.k===k?(tsort.d>0?" asc":" desc"):"")+(num?" num":"")+'" data-k="'+k+'">'+l+'</th>'};
+  return '<p class="lead">허브의 노드가 될 시뮬레이션 소프트웨어입니다. 첫 버전 목표는 60에서 80개이고, 아래는 관계 예시에 등장하는 '+N.length+'개입니다. 비용 등급은 T0 밀리초, T1 초, T2 분, T3 시간에서 일입니다. 래퍼 수는 이 소프트웨어를 에이전트에 노출한 레지스트리 항목 수이고, 0이면 허브가 직접 감싸야 합니다.</p>'+
+  '<div class="tw"><table><thead><tr>'+th("name","도구")+'<th>역할</th>'+th("tier","비용")+'<th>라이선스</th><th>실행</th>'+th("wr","래퍼",1)+th("rel","관계",1)+'</tr></thead><tbody>'+
+  rows.map(function(n){return '<tr class="click" data-id="'+n.id+'"><td><a href="#tool-'+n.id+'"><b>'+esc(n.name)+'</b></a></td><td style="color:var(--fg2)">'+esc(n.role)+'</td><td><span class="tier">'+n.tier+'</span></td><td style="color:var(--fg2)">'+esc(n.spec.lic)+'</td><td style="color:var(--fg2)">'+esc(n.spec.exec)+'</td><td class="num">'+(n.wr.length||'<span style="color:var(--bad);font-weight:600">0</span>')+'</td><td class="num">'+relCount(n.id)+'</td></tr>'}).join("")+'</tbody></table></div>';
 }
+var ttab="spec";
 function toolPage(id){
-  var n=NM[id]; if(!n)return '<p>도구를 찾을 수 없습니다. <a href="#tools">도구 목록</a>으로 돌아가세요.</p>';
-  var s=n.spec, rels=E.filter(function(e){return e.from===id||e.to===id});
-  return '<div class="crumb"><a href="#tools">도구</a> / '+esc(n.name)+'</div><h1>'+esc(n.name)+'</h1><p style="color:var(--fg2);margin:4px 0 18px">'+esc(n.role)+', 비용 등급 '+n.tier+'</p>'+
-  '<div class="nd"><div style="min-width:0"><dl class="kv">'+
-   [["입력",s.in],["출력",s.out],["기준점 정보",s.ref],["비용 등급",n.tier],["라이선스",s.lic],["실행 환경",s.env],["실행 방식",s.exec],["실패 처리",s.fail]].map(function(p){return '<dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd>'}).join("")+
-  '</dl><h2>관계 '+rels.length+'개</h2>'+(rels.length?relTable(rels,id):'<p style="color:var(--fg2)">아직 적힌 관계가 없습니다.</p>')+'</div>'+
-  '<aside class="side-box"><b>이 도구를 노출하는 래퍼</b>'+(n.wr.length?'<ul>'+n.wr.map(function(w){return '<li><a href="#registry" data-q="'+esc(w.split(/[ (]/)[0])+'">'+esc(w)+'</a></li>'}).join("")+'</ul>':'<p style="margin:6px 0 0;color:var(--fg2)">레지스트리에서 찾지 못했습니다. 허브가 직접 감싸야 하는 노드입니다.</p>')+'</aside></div>';
+  var n=NM[id];if(!n)return '<p>도구를 찾을 수 없습니다. <a href="#tools">도구 목록</a></p>';
+  var s=n.spec,rels=E.filter(function(e){return e.from===id||e.to===id});
+  var body;
+  if(ttab==="spec")body='<dl class="kv">'+[["입력",s.in],["출력",s.out],["기준점 정보",s.ref],["비용 등급",n.tier],["라이선스",s.lic],["실행 환경",s.env],["실행 방식",s.exec],["실패 처리",s.fail]].map(function(p){return '<dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd>'}).join("")+'</dl>';
+  else if(ttab==="rel")body=rels.length?relTable(rels,id):'<p style="color:var(--fg3)">아직 적힌 관계가 없습니다.</p>';
+  else body=n.wr.length?'<div class="list">'+n.wr.map(function(w){var key=w.split(/[ (]/)[0];var r=R.filter(function(x){return x.name.indexOf(key)===0})[0];
+      return '<div class="row"><div class="top"><a class="nm" href="#registry" data-q="'+esc(key)+'">'+esc(w)+'</a>'+(r?'<span class="tag"><span class="sw" style="background:var(--c-'+r.cat+')"></span>'+CAT[r.cat]+'</span><span class="st s-'+r.st+'">'+ST[r.st]+'</span>':"")+'</div>'+(r?'<div class="desc">'+esc(r.what)+'</div>':"")+'</div>'}).join("")+'</div>':'<p style="color:var(--fg3)">레지스트리에서 이 도구를 노출하는 래퍼를 찾지 못했습니다. 허브가 직접 감싸야 하는 노드입니다.</p>';
+  return '<div class="crumb"><a href="#tools">도구</a> / '+esc(n.name)+'</div><div class="dh"><h1>'+esc(n.name)+'</h1><span class="tag">'+esc(n.role)+'</span><span class="tier">'+n.tier+'</span></div><div class="dsub">'+esc(s.out)+'</div>'+
+  '<div class="tabs">'+[["spec","명세",""],["rel","관계",rels.length],["wr","래퍼",n.wr.length]].map(function(t){return '<button type="button" class="'+(ttab===t[0]?"on":"")+'" data-t="'+t[0]+'">'+t[1]+(t[2]!==""?'<span class="n">'+t[2]+'</span>':"")+'</button>'}).join("")+'</div>'+body;
 }
 function relTable(rels,self){
   return '<div class="tw"><table><thead><tr><th>종류</th><th>A</th><th>B</th><th>내용</th></tr></thead><tbody>'+
-  rels.map(function(e){var a=NM[e.from],b=NM[e.to];
-    var lk=function(n){return n.id===self?'<b>'+esc(n.name)+'</b>':'<a href="#tool-'+n.id+'">'+esc(n.name)+'</a>'};
-    return '<tr><td class="rt rt-'+e.type+'" style="white-space:nowrap">'+ET[e.type]+(e.forbid?", 금지":"")+'</td><td style="white-space:nowrap">'+lk(a)+'</td><td style="white-space:nowrap">'+lk(b)+'</td><td>'+esc(e.detail)+'</td></tr>'}).join("")+
-  '</tbody></table></div>';
+  rels.map(function(e){var a=NM[e.from],b=NM[e.to];var lk=function(n){return n.id===self?'<b>'+esc(n.name)+'</b>':'<a href="#tool-'+n.id+'">'+esc(n.name)+'</a>'};
+    return '<tr><td class="rt rt-'+e.type+'">'+ET[e.type]+(e.forbid?" · 금지":"")+'</td><td style="white-space:nowrap">'+lk(a)+'</td><td style="white-space:nowrap">'+lk(b)+'</td><td style="color:var(--fg2)">'+esc(e.detail)+'</td></tr>'}).join("")+'</tbody></table></div>';
 }
 
 /* ---------- relations ---------- */
-var on={pre:true,cmp:true,sub:true,ver:true}, gsel=null, scI=0, mode="graph";
+var on={pre:true,cmp:true,sub:true,ver:true},gsel=null,scI=0,mode="graph";
 function relPage(){
-  return '<div class="intro"><p>도구 사이의 관계 네 종류입니다. <b>전제 조건</b>은 B를 쓰려면 A를 먼저 특정 설정으로 돌려야 한다는 것, <b>호환성</b>은 두 결과를 같은 표에 놓거나 이어 붙여도 되는지, <b>대체</b>는 같은 양을 다른 비용과 정확도로 주는 도구, <b>검증</b>은 어떤 출력이 어떤 검사를 거쳐야 믿을 수 있는지입니다. 지금까지 공개된 어떤 레지스트리도 이 관계를 기계가 읽을 수 있게 적지 않았습니다. 에이전트가 경로를 짤 때 입력 형식, 전제 조건, 호환성은 기계적으로 검사되고, 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다.</p></div>'+
-  '<div class="gwrap"><svg id="graph" viewBox="0 0 1180 540" role="img" aria-label="도구 관계 그래프"></svg></div>'+
-  '<div class="legend" id="legend"></div><p class="gnote">도구를 누르면 그 도구에 걸린 관계만 남습니다. 다시 누르면 전체가 보입니다.</p>'+
-  '<h2>관계 목록</h2>'+relTable(E,null)+
-  '<p class="gnote">관계는 세 곳에서 옵니다. 문서와 스킬 본문에 적힌 규칙을 사람이 옮긴 것, 입출력 형식에서 자동으로 나오는 것, 실제로 돌려 보며 조용한 실패를 낸 조합에서 발견되는 것입니다. 첫 버전은 150에서 200개를 사람이 옮길 계획입니다.</p>'+
-  '<h2>게이트 동작 예시</h2><p style="max-width:760px">같은 목표를 받은 에이전트에 도구 목록만 주었을 때, 입출력 형식까지 주었을 때, 관계까지 주었을 때 짜이는 경로입니다. 조용한 실패는 에러 없이 그럴듯한 숫자가 나오지만 물리적으로 틀린 결과를 말합니다. 아래는 규칙이 어떻게 작동하는지 보이려고 쓴 예시이고 측정 결과가 아닙니다.</p>'+
-  '<div class="seg" id="sc"></div><br><div class="seg" id="md"></div><div id="pd"></div>';
+  return '<p class="lead">도구 사이의 관계 네 종류입니다. <b>전제 조건</b>은 B를 쓰려면 A를 먼저 특정 설정으로 돌려야 한다는 것, <b>호환성</b>은 두 결과를 같은 표에 놓거나 이어 붙여도 되는지, <b>대체</b>는 같은 양을 다른 비용과 정확도로 주는 도구, <b>검증</b>은 어떤 출력이 어떤 검사를 거쳐야 믿을 수 있는지입니다. 에이전트가 경로를 짤 때 입력 형식과 전제 조건과 호환성은 기계적으로 검사되고, 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다.</p>'+
+  '<div class="gcard"><div class="gbar" id="legend"><span class="lab">관계</span></div><div class="gscroll"><svg id="graph" viewBox="0 0 1180 540" role="img" aria-label="도구 관계 그래프"></svg></div><div class="gpanel" id="gpanel" hidden></div></div>'+
+  '<p class="gnote">도구를 누르면 걸린 관계만 남고 아래에 요약이 열립니다. 선 위에 마우스를 올리면 내용이 보입니다.</p>'+
+  '<h2>게이트 동작 예시</h2><p class="lead" style="margin-bottom:6px">같은 목표를 받은 에이전트에 도구 목록만 주었을 때, 입출력 형식까지 주었을 때, 관계까지 주었을 때 짜이는 경로입니다. 조용한 실패는 에러 없이 그럴듯한 숫자가 나오지만 물리적으로 틀린 결과입니다. 규칙이 어떻게 작동하는지 보이려고 쓴 예시이며 측정 결과가 아닙니다.</p>'+
+  '<div class="segs"><div class="seg" id="sc"></div><div class="seg" id="md"></div></div><div id="pd"></div>'+
+  '<h2>관계 목록 <span style="color:var(--fg3);font-weight:400">'+E.length+'</span></h2>'+relTable(E,null)+
+  '<p class="gnote">관계는 세 곳에서 옵니다. 문서와 스킬 본문의 규칙을 사람이 옮긴 것, 입출력 형식에서 자동으로 나오는 것, 실제로 돌려 보며 조용한 실패를 낸 조합에서 발견되는 것입니다. 첫 버전은 150에서 200개를 사람이 옮길 계획입니다.</p>';
 }
+var tip=$("#gtip");
+function showTip(ev,html){tip.innerHTML=html;tip.classList.add("show");moveTip(ev)}
+function moveTip(ev){var x=ev.clientX+14,y=ev.clientY+14;if(x+400>window.innerWidth)x=ev.clientX-400;if(y+120>window.innerHeight)y=ev.clientY-110;tip.style.left=x+"px";tip.style.top=y+"px"}
+function hideTip(){tip.classList.remove("show")}
 function drawGraph(){
-  var svg=$("#graph"), NS="http://www.w3.org/2000/svg";
+  var svg=$("#graph"),NS="http://www.w3.org/2000/svg";
   var mk=function(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
   var defs=mk("defs",{},svg);
-  ["pre","ver","cmp"].forEach(function(t){var m=mk("marker",{id:"m"+t,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"},defs);mk("path",{d:"M0,0L10,5L0,10z",style:"fill:var(--"+t+")"},m)});
-  COLS.forEach(function(c){mk("text",{x:c.x,y:26,class:"colh"},svg).textContent=c.label});
+  ["pre","ver","cmp"].forEach(function(t){var m=mk("marker",{id:"m"+t,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"6.5",markerHeight:"6.5",orient:"auto-start-reverse"},defs);mk("path",{d:"M0,0L10,5L0,10z",style:"fill:var(--"+t+")"},m)});
+  COLS.forEach(function(c){mk("text",{x:c.x,y:24,class:"colh"},svg).textContent=c.label.toUpperCase()});
   var eg=mk("g",{},svg);
   E.forEach(function(e){
-    var a=NM[e.from],b=NM[e.to],ay=a.y+H/2,by=b.y+H/2,d;
-    if(Math.abs(a.x-b.x)<10){var x=a.x+W,k=36+Math.abs(by-ay)*.18;d="M"+x+","+ay+" C"+(x+k)+","+ay+" "+(x+k)+","+by+" "+x+","+by}
-    else{var x1=b.x>a.x?a.x+W:a.x,x2=b.x>a.x?b.x:b.x+W,dx=(x2-x1)/2;d="M"+x1+","+ay+" C"+(x1+dx)+","+ay+" "+(x2-dx)+","+by+" "+x2+","+by}
-    var g=mk("g",{"data-t":e.type,"data-a":e.from,"data-b":e.to,class:"edge"},eg), c="var(--"+e.type+")";
-    if(e.type==="sub"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:4.5"},g);mk("path",{d:d,style:"fill:none;stroke:var(--bg);stroke-width:1.6"},g)}
-    else if(e.type==="cmp")mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.5;stroke-dasharray:6 4","marker-end":"url(#mcmp)","marker-start":"url(#mcmp)"},g);
-    else if(e.type==="pre")mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.6","marker-end":"url(#mpre)"},g);
-    else mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.5;stroke-dasharray:2 3","marker-end":"url(#mver)"},g);
-    mk("title",{},g).textContent=ET[e.type]+": "+a.name+" → "+b.name+". "+e.short;
+    var a=NM[e.from],b=NM[e.to],ay=a.y+H/2,by=b.y+H/2,d,mx,my;
+    if(Math.abs(a.x-b.x)<10){var x=a.x+W,k=36+Math.abs(by-ay)*.18;d="M"+x+","+ay+" C"+(x+k)+","+ay+" "+(x+k)+","+by+" "+x+","+by;mx=x+k*.75;my=(ay+by)/2}
+    else{var x1=b.x>a.x?a.x+W:a.x,x2=b.x>a.x?b.x:b.x+W,dx=(x2-x1)/2;d="M"+x1+","+ay+" C"+(x1+dx)+","+ay+" "+(x2-dx)+","+by+" "+x2+","+by;mx=(x1+x2)/2;my=(ay+by)/2}
+    var g=mk("g",{"data-t":e.type,"data-a":e.from,"data-b":e.to,class:"edge"},eg),c="var(--"+e.type+")";
+    if(e.type==="sub"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:4"},g);mk("path",{d:d,style:"fill:none;stroke:var(--bg);stroke-width:1.5"},g)}
+    else if(e.type==="cmp"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.4;stroke-dasharray:6 4","marker-end":"url(#mcmp)","marker-start":"url(#mcmp)"},g);if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+mx+","+my+")"},g);mk("circle",{r:7},xm);mk("path",{d:"M-3,-3L3,3M3,-3L-3,3"},xm)}}
+    else if(e.type==="pre")mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.5","marker-end":"url(#mpre)"},g);
+    else mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.4;stroke-dasharray:2 3","marker-end":"url(#mver)"},g);
+    mk("path",{d:d,class:"hit"},g);
+    var html='<div class="h"><span class="rt rt-'+e.type+'">'+ET[e.type]+(e.forbid?" · 금지":"")+'</span> '+esc(a.name)+(e.type==="pre"||e.type==="ver"?" → ":" ↔ ")+esc(b.name)+'</div>'+esc(e.detail);
+    g.addEventListener("mouseenter",function(ev){showTip(ev,html)});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
   });
   var ng=mk("g",{},svg);
   N.forEach(function(n){
     var g=mk("g",{class:"node","data-id":n.id,transform:"translate("+n.x+","+n.y+")",tabindex:"0",role:"button"},ng);
-    mk("rect",{width:W,height:H,rx:4},g);
-    mk("text",{x:10,y:20,class:"nm"},g).textContent=n.name;
-    mk("text",{x:10,y:36,class:"tr"},g).textContent=n.tier+"  "+n.role;
+    mk("rect",{class:"b",width:W,height:H,rx:6},g);
+    mk("rect",{class:"s",x:0,y:0,width:4,height:H,rx:2,style:"fill:var(--c-"+["db","mcp","mcp","pkg","std"][n.col]+")"},g);
+    mk("text",{x:13,y:19,class:"nm"},g).textContent=n.name;
+    mk("text",{x:13,y:35,class:"ro"},g).textContent=n.role;
+    var tw=n.tier.length*6.4+10;mk("rect",{class:"tb",x:W-tw-8,y:8,width:tw,height:16,rx:4},g);
+    mk("text",{x:W-tw/2-8,y:19.5,class:"tr","text-anchor":"middle"},g).textContent=n.tier;
     var act=function(){gsel=gsel===n.id?null:n.id;paint()};
     g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
+    g.addEventListener("mouseenter",function(ev){showTip(ev,'<div class="h">'+esc(n.name)+' <span class="tier">'+n.tier+'</span></div>'+esc(n.spec.out)+'<div style="color:var(--fg3);margin-top:3px">'+n.wr.length+'개 래퍼 · 관계 '+relCount(n.id)+'개 · 클릭해서 고정</div>')});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
   });
-  $("#legend").innerHTML=Object.keys(ET).map(function(t){
-    var sm={pre:'<line x1="0" y1="6" x2="22" y2="6" stroke="var(--pre)" stroke-width="1.6"/>',cmp:'<line x1="0" y1="6" x2="24" y2="6" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="5 3"/>',sub:'<line x1="0" y1="4" x2="24" y2="4" stroke="var(--sub)" stroke-width="1.4"/><line x1="0" y1="8" x2="24" y2="8" stroke="var(--sub)" stroke-width="1.4"/>',ver:'<line x1="0" y1="6" x2="24" y2="6" stroke="var(--ver)" stroke-width="1.6" stroke-dasharray="2 3"/>'}[t];
-    return '<label><input type="checkbox" data-t="'+t+'" checked><svg width="24" height="12" aria-hidden="true">'+sm+'</svg>'+ET[t]+' <span style="color:var(--fg2)">'+E.filter(function(e){return e.type===t}).length+'</span></label>'}).join("");
-  document.querySelectorAll("#legend input").forEach(function(i){i.addEventListener("change",function(){on[i.dataset.t]=i.checked;paint()})});
+  var sm={pre:'<line x1="0" y1="6" x2="20" y2="6" stroke="var(--pre)" stroke-width="1.6"/><path d="M16,2L22,6L16,10z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="6" x2="22" y2="6" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="5 3"/>',sub:'<line x1="0" y1="4" x2="22" y2="4" stroke="var(--sub)" stroke-width="1.5"/><line x1="0" y1="8" x2="22" y2="8" stroke="var(--sub)" stroke-width="1.5"/>',ver:'<line x1="0" y1="6" x2="20" y2="6" stroke="var(--ver)" stroke-width="1.6" stroke-dasharray="2 2"/><path d="M16,2L22,6L16,10z" fill="var(--ver)"/>'};
+  $("#legend").innerHTML='<span class="lab">관계</span>'+Object.keys(ET).map(function(t){return '<button type="button" class="pill on" data-t="'+t+'"><svg width="22" height="12" aria-hidden="true">'+sm[t]+'</svg>'+ET[t]+'<span class="n">'+E.filter(function(e){return e.type===t}).length+'</span></button>'}).join("")+'<span class="hint">왼쪽 색 띠는 열(데이터, 계산기, DFT, 후처리, 검사기)</span>';
+  $$("#legend .pill").forEach(function(b){b.addEventListener("click",function(){on[b.dataset.t]=!on[b.dataset.t];b.classList.toggle("on",on[b.dataset.t]);paint()})});
   paint();
 }
 function paint(){
   var keep={};
   if(gsel){keep[gsel]=1;E.forEach(function(e){if(on[e.type]&&(e.from===gsel||e.to===gsel)){keep[e.from]=1;keep[e.to]=1}})}
-  document.querySelectorAll("#graph .edge").forEach(function(g){
-    g.style.display=on[g.dataset.t]?"":"none";
-    g.classList.toggle("fade",!!gsel&&g.dataset.a!==gsel&&g.dataset.b!==gsel)});
-  document.querySelectorAll("#graph .node").forEach(function(g){
-    g.classList.toggle("sel",g.dataset.id===gsel);g.classList.toggle("fade",!!gsel&&!keep[g.dataset.id])});
+  $$("#graph .edge").forEach(function(g){g.style.display=on[g.dataset.t]?"":"none";g.classList.toggle("fade",!!gsel&&g.dataset.a!==gsel&&g.dataset.b!==gsel)});
+  $$("#graph .node").forEach(function(g){g.classList.toggle("sel",g.dataset.id===gsel);g.classList.toggle("fade",!!gsel&&!keep[g.dataset.id])});
+  var p=$("#gpanel");if(!gsel){p.hidden=true;return}
+  var n=NM[gsel],rels=E.filter(function(e){return on[e.type]&&(e.from===gsel||e.to===gsel)});
+  p.hidden=false;p.innerHTML='<div class="ph"><b>'+esc(n.name)+'</b><span class="tag">'+esc(n.role)+'</span><span class="tier">'+n.tier+'</span><a href="#tool-'+n.id+'" style="margin-left:auto;font-size:13px">상세 보기 →</a></div>'+
+    '<ul>'+rels.map(function(e){var o=e.from===gsel?NM[e.to]:NM[e.from];return '<li><span class="rt rt-'+e.type+'">'+ET[e.type]+'</span><span>'+(e.from===gsel?"→ ":"← ")+'<a href="#tool-'+o.id+'">'+esc(o.name)+'</a> <span style="color:var(--fg3)">'+esc(e.short)+'</span></span></li>'}).join("")+'</ul>';
 }
-var KL={ok:"정상",silent:"조용한 실패",blocked:"차단됨",added:"관계가 추가함"};
+var KL={ok:"정상",silent:"조용한 실패",blocked:"차단",added:"관계가 추가"};
 function drawPD(){
   $("#sc").innerHTML=SC.map(function(s,i){return '<button type="button" class="'+(i===scI?"on":"")+'" data-i="'+i+'">'+esc(s.tab)+'</button>'}).join("");
   $("#md").innerHTML=[["list","도구 목록만"],["io","입출력 형식까지"],["graph","관계까지"]].map(function(m){return '<button type="button" class="'+(m[0]===mode?"on":"")+'" data-m="'+m[0]+'">'+m[1]+'</button>'}).join("");
   var s=SC[scI],m=s[mode];
-  $("#pd").innerHTML='<p><b>목표.</b> '+esc(s.goal)+'</p><ol class="steps">'+m.steps.map(function(st){
-    return '<li class="'+st[2]+'"><span class="mono">'+esc(st[0])+'</span><span class="k k-'+st[2]+'">'+KL[st[2]]+'</span><br><span class="why">'+esc(st[1])+'</span></li>'}).join("")+
-    '</ol><p class="res"><b class="k-'+(m.v[0]==="ok"?"ok":"silent")+'">'+(m.v[0]==="ok"?"올바른 경로.":"조용한 실패.")+'</b> '+esc(m.v[1])+'</p>';
-  document.querySelectorAll("#sc button").forEach(function(b){b.addEventListener("click",function(){scI=+b.dataset.i;drawPD()})});
-  document.querySelectorAll("#md button").forEach(function(b){b.addEventListener("click",function(){mode=b.dataset.m;drawPD()})});
+  $("#pd").innerHTML='<p style="margin-bottom:8px"><b>목표.</b> '+esc(s.goal)+'</p><ol class="steps">'+m.steps.map(function(st){return '<li class="'+st[2]+'"><div><div class="t"><span class="tool">'+esc(st[0])+'</span><span class="k k-'+st[2]+'">'+KL[st[2]]+'</span></div><div class="why">'+esc(st[1])+'</div></div></li>'}).join("")+'</ol>'+
+    '<div class="verdict"><b class="'+(m.v[0]==="ok"?"k k-ok":"k k-silent")+'">'+(m.v[0]==="ok"?"올바른 경로":"조용한 실패")+'</b>'+esc(m.v[1])+'</div>';
+  $$("#sc button").forEach(function(b){b.addEventListener("click",function(){scI=+b.dataset.i;drawPD()})});
+  $$("#md button").forEach(function(b){b.addEventListener("click",function(){mode=b.dataset.m;drawPD()})});
 }
 
 /* ---------- benchmarks ---------- */
@@ -584,13 +719,12 @@ var BM=[
  ["SciAgentGym","github.com/CMarsRover/SciAgentGYM","물리, 화학, 재료, 바이오 다단계 툴 사용 (툴 1,780개)","259","2026-02","툴 실행"],
  ["CompMat-Bench","arxiv.org/abs/2610.00636","실제 연구의 입력 준비와 출력 분석, 규칙 채점","94","2026-09","아니오"],
  ["AutoMat","github.com/JHU-CLSP/AutoMat","코딩 에이전트의 논문 주장 재현","85","2026-05","아니오"],
- ["MatSciBench, ChemBench, LAB-Bench 외","","추론과 QA","","2024~2026","아니오"]
-];
+ ["MatSciBench, ChemBench, LAB-Bench 외","","추론과 QA","","2024~2026","아니오"]];
 function benchPage(){
-  return '<div class="intro"><p>에이전트의 도구 사용을 재는 벤치마크입니다. 관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러나므로, 시뮬레이터를 실제로 실행해 채점하는지를 가장 중요한 열로 두었습니다. 입력 준비만 채점하는 CompMat-Bench와 AutoMat은 조용한 실패를 잡지 못합니다.</p></div>'+
+  return '<p class="lead">에이전트의 도구 사용을 재는 벤치마크입니다. 관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러나므로, 시뮬레이터를 실제로 실행해 채점하는지를 가장 중요한 열로 두었습니다. 입력 준비만 채점하는 CompMat-Bench와 AutoMat은 조용한 실패를 잡지 못합니다.</p>'+
   '<div class="tw"><table><thead><tr><th>이름</th><th>무엇을 재나</th><th>크기</th><th>날짜</th><th>시뮬레이터 실행</th></tr></thead><tbody>'+
-  BM.map(function(b){return '<tr><td style="white-space:nowrap">'+(b[1]?'<a href="https://'+b[1]+'" target="_blank" rel="noopener">'+esc(b[0])+'</a>':esc(b[0]))+'</td><td>'+esc(b[2])+'</td><td class="mono" style="white-space:nowrap">'+esc(b[3])+'</td><td style="white-space:nowrap">'+esc(b[4])+'</td><td style="white-space:nowrap" class="'+(b[5].indexOf("예")===0?"k-ok":b[5]==="아니오"?"k-blocked":"")+'">'+esc(b[5])+'</td></tr>'}).join("")+
-  '</tbody></table></div><p class="gnote">AtomisticSkillsBenchmark는 MatWorld 실험 0에 쓸 예정이지만 별도 벤치 이름이 원 논문 초록에 없어 표에서 뺐습니다.</p>';
+  BM.map(function(b){var k=b[5].indexOf("예")===0?"k-ok":b[5]==="아니오"?"k-blocked":"k-silent";return '<tr><td style="white-space:nowrap">'+(b[1]?'<a href="https://'+b[1]+'" target="_blank" rel="noopener"><b>'+esc(b[0])+'</b></a>':'<b>'+esc(b[0])+'</b>')+'</td><td style="color:var(--fg2)">'+esc(b[2])+'</td><td class="mono" style="white-space:nowrap">'+esc(b[3])+'</td><td style="white-space:nowrap;color:var(--fg2)">'+esc(b[4])+'</td><td><span class="k '+k+'">'+esc(b[5])+'</span></td></tr>'}).join("")+'</tbody></table></div>'+
+  '<p class="gnote">AtomisticSkillsBenchmark는 MatWorld 실험 0에 쓸 예정이지만 별도 벤치 이름이 원 논문 초록에 없어 표에서 뺐습니다.</p>';
 }
 
 /* ---------- about ---------- */
@@ -598,12 +732,12 @@ function aboutPage(){
   return '<div class="prose"><h1>소개</h1>'+
   '<p style="margin-top:12px">재료 계산 도구는 이미 충분히 많고, 그것을 에이전트에 노출한 래퍼도 수백 개가 있습니다. 비어 있는 것은 도구를 조합하는 지식입니다. LOBSTER를 쓰려면 VASP를 대칭을 끄고 밴드 수를 늘려 돌려야 한다는 것, 힘을 직접 예측하는 모델은 포논에 쓰면 안 된다는 것, Materials Project 계열과 OMat24 계열 에너지는 기준점이 달라 섞으면 안 된다는 것은 숙련된 연구자는 알지만 어디에도 기계가 읽을 수 있게 적혀 있지 않습니다. 에이전트가 이것을 모른 채 도구를 부르면 에러로 멈추지 않고 그럴듯한 틀린 숫자를 냅니다.</p>'+
   '<p>SimulationHub는 도구를 노드로, 이런 지식을 네 종류의 관계로 적고 실행 시점에 강제합니다. 관계가 적혀 있으면 에이전트가 사람 없이도 도구를 올바른 순서와 설정으로 조합할 수 있고, 그 조합을 대량으로 돌려 재료 세계의 월드모델을 학습할 데이터를 만들 수 있습니다. 이것이 MatWorld 제안의 첫 단계입니다.</p>'+
-  '<h2>조사 방법</h2><p>MCP 서버와 에이전트 툴 서버, SKILL.md 스킬팩과 플러그인, MCP가 아닌 에이전트 플랫폼과 원자 단위 밖 시뮬레이터와 벤치마크와 표준의 세 갈래로 나눠 조사했습니다. GitHub 페이지, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 직접 클론해 SKILL.md 수와 스크립트 수를 셌습니다. GitHub API와 일부 MCP 디렉터리 사이트는 막혀 있어 PyPI 전체 인덱스를 키워드 150개로 훑고 검색 45회로 보완했습니다. 열지 못한 항목은 [미검증]으로 표시했습니다.</p>'+
-  '<h2>상태 기준</h2><ul class="plain"><li><span class="dot s-prod">prod</span> 패키징되어 있고 릴리스가 2회 이상이며 툴 목록이 실제로 있음</li><li><span class="dot s-demo">demo</span> PoC나 알파</li><li><span class="dot s-dead">dead</span> 아카이브되었거나 명백히 방치됨</li></ul>'+
+  '<h2>조사 방법</h2><p>MCP 서버와 에이전트 툴 서버, SKILL.md 스킬팩과 플러그인, 그리고 MCP가 아닌 에이전트 플랫폼과 원자 단위 밖 시뮬레이터와 벤치마크와 표준의 세 갈래로 나눠 조사했습니다. GitHub 페이지, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 직접 클론해 SKILL.md 수와 스크립트 수를 셌습니다. GitHub API와 일부 MCP 디렉터리 사이트는 막혀 있어 PyPI 전체 인덱스를 키워드 150개로 훑고 검색 45회로 보완했습니다. 열지 못한 항목은 [미검증]으로 표시했습니다.</p>'+
+  '<h2>상태 기준</h2><ul><li><span class="st s-prod">prod</span> 패키징되어 있고 릴리스가 2회 이상이며 툴 목록이 실제로 있음</li><li><span class="st s-near">prod 근접</span> 위 조건 중 하나가 빠짐</li><li><span class="st s-demo">demo</span> PoC나 알파</li><li><span class="st s-dead">dead</span> 아카이브되었거나 명백히 방치됨</li></ul>'+
   '<h2>주류 패키지의 에이전트 파일 배포</h2><p>직접 스킬을 배포하는 곳은 DeepModeling 생태계(deepmd-kit, dpdata, dpgen, dpdispatcher, reacnetgenerator), NVIDIA ALCHEMI, TB2J뿐입니다. pymatgen, LAMMPS, aiida-core, fairchem, matgl 등은 기여자용 AGENTS.md만 있고, ASE, phonopy, Quantum ESPRESSO, GPAW, atomate2, MACE, MatterGen, CP2K, PySCF 등 42개는 아무것도 없습니다.</p>'+
   '<h2>공백</h2><div class="tw"><table><thead><tr><th>분야</th><th>에이전트 래퍼</th></tr></thead><tbody>'+
-  [["CFD","OpenFOAM MCP 2종, Ansys Fluent와 CFX 공식 MCP"],["FEM","FEniCSx, CalculiX, Abaqus MCP, COMSOL은 API와 스킬"],["Phase-field","MOOSE는 AutoMOOSE, MooseAgent. PRISMS-PF와 FiPy는 없음"],["kinetic Monte Carlo","Zacros, kmos, KMCLib 없음 (chatMOSP만)"],["광학","Lumerical, Tidy3D 공식. Meep은 없음"],["양자 수송","Kwant, QuantumATK 없음"],["멀티스케일","preCICE 없음"],["배터리","PyBaMM 위 Battery-Sim-Agent, MCP 없음"]].map(function(r){return '<tr><td style="white-space:nowrap">'+r[0]+'</td><td>'+r[1]+'</td></tr>'}).join("")+
-  '</tbody></table></div><p class="gnote">스킬팩 쪽에서도 CALPHAD, phase-field, kMC, FEM 연속체, MOF 스크리닝, ShengBTE와 phono3py, 전기화학은 거의 비어 있습니다.</p>'+
+  [["CFD","OpenFOAM MCP 2종, Ansys Fluent와 CFX 공식 MCP"],["FEM","FEniCSx, CalculiX, Abaqus MCP. COMSOL은 API와 스킬"],["Phase-field","MOOSE는 AutoMOOSE, MooseAgent. PRISMS-PF와 FiPy는 없음"],["kinetic Monte Carlo","Zacros, kmos, KMCLib 없음 (chatMOSP만)"],["광학","Lumerical, Tidy3D 공식. Meep은 없음"],["양자 수송","Kwant, QuantumATK 없음"],["멀티스케일","preCICE 없음"],["배터리","PyBaMM 위 Battery-Sim-Agent, MCP 없음"]].map(function(r){return '<tr><td style="white-space:nowrap"><b>'+r[0]+'</b></td><td style="color:var(--fg2)">'+r[1]+'</td></tr>'}).join("")+'</tbody></table></div>'+
+  '<p class="gnote">스킬팩 쪽에서도 CALPHAD, phase-field, kMC, FEM 연속체, MOF 스크리닝, ShengBTE와 phono3py, 전기화학은 거의 비어 있습니다.</p>'+
   '<h2>허브에 반영하는 방식</h2><p>AtomisticSkills MCP 서버, fairchem-mcp의 비동기 잡 패턴, chemtoolsmcp의 실패 복구 계획, CatGo의 DAG 엔진과 HPC 제출, CrystOD, raspa-mcp, opencalphad-mcp, Profex-MCP, Pipeworx OPTIMADE 게이트웨이, MP 공식 MCP, DeepModeling과 NVIDIA의 저장소 내 스킬은 노드 실행기로 가져옵니다. materials-agent-toolkit의 JSON 카탈로그, semantikon의 타입 포트, TWA의 온톨로지에서 MCP로의 컴파일, Bohrium의 capability 스키마는 설계만 참고합니다. 라이선스가 없거나 아카이브되었거나 불완전하게 공개된 것은 제외합니다.</p>'+
   '<p>관계의 1차 자료는 스킬 본문입니다. jinzhezenggroup 62개, catgo-LRG 139개, crystal668-hub 88개, AtomisticSkills 133개 등 약 500개의 SKILL.md에 "먼저 이걸 돌려라", "이 결과는 믿지 마라"가 자연어로 적혀 있고, 여기서 전제 조건과 호환성을 반자동으로 뽑는 것이 그래프 구축의 첫 단계입니다.</p>'+
   '<h2>한계</h2><p>관계는 완전하지 않으며 완전하다고 주장하지 않습니다. VASP처럼 상용이거나 학술 전용인 도구는 그래프에 등록하되 공개 배포판에는 감싸는 코드만 넣고 실제 프로그램은 사용자가 가진 것을 가리킵니다. 이 페이지의 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠고, 확실하지 않은 칸은 카탈로그 확인으로 남겼습니다.</p></div>';
@@ -611,20 +745,20 @@ function aboutPage(){
 
 /* ---------- router ---------- */
 function render(){
-  var h=(location.hash||"#registry").slice(1), page=h.indexOf("tool-")===0?"tools":h;
+  var h=(location.hash||"#registry").slice(1),page=h.indexOf("tool-")===0?"tools":h;
   if(["registry","tools","relations","benchmarks","about"].indexOf(page)<0){page="registry";h="registry"}
-  document.querySelectorAll(".hd nav a").forEach(function(a){a.classList.toggle("on",a.dataset.p===page)});
-  var app=$("#app");
+  $$(".hnav a").forEach(function(a){a.classList.toggle("on",a.dataset.p===page)});
+  var app=$("#app");hideTip();
   if(h==="registry"){app.innerHTML=regPage();bindReg()}
-  else if(h==="tools"){app.innerHTML=toolsPage();document.querySelectorAll("tr.click").forEach(function(tr){tr.addEventListener("click",function(e){if(e.target.tagName!=="A")location.hash="tool-"+tr.dataset.id})})}
-  else if(h.indexOf("tool-")===0){app.innerHTML=toolPage(h.slice(5));document.querySelectorAll("[data-q]").forEach(function(a){a.addEventListener("click",function(){F.q=a.dataset.q})})}
+  else if(h==="tools"){app.innerHTML=toolsPage();$$("tr.click").forEach(function(tr){tr.addEventListener("click",function(e){if(e.target.tagName!=="A")location.hash="tool-"+tr.dataset.id})});$$("th.sort").forEach(function(t){t.addEventListener("click",function(){if(tsort.k===t.dataset.k)tsort.d=-tsort.d;else{tsort.k=t.dataset.k;tsort.d=1}render()})})}
+  else if(h.indexOf("tool-")===0){app.innerHTML=toolPage(h.slice(5));$$(".tabs button").forEach(function(b){b.addEventListener("click",function(){ttab=b.dataset.t;render()})});$$("[data-q]").forEach(function(a){a.addEventListener("click",function(){F.q=a.dataset.q;$("#hq").value=F.q})})}
   else if(h==="relations"){app.innerHTML=relPage();drawGraph();drawPD()}
   else if(h==="benchmarks")app.innerHTML=benchPage();
   else app.innerHTML=aboutPage();
-  document.title=(page==="registry"?"":({tools:"도구",relations:"관계",benchmarks:"벤치마크",about:"소개"}[page]+" · "))+"SimulationHub";
-  window.scrollTo(0,0);
+  document.title=(page==="registry"?"":({tools:"도구",relations:"관계 그래프",benchmarks:"벤치마크",about:"소개"}[page]+" · "))+"SimulationHub";
 }
-window.addEventListener("hashchange",render);
+var lastPage="";
+window.addEventListener("hashchange",function(){var p=(location.hash||"#registry").slice(1);var np=p.indexOf("tool-")===0?"tools":p;if(np!==lastPage||p.indexOf("tool-")===0)window.scrollTo(0,0);lastPage=np;if(p.indexOf("tool-")===0)ttab="spec";render()});
 render();
 })();
 </script>
