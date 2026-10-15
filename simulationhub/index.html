@@ -6,275 +6,402 @@
 <title>SimulationHub</title>
 <meta name="description" content="에이전트가 쓸 수 있는 재료 시뮬레이션 도구와 도구 사이 관계의 레지스트리">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<script>(function(){try{var t=localStorage.getItem('sh-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
-  --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef0f3;--fg:#111827;--fg2:#4b5563;--fg3:#6b7280;--bd:#e5e7eb;--bd2:#d1d5db;
-  --link:#2563eb;--acc:#2563eb;--acc-bg:#eff6ff;
-  --c-mcp:#2563eb;--c-skill:#16a34a;--c-db:#0d9488;--c-pkg:#7c3aed;--c-plat:#ea580c;--c-acad:#db2777;--c-beyond:#a16207;--c-std:#64748b;--c-gskill:#65a30d;
-  --pre:#2563eb;--cmp:#dc2626;--sub:#059669;--ver:#7c3aed;
-  --ok:#16a34a;--warn:#d97706;--bad:#dc2626;--gray:#9ca3af;
-  --shadow:0 1px 2px rgba(0,0,0,.05);
-  --sans:"Source Sans 3","Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --blue:#0866ff;--blue2:#0457cb;--ink:#0a1317;--body:#1c1e21;--muted:#5d6c7b;--faint:#8a97a5;--line:#dadde1;--line2:#e9ecef;--soft:#f5f7f9;--soft2:#eef2f6;
+  --green:#059669;--green-bg:#ecfdf5;--red:#ef4444;--red-bg:#fef2f2;--amber:#d97706;--amber-bg:#fffbeb;
+  --c-mcp:#0866ff;--c-skill:#059669;--c-db:#0891b2;--c-pkg:#7c3aed;--c-plat:#ea580c;--c-acad:#db2777;--c-beyond:#b45309;--c-std:#475569;--c-gskill:#65a30d;
+  --pre:#0866ff;--cmp:#ef4444;--sub:#059669;--ver:#7c3aed;
+  --sans:"Onest","Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:16px;--shadow:0 1px 2px rgba(10,19,23,.04),0 8px 24px rgba(10,19,23,.06);
 }
-html[data-theme="dark"]{
-  --bg:#0b0f14;--bg2:#111820;--bg3:#1a2230;--fg:#e5e7eb;--fg2:#b4bcc8;--fg3:#8b95a5;--bd:#1f2937;--bd2:#374151;
-  --link:#60a5fa;--acc:#60a5fa;--acc-bg:#172554;
-  --c-mcp:#60a5fa;--c-skill:#4ade80;--c-db:#2dd4bf;--c-pkg:#a78bfa;--c-plat:#fb923c;--c-acad:#f472b6;--c-beyond:#facc15;--c-std:#94a3b8;--c-gskill:#a3e635;
-  --pre:#60a5fa;--cmp:#f87171;--sub:#34d399;--ver:#a78bfa;
-  --ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--gray:#6b7280;
-  --shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}
-@media (prefers-color-scheme:dark){html:not([data-theme="light"]){
-  --bg:#0b0f14;--bg2:#111820;--bg3:#1a2230;--fg:#e5e7eb;--fg2:#b4bcc8;--fg3:#8b95a5;--bd:#1f2937;--bd2:#374151;
-  --link:#60a5fa;--acc:#60a5fa;--acc-bg:#172554;
-  --c-mcp:#60a5fa;--c-skill:#4ade80;--c-db:#2dd4bf;--c-pkg:#a78bfa;--c-plat:#fb923c;--c-acad:#f472b6;--c-beyond:#facc15;--c-std:#94a3b8;--c-gskill:#a3e635;
-  --pre:#60a5fa;--cmp:#f87171;--sub:#34d399;--ver:#a78bfa;
-  --ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--gray:#6b7280;
-  --shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}}
-
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline}
-h1,h2,h3{margin:0;line-height:1.3;letter-spacing:-.01em}
-h1{font-size:24px;font-weight:700}
-h2{font-size:17px;font-weight:600;margin:28px 0 10px}
-h3{font-size:14.5px;font-weight:600;margin:16px 0 6px}
-p{margin:0 0 10px}
-code,.mono{font-family:var(--mono);font-size:.9em}
-button{font:inherit;color:inherit;cursor:pointer}
-.wrap{max-width:1280px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
-svg.i{width:14px;height:14px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+body{background:#fff;color:var(--body);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;color:var(--ink);letter-spacing:-.02em;line-height:1.15;font-weight:700;word-break:keep-all}
+.sub,.pts li,.scard p,.acc .body{word-break:keep-all}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+code,.mono{font-family:var(--mono)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.narrow{max-width:760px;margin:0 auto}
+section{padding:96px 0}
+section+section{border-top:1px solid var(--line2)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+.eyebrow::before{content:"";width:2px;height:12px;background:var(--ink)}
+.eyebrow.blue{color:var(--blue);font-family:var(--sans);letter-spacing:.06em;font-weight:600;font-size:12px}
+.eyebrow.blue::before{display:none}
+.center{text-align:center}
+.center .eyebrow{justify-content:center}
+h2{font-size:clamp(28px,3.6vw,40px)}
+.sub{color:var(--muted);font-size:17px;max-width:620px;margin:12px auto 0}
+.center .sub{margin-left:auto;margin-right:auto}
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font-weight:600;font-size:14px;transition:background .15s}
+.btn:hover{background:var(--blue2)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--soft)}
+.btn.sm{height:34px;padding:0 14px;font-size:13px}
+svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-/* header */
-.hdr{border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:0;z-index:30}
-.hdr .wrap{display:flex;align-items:center;gap:14px;height:54px}
-.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;color:var(--fg);white-space:nowrap}
-.logo:hover{text-decoration:none}
-.logo .mark{width:22px;height:22px}
-.hsearch{flex:1;max-width:460px;position:relative}
-.hsearch input{width:100%;height:34px;padding:0 12px 0 34px;border:1px solid var(--bd);border-radius:8px;background:var(--bg2);color:var(--fg);font:inherit;font-size:13.5px}
-.hsearch input:focus{outline:none;border-color:var(--acc);background:var(--bg)}
-.hsearch svg{position:absolute;left:11px;top:10px;color:var(--fg3)}
-.hnav{display:flex;gap:2px;margin-left:auto}
-.hnav a{padding:6px 10px;border-radius:6px;color:var(--fg2);font-weight:500;font-size:13.5px}
-.hnav a:hover{background:var(--bg2);text-decoration:none;color:var(--fg)}
-.hnav a.on{color:var(--fg);background:var(--bg3)}
-.tbtn{width:34px;height:34px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);display:grid;place-items:center;color:var(--fg2)}
-.tbtn:hover{background:var(--bg2)}
+/* nav */
+nav.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line2)}
+nav.top .wrap{display:flex;align-items:center;height:64px;gap:28px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;color:var(--ink);letter-spacing:-.02em}
+.logo svg{width:26px;height:26px}
+.links{display:flex;gap:4px;margin-left:8px}
+.links a{padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted)}
+.links a:hover{color:var(--ink);background:var(--soft)}
+nav.top .btn{margin-left:auto}
 
-main.wrap{padding-top:22px;padding-bottom:64px}
-.lead{color:var(--fg2);max-width:820px;margin-bottom:18px}
-.lead b{color:var(--fg);font-weight:600}
-.statline{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--fg3);margin-bottom:18px}
-.statline b{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums}
-.statline .z b{color:var(--bad)}
+/* hero */
+.hero{padding:88px 0 72px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1px,transparent 1.2px);background-size:24px 24px;mask-image:radial-gradient(ellipse 70% 70% at 50% 30%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 30%,#000 30%,transparent 75%);pointer-events:none}
+.hero .wrap{position:relative}
+.hero h1{font-size:clamp(38px,6vw,68px);font-weight:800;letter-spacing:-.035em;line-height:1.08;max-width:900px;margin:0 auto}
+.hero h1 .acc{color:var(--blue)}
+.hero h1 .cur{display:inline-block;width:3px;height:.9em;background:var(--blue);vertical-align:-.08em;margin-left:4px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero .sub{font-size:18px;margin-top:22px}
+.search{max-width:640px;margin:34px auto 0;position:relative}
+.search input{width:100%;height:56px;border:1px solid var(--line);border-radius:14px;padding:0 20px 0 50px;font:inherit;font-size:16px;color:var(--ink);background:#fff;box-shadow:var(--shadow)}
+.search input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(8,102,255,.12)}
+.search svg{position:absolute;left:18px;top:19px;color:var(--faint);width:18px;height:18px}
+.search .cnt{position:absolute;right:16px;top:18px;font-size:13px;color:var(--faint)}
+.hero .tabs{display:flex;gap:4px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.hero .tabs button{padding:8px 12px;font-size:13.5px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent}
+.hero .tabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.codebox{max-width:720px;margin:14px auto 0;text-align:left;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--shadow);overflow:hidden}
+.codebox .cap{padding:9px 14px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line2);display:flex;align-items:center;gap:8px}
+.codebox .cap button{margin-left:auto;color:var(--faint);display:inline-flex;align-items:center;gap:5px;font-size:12px}
+.codebox .cap button:hover{color:var(--ink)}
+.codebox pre{margin:0;padding:14px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--body);white-space:pre;overflow-x:auto}
+.codebox pre .k{color:var(--blue)}.codebox pre .s{color:var(--green)}.codebox pre .c{color:var(--faint)}
+.hero .note{margin-top:28px;font-size:13px;color:var(--faint)}
+.hero .note a{color:var(--muted);font-weight:500;border-bottom:1px solid var(--line)}
+.marks{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;margin-top:40px;font-family:var(--mono);font-size:12.5px;color:var(--faint);letter-spacing:.02em}
 
-/* pills */
-.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid var(--bd);border-radius:999px;background:var(--bg);font-size:12.5px;color:var(--fg2);white-space:nowrap}
-.pill:hover{border-color:var(--bd2);color:var(--fg)}
-.pill.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.pill .n{color:inherit;opacity:.6;font-variant-numeric:tabular-nums;font-size:11.5px}
-.pill .sw{width:8px;height:8px;border-radius:2px;flex:none}
-.pill.on .sw{outline:1px solid var(--bg)}
-.tag{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:5px;font-size:11.5px;font-weight:500;white-space:nowrap;background:var(--bg3);color:var(--fg2)}
-.tag .sw{width:7px;height:7px;border-radius:2px}
-.st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500}
-.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.s-prod{color:var(--ok)}.s-near{color:var(--sub)}.s-demo{color:var(--warn)}.s-dead{color:var(--gray)}.s-comm{color:var(--c-mcp)}.s-res{color:var(--ver)}.s-gap{color:var(--bad)}
+/* before / after */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+.panel{border-radius:var(--r);padding:26px;border:1px solid var(--line2);text-align:left}
+.panel.bad{background:linear-gradient(180deg,#fff7f7,#fff)}
+.panel.good{background:linear-gradient(180deg,#f2fbf7,#fff)}
+.panel .ph{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.panel .ph .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.panel.bad .ic{background:var(--red)}.panel.good .ic{background:var(--ink)}
+.chat{background:#fff;border:1px solid var(--line2);border-radius:12px;padding:14px;display:grid;gap:10px;box-shadow:var(--shadow)}
+.msg{display:flex;gap:9px;align-items:flex-start;font-size:13.5px}
+.msg .av{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:10px;font-weight:700;background:var(--soft2);color:var(--muted)}
+.msg.u .av{background:var(--ink);color:#fff}
+.msg .b{padding:7px 11px;border-radius:10px;background:var(--soft);line-height:1.5}
+.msg.u .b{background:var(--ink);color:#fff}
+.msg .b .tool{display:inline-block;font-family:var(--mono);font-size:11.5px;background:var(--green-bg);color:var(--green);padding:1px 7px;border-radius:5px;border:1px solid #bbf0d8;margin:1px 2px 1px 0}
+.msg .b .tool.x{background:var(--red-bg);color:var(--red);border-color:#fbc9c9;text-decoration:line-through}
+.msg .b .warn{color:var(--red);font-weight:600}
+.msg .b .ok{color:var(--green);font-weight:600}
+.pts{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px}
+.pts li{display:grid;grid-template-columns:18px 1fr;gap:10px;font-size:14px;font-weight:500;color:var(--ink)}
+.pts li small{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:1px}
+.pts .x{width:18px;height:18px;border-radius:50%;background:var(--red-bg);color:var(--red);display:grid;place-items:center;margin-top:2px}
+.pts .v{width:18px;height:18px;border-radius:50%;background:var(--green-bg);color:var(--green);display:grid;place-items:center;margin-top:2px}
+.pts svg{width:11px;height:11px;stroke-width:2.6}
 
-/* registry */
-.reg{display:grid;grid-template-columns:232px minmax(0,1fr);gap:28px;align-items:start}
-.side{position:sticky;top:70px;display:grid;gap:18px}
-.side section h4{margin:0 0 7px;font-size:12px;font-weight:600;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em}
-.side .pills{display:flex;flex-wrap:wrap;gap:5px}
-.side .pill{height:24px;font-size:12px;padding:0 9px}
-.side .showmore{background:none;border:0;padding:0;color:var(--link);font-size:12px;margin-top:6px}
-.fbtn{display:none}
-.rhead{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-.rhead h1{font-size:18px}
-.rhead h1 span{color:var(--fg3);font-weight:400;margin-left:6px;font-variant-numeric:tabular-nums}
-.rhead .act{display:flex;gap:6px;flex-wrap:wrap}
-.rhead .active .pill{height:24px;font-size:12px;background:var(--acc-bg);border-color:transparent;color:var(--acc)}
-.rhead .active .pill svg{width:11px;height:11px}
-.rhead select{margin-left:auto;height:30px;border:1px solid var(--bd);border-radius:7px;background:var(--bg);color:var(--fg);font:inherit;font-size:13px;padding:0 8px}
-.list{display:grid;gap:8px}
-.row{border:1px solid var(--bd);border-radius:10px;padding:12px 14px;background:var(--bg);display:grid;gap:5px;transition:border-color .12s}
-.row:hover{border-color:var(--bd2);box-shadow:var(--shadow)}
-.row .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.row .nm{font-weight:600;font-size:15px;color:var(--fg)}
-.row .nm:hover{color:var(--link)}
-.row .url{font-family:var(--mono);font-size:11.5px;color:var(--fg3)}
-.row .hub{margin-left:auto;font-size:12px;font-weight:500}
-.h-take{color:var(--ok)}.h-ref{color:var(--fg3)}.h-excl{color:var(--bad)}
-.row .desc{color:var(--fg2);font-size:13.5px}
-.row .meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--fg3);align-items:center}
-.row .meta span{display:inline-flex;align-items:center;gap:4px}
-.row .meta .lic.bad{color:var(--bad)}
-.inst{display:inline-flex;align-items:center;gap:6px;margin-left:auto;background:var(--bg2);border:1px solid var(--bd);border-radius:6px;padding:2px 4px 2px 9px;font-family:var(--mono);font-size:11.5px;color:var(--fg2);max-width:100%}
-.inst code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.inst button{border:0;background:transparent;color:var(--fg3);width:22px;height:20px;display:grid;place-items:center;border-radius:4px}
-.inst button:hover{background:var(--bg3);color:var(--fg)}
-.inst button.done{color:var(--ok)}
-.empty{padding:40px 0;text-align:center;color:var(--fg3)}
-.foot-note{margin-top:28px;font-size:13px;color:var(--fg3);line-height:1.6}
-.foot-note h3{color:var(--fg2)}
+/* examples */
+.cats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:30px}
+.cpill{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted);background:#fff}
+.cpill:hover{border-color:var(--faint);color:var(--ink)}
+.cpill.on{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.excard{max-width:840px;margin:28px auto 0;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--shadow);overflow:hidden;text-align:left}
+.excard .q{padding:20px 24px;background:var(--soft);border-bottom:1px solid var(--line2)}
+.excard .q .lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;font-family:var(--mono);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.excard .q .t{font-size:16px;font-weight:500;color:var(--ink)}
+.excard .tools{padding:12px 24px;border-bottom:1px solid var(--line2);display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--faint)}
+.excard .tools code{font-size:11.5px;background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:5px;border:1px solid #bbf0d8}
+.excard .tools code.x{background:var(--red-bg);color:var(--red);border-color:#fbc9c9;text-decoration:line-through}
+.excard .tools code.p{background:#eef4ff;color:var(--blue);border-color:#c7dbff}
+.excard .res{padding:18px 24px}
+.excard .res b{display:block;color:var(--green);font-size:14px;margin-bottom:8px}
+.excard .res ul{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:14px}
+.excard .res li{display:grid;grid-template-columns:12px 1fr;gap:8px}
+.excard .res li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);margin-top:8px}
+.exnav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:20px}
+.exnav .ar{width:32px;height:32px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.exnav .ar:hover{border-color:var(--faint);color:var(--ink)}
+.exnav .dots{display:flex;gap:6px}
+.exnav .dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:all .2s}
+.exnav .dots i.on{width:18px;background:var(--ink)}
 
-/* tables */
-.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--bd);vertical-align:top}
-th{background:var(--bg2);font-weight:600;font-size:12px;color:var(--fg3);white-space:nowrap;position:sticky;top:0}
-th.sort{cursor:pointer;user-select:none}
-th.sort:hover{color:var(--fg)}
-th.sort.asc::after{content:" ↑"}th.sort.desc::after{content:" ↓"}
-tr:last-child td{border-bottom:0}
-td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-tr.click{cursor:pointer}
-tr.click:hover td{background:var(--bg2)}
-.tier{font-family:var(--mono);font-size:11.5px;padding:1px 6px;border-radius:4px;background:var(--bg3);color:var(--fg2)}
-.rt{font-size:12px;font-weight:600;white-space:nowrap}
-.rt-pre{color:var(--pre)}.rt-cmp{color:var(--cmp)}.rt-sub{color:var(--sub)}.rt-ver{color:var(--ver)}
-
-/* tool detail */
-.crumb{font-size:13px;color:var(--fg3);margin-bottom:8px}
-.dh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.dsub{color:var(--fg3);font-size:13.5px;margin-bottom:14px}
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--bd);margin-bottom:16px}
-.tabs button{border:0;background:none;padding:8px 12px;color:var(--fg2);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tabs button.on{color:var(--fg);border-bottom-color:var(--fg)}
-.tabs button .n{color:var(--fg3);font-size:12px;margin-left:4px}
-.nd{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
-dl.kv{display:grid;grid-template-columns:120px minmax(0,1fr);margin:0;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
-dl.kv dt,dl.kv dd{padding:9px 12px;border-bottom:1px solid var(--bd);margin:0}
-dl.kv dt{color:var(--fg3);font-size:12.5px;background:var(--bg2)}
-dl.kv dt:nth-last-of-type(1),dl.kv dd:last-child{border-bottom:0}
-.box{border:1px solid var(--bd);border-radius:10px;padding:12px 14px;background:var(--bg)}
-.box h4{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em}
-.box ul{margin:0;padding-left:16px}
-.box li{margin:3px 0}
-
-/* graph */
-.gcard{border:1px solid var(--bd);border-radius:10px;background:var(--bg);overflow:hidden}
-.gbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--bd);background:var(--bg2)}
-.gbar .lab{font-size:12px;color:var(--fg3);margin-right:4px}
-.gbar .hint{margin-left:auto;font-size:12px;color:var(--fg3)}
+/* demo frame */
+.frame{margin-top:40px;border-radius:14px;background:#0b1220;box-shadow:0 30px 80px rgba(10,19,23,.25);overflow:hidden;
+  --fbg:#0b1220;--fbg2:#111a2c;--ffg:#e6edf5;--ffg2:#9fb0c3;--fline:#22304a;--pre:#6aa6ff;--cmp:#ff7b7b;--sub:#3ed598;--ver:#b79bff}
+.frame .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--fline)}
+.frame .bar i{width:11px;height:11px;border-radius:50%}
+.frame .bar .t{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ffg2);letter-spacing:.06em}
+.frame .leg{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--fline);color:var(--ffg2);font-size:12.5px}
+.frame .leg .lab{margin-right:6px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.frame .leg button{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;border:1px solid var(--fline);border-radius:999px;color:var(--ffg);font-size:12.5px}
+.frame .leg button.off{opacity:.4}
+.frame .leg .hint{margin-left:auto;font-size:12px}
 .gscroll{overflow-x:auto}
 #graph{display:block;min-width:960px;width:100%;height:auto}
 #graph text{font-family:var(--sans)}
-#graph .colh{font-size:11.5px;font-weight:600;fill:var(--fg3);letter-spacing:.04em}
-#graph .node rect.b{fill:var(--bg);stroke:var(--bd2);stroke-width:1}
-#graph .node rect.s{stroke:none}
-#graph .node:hover rect.b{stroke:var(--fg2)}
-#graph .node.sel rect.b{stroke:var(--acc);stroke-width:1.8}
-#graph .node .nm{font-size:12.5px;font-weight:600;fill:var(--fg)}
-#graph .node .ro{font-size:10.5px;fill:var(--fg3)}
-#graph .node .tr{font-size:10px;fill:var(--fg2);font-family:var(--mono)}
-#graph .node rect.tb{fill:var(--bg3);stroke:none}
-#graph .node{cursor:pointer}
-#graph .edge{cursor:pointer}
+#graph .colh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;fill:var(--ffg2)}
+#graph .node rect.b{fill:var(--fbg2);stroke:var(--fline);stroke-width:1}
+#graph .node:hover rect.b{stroke:var(--ffg2)}
+#graph .node.sel rect.b{stroke:#fff;stroke-width:1.6}
+#graph .node .nm{font-size:12.5px;font-weight:600;fill:var(--ffg)}
+#graph .node .ro{font-size:10.5px;fill:var(--ffg2)}
+#graph .node .tr{font-family:var(--mono);font-size:10px;fill:var(--ffg2)}
+#graph .node rect.tb{fill:#1c2740}
+#graph .node,#graph .edge{cursor:pointer}
 #graph .edge .hit{stroke:transparent;stroke-width:12;fill:none}
 #graph .fade{opacity:.1}
-#graph .xm circle{fill:var(--bg);stroke:var(--cmp);stroke-width:1.3}
+#graph .xm circle{fill:var(--fbg);stroke:var(--cmp);stroke-width:1.3}
 #graph .xm path{stroke:var(--cmp);stroke-width:1.5;fill:none}
-.gtip{position:fixed;z-index:99;max-width:380px;background:var(--bg);border:1px solid var(--bd2);border-radius:8px;padding:8px 11px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:12.5px;line-height:1.5;display:none;pointer-events:none}
-.gtip.show{display:block}
-.gtip .h{font-weight:600;margin-bottom:2px}
-.gpanel{border-top:1px solid var(--bd);padding:12px 14px;display:grid;gap:8px;background:var(--bg)}
+.gpanel{border-top:1px solid var(--fline);padding:14px 16px;color:var(--ffg);display:grid;gap:8px;font-size:13.5px}
 .gpanel .ph{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .gpanel .ph b{font-size:15px}
-.gpanel ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:13px}
-.gpanel li{display:grid;grid-template-columns:64px 1fr;gap:10px}
-.gnote{font-size:12.5px;color:var(--fg3);margin-top:8px}
+.gpanel .ph .tag{font-family:var(--mono);font-size:11px;background:#1c2740;color:var(--ffg2);padding:2px 8px;border-radius:5px}
+.gpanel ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.gpanel li{display:grid;grid-template-columns:70px 1fr;gap:10px;color:var(--ffg2)}
+.gpanel li a{color:var(--ffg);font-weight:500}
+.rt{font-weight:600;font-size:12px;white-space:nowrap}
+.rt-pre{color:var(--pre)}.rt-cmp{color:var(--cmp)}.rt-sub{color:var(--sub)}.rt-ver{color:var(--ver)}
+.gtip{position:fixed;z-index:99;max-width:360px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;box-shadow:0 12px 32px rgba(10,19,23,.18);font-size:13px;line-height:1.5;color:var(--body);display:none;pointer-events:none}
+.gtip.show{display:block}.gtip .h{font-weight:600;color:var(--ink);margin-bottom:2px}
+.gtip .rt-pre{color:#0866ff}.gtip .rt-cmp{color:#ef4444}.gtip .rt-sub{color:#059669}.gtip .rt-ver{color:#7c3aed}
 
-/* gate demo */
-.seg{display:inline-flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden;background:var(--bg)}
-.seg button{border:0;background:transparent;padding:6px 12px;font-size:13px;color:var(--fg2);border-right:1px solid var(--bd)}
-.seg button:last-child{border-right:0}
-.seg button.on{background:var(--bg3);color:var(--fg);font-weight:600}
-.segs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
-.steps{display:grid;gap:6px;margin:0;padding:0;list-style:none;counter-reset:s}
-.steps li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
-.steps li::before{counter-increment:s;content:counter(s);font-size:12px;color:var(--fg3);font-variant-numeric:tabular-nums;padding-top:2px}
-.steps .t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.steps .tool{font-family:var(--mono);font-size:12.5px;font-weight:500}
-.steps .why{color:var(--fg3);font-size:12.5px}
-.steps li.blocked .tool{text-decoration:line-through;color:var(--fg3)}
-.k{font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:5px}
-.k-ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
-.k-silent{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
-.k-blocked{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
-.k-added{color:var(--pre);background:color-mix(in srgb,var(--pre) 12%,transparent)}
-.verdict{margin-top:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--bg2);font-size:13.5px}
-.verdict b{margin-right:6px}
+/* categories */
+.catgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+.ccard{border:1px solid var(--line);border-radius:14px;padding:22px;background:#fff;display:grid;gap:10px;align-content:start;position:relative;transition:border-color .15s,box-shadow .15s;text-align:left}
+.ccard:hover{border-color:var(--faint);box-shadow:var(--shadow)}
+.ccard .ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;color:#fff}
+.ccard .ic svg{width:18px;height:18px}
+.ccard .n{position:absolute;top:16px;right:18px;font-family:var(--mono);font-size:12px;color:var(--faint)}
+.ccard h4{font-size:15px;letter-spacing:-.01em}
+.ccard p{font-size:13px;color:var(--muted);line-height:1.5}
+.ccard .go{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.ccard.on{border-color:var(--ink)}
 
-.prose{max-width:780px}
-.prose p{margin-bottom:12px;color:var(--fg)}
-.prose ul{padding-left:20px}
-footer{border-top:1px solid var(--bd);padding:18px 0 40px;font-size:12.5px;color:var(--fg3)}
+/* tool cards */
+.tfilt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:56px}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.tcard{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:12px;padding:18px 20px 16px;background:#fff;display:grid;gap:9px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative}
+.tcard:hover{box-shadow:var(--shadow);border-color:var(--faint);border-top-color:var(--c)}
+.tcard .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tcard .ct{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);padding:2px 7px;border-radius:5px}
+.tcard .st{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600}
+.tcard .st svg{width:12px;height:12px;stroke-width:2.4}
+.st.prod{color:var(--green)}.st.near{color:#0891b2}.st.demo{color:var(--amber)}.st.dead{color:var(--faint)}.st.comm{color:var(--blue)}.st.res{color:#7c3aed}.st.gap{color:var(--red)}
+.tcard h4{font-size:15.5px;letter-spacing:-.01em;line-height:1.3}
+.tcard h4 a:hover{color:var(--blue)}
+.tcard .be{display:flex;flex-wrap:wrap;gap:4px}
+.tcard .be code{font-size:11px;background:var(--soft);color:var(--muted);padding:2px 7px;border-radius:5px}
+.tcard p{font-size:13px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tcard .ft{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--faint);margin-top:2px;flex-wrap:wrap}
+.tcard .ft .hub{margin-left:auto;font-weight:600}
+.hub.take{color:var(--green)}.hub.ref{color:var(--muted)}.hub.excl{color:var(--red)}
+.tcard .ft .lic.bad{color:var(--red)}
+.more{display:flex;justify-content:center;margin-top:28px;gap:10px;align-items:center;color:var(--faint);font-size:13px}
+.empty{padding:40px;text-align:center;color:var(--faint);grid-column:1/-1}
 
-@media (max-width:900px){
-  .reg,.nd{grid-template-columns:1fr}
-  .side{position:static;display:none}
-  .side.open{display:grid}
-  .fbtn{display:inline-flex}
-  .hsearch{max-width:none}
-  .hnav a{padding:6px 7px;font-size:13px}
+/* features (accordion) */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:40px}
+.acc{border-top:1px solid var(--line)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;font-size:17px;font-weight:600;color:var(--ink);cursor:pointer}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary .pm{width:18px;height:18px;position:relative;flex:none}
+.acc summary .pm::before,.acc summary .pm::after{content:"";position:absolute;background:var(--ink);left:0;right:0;top:8px;height:2px}
+.acc summary .pm::after{transform:rotate(90deg);transition:transform .2s}
+.acc details[open] summary .pm::after{transform:rotate(0)}
+.acc .body{padding:0 0 20px;color:var(--muted);font-size:14.5px;max-width:460px;line-height:1.6}
+.acc .body code{font-size:12px;background:var(--soft);padding:1px 6px;border-radius:4px;color:var(--ink)}
+.illus{background:var(--soft);border-radius:var(--r);min-height:360px;display:grid;place-items:center;padding:30px;position:sticky;top:90px}
+.illus svg{width:100%;max-width:420px;height:auto}
+.illus text{font-family:var(--sans);font-size:13px;fill:var(--ink);font-weight:600}
+.illus .sm{font-family:var(--mono);font-size:10.5px;fill:var(--muted);font-weight:400}
+.illus .bx{fill:#fff;stroke:var(--line);stroke-width:1}
+
+/* two cards */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+.scard{background:var(--soft);border-radius:var(--r);padding:28px}
+.scard .h{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:14px;letter-spacing:-.01em}
+.scard .h .ic{width:30px;height:30px;border-radius:50%;background:var(--muted);color:#fff;display:grid;place-items:center;flex:none}
+.scard p{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* big panel */
+.bigpanel{margin-top:40px;border-radius:24px;background:linear-gradient(180deg,#fff 0%,#e9f1ff 55%,#dbe8ff 100%);padding:90px 40px 70px;text-align:center;border:1px solid #e3ecfb}
+.bigpanel h3{font-size:clamp(34px,5.4vw,64px);font-weight:700;letter-spacing:-.035em;line-height:1.1}
+.bigpanel h3 .d{color:var(--muted);font-weight:500}
+.stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin-top:44px}
+.stats div{text-align:center}
+.stats b{display:block;font-size:30px;font-weight:700;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.stats b.z{color:var(--blue)}
+.stats span{font-size:13px;color:var(--muted)}
+
+/* bench */
+.tbl{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;overflow-x:auto;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:720px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px}
+.pill.y{background:var(--green-bg);color:var(--green)}.pill.n{background:var(--red-bg);color:var(--red)}.pill.p{background:var(--amber-bg);color:var(--amber)}
+
+footer{border-top:1px solid var(--line2);padding:40px 0 60px;font-size:13px;color:var(--faint)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center}
+footer a{color:var(--muted)}
+
+@media (max-width:960px){
+  .catgrid{grid-template-columns:repeat(2,1fr)}
+  .tgrid{grid-template-columns:repeat(2,1fr)}
+  .feat{grid-template-columns:1fr}
+  .illus{position:static;min-height:260px}
+  .links{display:none}
 }
-@media (max-width:600px){
-  .hdr .wrap{height:auto;flex-wrap:wrap;padding-top:8px;padding-bottom:8px;gap:8px}
-  .hsearch{order:3;flex-basis:100%}
-  .hnav{margin-left:auto}
+@media (max-width:640px){
+  section{padding:64px 0}
+  .ba,.two,.tgrid,.catgrid{grid-template-columns:1fr}
+  .hero{padding:56px 0 48px}
+  .bigpanel{padding:56px 20px 44px}
+  .stats{gap:24px}
+  nav.top .wrap{height:56px}
 }
+@media (max-width:520px){.hero h1 br{display:none}.hero h1{font-size:34px}}
+@media (prefers-reduced-motion:reduce){.hero h1 .cur{animation:none}}
 </style>
 </head>
 <body>
-<header class="hdr"><div class="wrap">
-  <a class="logo" href="#registry"><svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 9.8V5.5M14 13.1l3.6 2.1M10 13.1l-3.6 2.1" stroke="currentColor" stroke-width="1.5"/></svg>SimulationHub</a>
-  <div class="hsearch"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="hq" type="search" placeholder="도구, 백엔드, 기능 검색 (phonopy, LAMMPS, OPTIMADE …)" aria-label="검색"></div>
-  <nav class="hnav">
-    <a href="#registry" data-p="registry">레지스트리</a>
-    <a href="#tools" data-p="tools">도구</a>
-    <a href="#relations" data-p="relations">관계 그래프</a>
-    <a href="#benchmarks" data-p="benchmarks">벤치마크</a>
-    <a href="#about" data-p="about">소개</a>
-  </nav>
-  <button class="tbtn" id="theme" type="button" aria-label="테마 전환"><svg class="i" viewBox="0 0 24 24" id="ti"></svg></button>
+<nav class="top"><div class="wrap">
+  <a class="logo" href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 9.8V5.5M14 13.1l3.6 2.1M10 13.1l-3.6 2.1" stroke="currentColor" stroke-width="1.5"/></svg>SimulationHub</a>
+  <div class="links"><a href="#why">왜 관계인가</a><a href="#examples">예시</a><a href="#graph-sec">관계 그래프</a><a href="#tools">도구</a><a href="#bench">벤치마크</a></div>
+  <a class="btn sm" href="#tools">레지스트리 둘러보기</a>
+</div></nav>
+
+<header class="hero center" id="top"><div class="wrap">
+  <h1>SimulationHub:<br>재료 시뮬레이션 도구를<br><span class="acc">관계와 함께</span> 에이전트에게.<span class="cur"></span></h1>
+  <p class="sub">에이전트가 쓸 수 있는 재료 시뮬레이션 도구 130여 개와, 도구 사이의 전제 조건과 호환성과 대체와 검증 관계를 한 곳에 모은 공개 레지스트리.</p>
+  <div class="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="도구, 스킬, 백엔드 검색" aria-label="검색"><span class="cnt" id="qcnt"></span></div>
+  <div class="tabs" id="rtabs"></div>
+  <div class="codebox"><div class="cap"><span id="rcap"></span><button type="button" id="rcopy"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>복사</button></div><pre id="rcode"></pre></div>
+  <p class="note">MatWorld 연구 제안의 첫 구성 요소 · <a href="#about">Vision &amp; Learning Lab, SNU</a> · 조사일 2026-10-15</p>
+  <div class="marks" id="marks"></div>
 </div></header>
 
-<main class="wrap" id="app"></main>
-<div class="gtip" id="gtip"></div>
+<section id="why" class="center"><div class="wrap">
+  <span class="eyebrow">Why relations</span>
+  <h2>같은 목표, 다른 경로</h2>
+  <p class="sub">도구 목록만 받은 에이전트는 에러 없이 틀린 숫자를 냅니다. 관계를 받은 에이전트는 전제 조건을 먼저 채우고, 금지된 조합은 처음부터 고르지 않습니다.</p>
+  <div class="ba">
+    <div class="panel bad"><div class="ph"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.6"><path d="M6 6l12 12M18 6L6 18"/></svg></span>도구 목록만</div>
+      <div class="chat">
+        <div class="msg u"><span class="av">U</span><div class="b">이 산화물의 금속-산소 결합을 COHP로 분석해줘</div></div>
+        <div class="msg"><span class="av">AI</span><div class="b"><span class="tool">vasp.static</span><span class="tool">lobster.cohp</span><br>ICOHP −2.41 eV. 결합이 강합니다. <span class="warn">[투영 손실 큼, 믿을 수 없음]</span></div></div>
+      </div>
+      <ul class="pts">
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>VASP를 기본 설정으로 돌리고 LOBSTER에 넘김<small>대칭을 끄지 않고 밴드 수도 늘리지 않음</small></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>힘을 직접 예측하는 모델로 포논 계산<small>포논, 탄성, NVE 분자동역학에는 보존력만 써야 함</small></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>Materials Project 에너지와 OMat24 에너지를 한 상도에<small>기준점이 달라 안정성 부호까지 바뀔 수 있음</small></span></li>
+        <li><span class="x"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span>생성 구조를 완화도 중복 확인도 없이 안정하다고 보고<small>결과는 그럴듯하지만 물리적으로 틀림. 조용한 실패</small></span></li>
+      </ul>
+    </div>
+    <div class="panel good"><div class="ph"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.6"><path d="M5 12l5 5 9-10"/></svg></span>관계 그래프와 함께</div>
+      <div class="chat">
+        <div class="msg u"><span class="av">U</span><div class="b">이 산화물의 금속-산소 결합을 COHP로 분석해줘</div></div>
+        <div class="msg"><span class="av">AI</span><div class="b"><span class="tool">vasp.static(ISYM=-1, NBANDS↑)</span><span class="tool">conv.check</span><span class="tool">lobster.cohp</span><br>ICOHP −2.41 eV, 투영 손실 1.2%. <span class="ok">[전제 조건 충족, 수렴 확인]</span></div></div>
+      </div>
+      <ul class="pts">
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>전제 조건이 상위 계산의 설정을 바꿈<small>LOBSTER를 고르면 VASP 설정이 따라옴</small></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>호환성에 걸리는 조합은 선택지에 없음<small>직접 힘 모델은 포논 계산기 후보에서 빠짐</small></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>대체 관계로 싼 도구 먼저, 비싼 도구는 확인용<small>T1 퍼텐셜로 거르고 T3 DFT로 확인</small></span></li>
+        <li><span class="v"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span><span>검증 사슬을 거친 출력만 라벨을 받음<small>완화, 안정성, 중복, 대칭, 전하 중성</small></span></li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:18px;font-size:12.5px;color:var(--faint)">대화와 숫자는 규칙이 어떻게 작동하는지 보이기 위한 예시입니다.</p>
+</div></section>
 
-<footer><div class="wrap">SimulationHub는 MatWorld 연구 제안(v4)의 첫 번째 구성 요소입니다. 조사일 2026-10-15. 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠습니다. · <a href="https://yerimoh.github.io">yerimoh.github.io</a></div></footer>
+<section id="examples" class="center"><div class="wrap">
+  <span class="eyebrow">Live examples</span>
+  <h2>무엇을 시킬 수 있나</h2>
+  <p class="sub">목표 하나를 주면 에이전트가 그래프에서 경로를 찾습니다. 전제 조건은 자동으로 채워지고, 금지된 도구는 가려집니다.</p>
+  <div class="cats" id="excats"></div>
+  <div class="excard" id="excard"></div>
+  <div class="exnav"><button class="ar" id="exprev" type="button" aria-label="이전"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><div class="dots" id="exdots"></div><button class="ar" id="exnext" type="button" aria-label="다음"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+</div></section>
+
+<section id="graph-sec" class="center"><div class="wrap">
+  <span class="eyebrow">Demo</span>
+  <h2>도구 그래프</h2>
+  <p class="sub">도구 27개와 관계 24개. 선 위에 올리면 내용이, 도구를 누르면 걸린 관계가 보입니다.</p>
+  <div class="frame">
+    <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">simulationhub · graph v0</span></div>
+    <div class="leg" id="legend"><span class="lab">Relations</span></div>
+    <div class="gscroll"><svg id="graph" viewBox="0 0 1180 540" role="img" aria-label="도구 관계 그래프"></svg></div>
+    <div class="gpanel" id="gpanel" hidden></div>
+  </div>
+</div></section>
+
+<section id="tools"><div class="wrap">
+  <div style="max-width:560px"><span class="eyebrow">Explore by category</span><h2>레지스트리</h2><p class="sub" style="margin-left:0">에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼 146개. 종류를 고르거나 위의 검색창을 쓰세요.</p></div>
+  <div class="catgrid" id="catgrid"></div>
+  <div class="tfilt" id="tfilt"></div>
+  <div class="tgrid" id="tgrid"></div>
+  <div class="more" id="more"></div>
+</div></section>
+
+<section id="relations"><div class="wrap">
+  <span class="eyebrow blue">관계 네 종류</span>
+  <h2 style="max-width:620px">카탈로그의 주의사항이 전부 선이 됩니다</h2>
+  <p class="sub" style="margin-left:0">숙련된 연구자의 머릿속에만 있던 조합 지식을 기계가 읽을 수 있게 적고, 에이전트가 경로를 짤 때 강제합니다.</p>
+  <div class="feat">
+    <div class="acc" id="acc"></div>
+    <div class="illus"><svg id="illus" viewBox="0 0 420 260" aria-hidden="true"></svg></div>
+  </div>
+</div></section>
+
+<section id="safety"><div class="wrap">
+  <span class="eyebrow blue">실행 시점에 강제</span>
+  <div class="two">
+    <div class="scard"><div class="h"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span>금지된 조합은 선택지에 없다</div><p>입력 형식, 전제 조건, 호환성은 LLM이 아니라 그래프가 기계적으로 검사합니다. 검사를 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다. 남은 선택지 중 어느 대체 도구를 어떤 순서로 쓸지만 비용과 불확실성을 보고 고릅니다.</p></div>
+    <div class="scard"><div class="h"><span class="ic"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 12l5 5 9-10"/></svg></span>실패도 기록으로 남는다</div><p>결과마다 상태 플래그가 붙습니다. 정상, 자동 복구된 가벼운 오류, 계산 실패, 그리고 결과는 나왔는데 물리적으로 틀린 조용한 실패. 조용한 실패를 낸 조합은 새 관계로 그래프에 추가되므로, 그래프는 데이터가 쌓이면서 갱신됩니다.</p></div>
+  </div>
+</div></section>
+
+<section id="stats-sec" style="padding-top:40px"><div class="wrap">
+  <div class="bigpanel">
+    <h3>노드는 넘치고,<br><span class="d">관계는 어디에도 없다.</span></h3>
+    <div class="stats"><div><b>~130</b><span>재료 시뮬레이션 MCP 서버</span></div><div><b>~25</b><span>실제로 쓸 만한 서버</span></div><div><b>45</b><span>SKILL.md 스킬팩</span></div><div><b>~500</b><span>관계를 뽑을 스킬 본문</span></div><div><b class="z">0</b><span>관계를 적은 공개 레지스트리</span></div></div>
+  </div>
+</div></section>
+
+<section id="bench"><div class="wrap">
+  <span class="eyebrow">Benchmarks</span>
+  <h2>실제로 돌려서 채점하는가</h2>
+  <p class="sub" style="margin-left:0">관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러납니다. 입력 준비만 채점하는 벤치마크는 조용한 실패를 잡지 못합니다.</p>
+  <div class="tbl"><table><thead><tr><th>벤치마크</th><th>무엇을 재나</th><th>크기</th><th>시뮬레이터 실행</th></tr></thead><tbody id="benchrows"></tbody></table></div>
+</div></section>
+
+<section id="about"><div class="wrap"><div class="narrow" style="margin-left:0">
+  <span class="eyebrow">About</span>
+  <h2>왜 만드나</h2>
+  <p style="margin-top:18px;color:var(--muted);font-size:16px;line-height:1.7">재료 계산 도구는 이미 충분히 많고, 그것을 에이전트에 노출한 래퍼도 수백 개가 있습니다. 비어 있는 것은 도구를 조합하는 지식입니다. 그 지식을 네 종류의 관계로 적어 두면 에이전트가 사람 없이도 도구를 올바른 순서와 설정으로 조합할 수 있고, 그 조합을 대량으로 돌려 재료 세계의 월드모델을 학습할 데이터를 만들 수 있습니다. SimulationHub는 MatWorld 제안의 첫 단계이며, 관계가 완전하다고 주장하지 않고 관계가 있으면 없을 때보다 낫다는 것을 벤치마크에서 보이려 합니다.</p>
+  <p style="margin-top:16px;color:var(--faint);font-size:13px;line-height:1.6">조사는 MCP 서버, SKILL.md 스킬팩, MCP가 아닌 플랫폼과 벤치마크와 표준의 세 갈래로 했습니다. GitHub, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 클론해 셌습니다. 열지 못한 항목은 [미검증]입니다. 이 페이지의 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠습니다.</p>
+</div></div></section>
+
+<footer><div class="wrap"><span>SimulationHub · Vision &amp; Learning Lab, SNU · 2026</span><span><a href="https://yerimoh.github.io">yerimoh.github.io</a></span></div></footer>
+<div class="gtip" id="gtip"></div>
 
 <script>
 (function(){
 "use strict";
-var $=function(s){return document.querySelector(s)};
-var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
-var I={star:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.4 6.3 20.5l1.2-6.4L2.8 9.7l6.4-.8z"/></svg>',
- commit:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M2 12h6.5M15.5 12H22"/></svg>',
- cal:'<svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
- scale:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 006 0zM19 7l-3 7a3 3 0 006 0z"/></svg>',
- box:'<svg class="i" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>',
- copy:'<svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>',
- check:'<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>',
- x:'<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
- filter:'<svg class="i" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>',
- sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
- moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>'};
-
-/* theme */
-function curTheme(){var a=document.documentElement.getAttribute("data-theme");if(a)return a;return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}
-function paintTheme(){$("#ti").innerHTML=curTheme()==="dark"?I.sun:I.moon}
-$("#theme").addEventListener("click",function(){var n=curTheme()==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",n);try{localStorage.setItem("sh-theme",n)}catch(e){}paintTheme()});
-paintTheme();
-
-var COLS=[{x:16,label:"데이터, 생성기"},{x:252,label:"빠른 계산기"},{x:488,label:"DFT"},{x:724,label:"후처리 계산기"},{x:960,label:"검사기"}];
+var COLS=[{x:16,label:"Data / generators"},{x:252,label:"Fast calculators"},{x:488,label:"DFT"},{x:724,label:"Post-processing"},{x:960,label:"Checkers"}];
 var W=186,H=46;
 var ET={pre:"전제 조건",cmp:"호환성",sub:"대체",ver:"검증"};
 
@@ -494,159 +621,69 @@ const R=[
 ["std","EMMO, CMSO, openBIS","","재료 온톨로지, 계산 시료 온톨로지, ELN","","","","near",""],
 ["std","공개 재료 툴 레지스트리","","없음. 허브의 자리","","","","gap",""]
 ].map(a=>({cat:a[0],name:a[1],url:a[2],what:a[3],backend:a[4],lic:a[5],act:a[6],st:a[7],hub:a[8]}));
-const SC=[
- {id:"lobster",tab:"LOBSTER 결합 분석",goal:"주어진 산화물 구조의 금속-산소 결합을 COHP로 분석하라.",
-  list:{steps:[["VASP 정적 계산","기본 설정 그대로. 대칭 켬, 기본 밴드 수","ok"],["LOBSTER","대칭으로 줄인 k점과 부족한 밴드를 받아 투영이 불완전함. COHP 곡선은 그대로 그려짐","silent"]],
-   v:["silent","에러 없이 결합 세기 숫자가 나옵니다. 상위 계산의 설정이 틀렸다는 사실은 LOBSTER 출력만 봐서는 보이지 않습니다."]},
-  io:{steps:[["VASP 정적 계산","출력 WAVECAR, 구조. 형식 검사 통과","ok"],["LOBSTER","입력 형식이 맞으므로 연결 허용. 투영은 여전히 불완전","silent"]],
-   v:["silent","형식은 맞으므로 통과합니다. 전제 조건은 파일 형식이 아니라 상위 계산의 설정에 있어서 형식 검사로는 잡히지 않습니다."]},
-  graph:{steps:[["VASP 정적 계산","전제 조건 관계가 ISYM=-1과 NBANDS 증가를 요구해 설정을 바꿔 다시 짬","added"],["LOBSTER","전제 조건 충족 후 실행","ok"],["수렴 기록 검사","검증 관계에 따라 DFT 출력 확인","added"]],
-   v:["ok","전제 조건이 경로를 짤 때 강제되어 상위 계산이 처음부터 올바른 설정으로 돌아갑니다."]}},
- {id:"gen",tab:"생성 구조의 동역학적 안정성",goal:"MatterGen이 만든 후보 가운데 동역학적으로 안정한 새 물질을 골라라.",
-  list:{steps:[["MatterGen","후보 구조 생성","ok"],["Orb v3 direct","완화 없이 바로 힘 계산. 힘이 에너지의 미분이 아님","silent"],["phonopy","허수 진동수 없음으로 나와 안정으로 판정","silent"]],
-   v:["silent","완화, 안정성, 중복 확인 없이 직접 힘 모델로 포논을 계산했습니다. 알려진 물질이거나 존재할 수 없는 조성일 수도 있는 후보가 안정한 새 물질로 보고됩니다."]},
-  io:{steps:[["MatterGen","출력 Structure","ok"],["Orb v3 direct","Structure → Forces 형식 일치","silent"],["phonopy","Forces 입력 형식 일치","silent"]],
-   v:["silent","모든 연결이 형식상 맞습니다. 힘이 에너지의 미분인지는 타입에 없고 호환성 관계에만 있습니다."]},
-  graph:{steps:[["MatterGen","후보 구조 생성","ok"],["SMACT","검증 관계. 존재할 수 없는 조성을 가장 싸게 먼저 거름","added"],["MACE-MPA-0 완화","검증 관계. 생성 출력은 완화를 거침","added"],["상도 · E_hull","같은 기준점 에너지로만 계산","added"],["StructureMatcher","알려진 구조와 중복 확인","added"],["spglib","공간군 확인","added"],["Orb v3 direct","호환성 관계로 포논 계산기 후보에서 제외","blocked"],["phonopy + MACE-MPA-0","보존력 계산기로 포논","ok"],["허수 진동수 검사","동역학적 안정성 라벨 부여","added"]],
-   v:["ok","생성 모델 출력이 검증 사슬을 모두 거친 뒤에야 안정성 라벨을 받습니다. 금지된 계산기는 선택지에 아예 나타나지 않습니다."]}},
- {id:"hull",tab:"여러 출처 에너지로 상도",goal:"Materials Project 경쟁 상과 새 후보의 에너지로 후보의 E_hull을 구하라.",
-  list:{steps:[["Materials Project","경쟁 상 에너지 (MP 호환 설정)","ok"],["PET-OAM","후보 에너지 (OMat24 기준)","ok"],["상도 · E_hull","기준점이 다른 두 에너지를 한 상도에 섞음","silent"]],
-   v:["silent","E_hull 숫자가 깔끔하게 나오지만 두 에너지의 기준점이 달라 안정성 판정의 부호까지 바뀔 수 있습니다."]},
-  io:{steps:[["Materials Project","출력 에너지 (eV/atom)","ok"],["PET-OAM","출력 에너지 (eV/atom), 단위 일치","ok"],["상도 · E_hull","형식과 단위가 같아 통과","silent"]],
-   v:["silent","단위까지 같아서 형식 검사로는 구분할 수 없습니다. 기준점은 도구에 붙은 메타데이터에만 있습니다."]},
-  graph:{steps:[["Materials Project","경쟁 상 목록만 가져옴","ok"],["MP 에너지 + PET-OAM 에너지","호환성 관계로 같은 상도에 섞는 것 차단","blocked"],["PET-OAM 경쟁 상 재계산","같은 기준점으로 경쟁 상 전체를 다시 계산 (T1)","added"],["상도 · E_hull","한 기준점 안에서 계산","ok"],["VASP (MP 호환 설정)","대체 관계. 유망 후보만 T3로 확인","added"]],
-   v:["ok","기준점이 섞이는 경로는 실행되지 않습니다. 싼 도구로 고르고 비싼 도구로 확인하는 순서는 대체 관계와 남은 예산으로 정해집니다."]}}
-];
 
-var CAT={mcp:"MCP 서버",skill:"스킬팩",db:"데이터베이스 서버",pkg:"툴 패키지",plat:"상용 플랫폼",acad:"학술 시스템",beyond:"원자 단위 밖",std:"표준, 스키마",gskill:"범용 스킬 모음"};
+var CAT={mcp:["MCP 서버","에이전트가 표준 방식으로 부르는 시뮬레이션 툴 서버"],skill:["스킬팩","SKILL.md 지시문과 스크립트 묶음"],db:["데이터베이스 서버","Materials Project, OQMD, COD 같은 데이터 소스"],pkg:["툴 패키지","MCP가 아닌 에이전트 툴 라이브러리"],plat:["상용 플랫폼","공개 API 유무를 포함한 기업 제품"],acad:["학술 시스템","논문으로 나온 다중 에이전트 시스템"],beyond:["원자 단위 밖","CFD, FEM, phase-field, 공정"],std:["표준, 스키마","입출력 스키마, 온톨로지, 레지스트리 선례"],gskill:["범용 스킬 모음","재료가 일부 들어 있는 범용 팩"]};
+var ICON={mcp:'<path d="M4 6h16v5H4zM4 13h16v5H4zM7 8.5h.01M7 15.5h.01"/>',skill:'<path d="M5 4h11l3 3v13H5z"/><path d="M8 11h8M8 15h6"/>',db:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',pkg:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',plat:'<path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-5h6v5M9 11h.01M15 11h.01"/>',acad:'<path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4c0 1.5 2.2 3 5 3s5-1.5 5-3v-4M21 9v5"/>',beyond:'<path d="M3 17c3-6 6-6 9 0s6 6 9 0"/><path d="M3 10c3-6 6-6 9 0s6 6 9 0"/>',std:'<path d="M4 5h16M4 12h10M4 19h16"/><path d="M18 10l2 2-2 2"/>',gskill:'<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6"/>'};
 var ST={prod:"prod",near:"prod 근접",demo:"demo",dead:"dead",comm:"상용",res:"연구",gap:"공백"};
 var HUB={take:"노드로 가져옴",ref:"설계 참고",excl:"제외"};
-var BACKENDS=[["VASP",/\bVASP\b/i],["Quantum ESPRESSO",/\bQE\b|Quantum ESPRESSO/i],["LAMMPS",/LAMMPS/i],["GROMACS",/GROMACS|\bgmx\b/i],["phonopy",/phonopy/i],["MACE",/\bMACE\b/i],["ASE",/\bASE\b/i],["pymatgen",/pymatgen/i],["RDKit",/RDKit/i],["OpenMM",/OpenMM/i],["PySCF",/PySCF/i],["xTB",/\bxTB\b/i],["ORCA",/\bORCA\b/i],["CP2K",/CP2K/i],["deepmd",/deepmd|DPA/i],["Materials Project",/Materials Project|\bMP\b|mp-api/],["OPTIMADE",/OPTIMADE/i],["AiiDA",/AiiDA/i],["atomate2",/atomate2/i],["MatterGen",/MatterGen/i],["MatterSim",/MatterSim/i],["OVITO",/OVITO/i],["Cantera",/Cantera/i],["OpenFOAM",/OpenFOAM/i],["FEniCSx",/FEniCS/i],["COMSOL",/COMSOL/i]];
-R.forEach(function(r){r.text=[r.name,r.what,r.backend].join(" ");r.be=BACKENDS.filter(function(b){return b[1].test(r.text)}).map(function(b){return b[0]});
-  var parts=(r.backend||"").split(" · ");r.inst="";parts.forEach(function(p){if(/^(pip |uv |uvx|npm|npx|claude mcp|docker)/i.test(p.trim()))r.inst=p.trim()});
-  r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1];r.commits=(r.act.match(/커밋 ([\d,]+)/)||[])[1];r.date=(r.act.match(/20\d\d(-\d\d(-\d\d)?)?/)||[])[0];
-  r.actRest=r.act.replace(/별 [\d,]+/,"").replace(/커밋 [\d,]+/,"").replace(/20\d\d(-\d\d(-\d\d)?)?/,"").replace(/^[\s·]+|[\s·]+$/g,"").replace(/\s*·\s*·\s*/g," · ")});
+var BE=[["VASP",/\bVASP\b/i],["Quantum ESPRESSO",/\bQE\b|Quantum ESPRESSO/i],["LAMMPS",/LAMMPS/i],["GROMACS",/GROMACS|\bgmx\b/i],["phonopy",/phonopy/i],["MACE",/\bMACE\b/i],["ASE",/\bASE\b/i],["pymatgen",/pymatgen/i],["RDKit",/RDKit/i],["OpenMM",/OpenMM/i],["PySCF",/PySCF/i],["xTB",/\bxTB\b/i],["ORCA",/\bORCA\b/i],["CP2K",/CP2K/i],["deepmd",/deepmd|DPA/i],["Materials Project",/Materials Project|\bMP\b|mp-api/],["OPTIMADE",/OPTIMADE/i],["AiiDA",/AiiDA/i],["atomate2",/atomate2/i],["MatterGen",/MatterGen/i],["OVITO",/OVITO/i],["Cantera",/Cantera/i],["OpenFOAM",/OpenFOAM/i],["FEniCSx",/FEniCS/i]];
+R.forEach(function(r){r.text=[r.name,r.what,r.backend,r.url].join(" ").toLowerCase();r.be=BE.filter(function(b){return b[1].test(r.name+" "+r.what+" "+r.backend)}).map(function(b){return b[0]}).slice(0,4);r.date=(r.act.match(/20\d\d(-\d\d)?/)||[])[0]||"";r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1]||""});
 var relCount=function(id){return E.filter(function(e){return e.from===id||e.to===id}).length};
 
-/* ---------- registry ---------- */
-var F={q:"",cat:{},st:{},be:{},hub:"",badlic:false,sort:"default"};
-var moreBe=false;
-function cnt(fn){return R.filter(fn).length}
-function pills(key,items,getter){return items.map(function(it){var k=it[0],lab=it[1],n=it[2],sw=it[3];
-  return '<button type="button" class="pill'+(F[key][k]?" on":"")+'" data-k="'+key+'" data-v="'+esc(k)+'">'+(sw?'<span class="sw" style="background:'+sw+'"></span>':"")+esc(lab)+'<span class="n">'+n+'</span></button>'}).join("")}
-function regPage(){
-  var catItems=Object.keys(CAT).map(function(k){return [k,CAT[k],cnt(function(r){return r.cat===k}),"var(--c-"+k+")"]}).filter(function(i){return i[2]});
-  var stItems=["prod","near","demo","dead","comm","res"].map(function(k){return [k,ST[k],cnt(function(r){return r.st===k})]});
-  var beAll=BACKENDS.map(function(b){return [b[0],b[0],cnt(function(r){return r.be.indexOf(b[0])>=0})]}).filter(function(i){return i[2]}).sort(function(a,b){return b[2]-a[2]});
-  var beItems=moreBe?beAll:beAll.slice(0,10);
-  var hubItems=["take","ref","excl"].map(function(k){return [k,HUB[k],cnt(function(r){return r.hub===k})]});
-  return '<p class="lead">에이전트가 부를 수 있게 만든 재료 시뮬레이션 래퍼(MCP 서버, SKILL.md 스킬팩, 툴 패키지)와 주변 플랫폼, 벤치마크, 표준의 목록입니다. 도구 사이의 관계는 <a href="#relations">관계 그래프</a>에 따로 있습니다.</p>'+
-  '<div class="statline"><span>재료 시뮬레이션 MCP 서버 <b>약 130</b></span><span>그중 쓸 만한 것 <b>약 25</b></span><span>스킬팩 <b>45</b></span><span>SKILL.md 본문 <b>약 500</b></span><span class="z">도구 관계를 적은 공개 레지스트리 <b>0</b></span></div>'+
-  '<div class="reg"><aside class="side" id="side">'+
-    '<section><h4>종류</h4><div class="pills">'+pills("cat",catItems)+'</div></section>'+
-    '<section><h4>백엔드</h4><div class="pills">'+pills("be",beItems)+'</div><button type="button" class="showmore" id="morebe">'+(moreBe?"접기":"더 보기 ("+(beAll.length-10)+")")+'</button></section>'+
-    '<section><h4>상태</h4><div class="pills">'+pills("st",stItems)+'</div></section>'+
-    '<section><h4>허브 반영</h4><div class="pills">'+hubItems.map(function(h){return '<button type="button" class="pill'+(F.hub===h[0]?" on":"")+'" data-k="hub" data-v="'+h[0]+'">'+h[1]+'<span class="n">'+h[2]+'</span></button>'}).join("")+'</div></section>'+
-    '<section><h4>라이선스</h4><div class="pills"><button type="button" class="pill'+(F.badlic?" on":"")+'" data-k="badlic" data-v="1">없음 또는 미표기<span class="n">'+cnt(function(r){return /없음|미표기/.test(r.lic)})+'</span></button></div></section>'+
-  '</aside><div style="min-width:0"><div class="rhead"><h1>레지스트리<span id="rc"></span></h1><button type="button" class="pill fbtn" id="fbtn">'+I.filter+'필터</button><div class="act active" id="active"></div><select id="sort" aria-label="정렬"><option value="default">조사 순서</option><option value="name">이름순</option><option value="status">상태순</option><option value="stars">별 많은 순</option><option value="date">최근 활동순</option></select></div><div class="list" id="list"></div>'+
-  '<div class="foot-note"><h3>표에 따로 올리지 않은 것</h3><p>이전 조사에서 확인한 42개는 카탈로그 11절에 세부가 있습니다. AtomisticSkills 2.0, Materials Project 공식 MCP, optimade-mcp-server, mace-mcp-server, VASPilot, ABACUS-agent-tools, MatMaster, TritonDFT, Masgent, LangSim, ChemGraph, MDCrow, ToolUniverse 등입니다.</p><p>이름만 비슷하고 재료 시뮬레이션과 무관한 것은 뺐습니다. qe2mcp(HTTP 서버), sumo-mcp(교통), espresso-mcp(안드로이드), nomad-mcp(HashiCorp), lattice-mcp(HR), orca-mcp-server(보안), zeo-mcp(KiCad), phonon(업타임 모니터링).</p></div></div></div>';
+/* hero relation snippets */
+var SNIP=[
+ ["전제 조건","precondition","# LOBSTER를 쓰려면 VASP를 먼저 이렇게 돌려야 한다\n<k>type</k>: precondition\n<k>from</k>: vasp.static\n<k>to</k>: lobster.cohp\n<k>requires</k>:\n  ISYM: <s>-1</s>          # 대칭 끔\n  NBANDS: <s>\">= 1.5x default\"</s>\n<k>source</k>: <s>LOBSTER docs, catalog §4</s>"],
+ ["호환성","compat","# 힘을 직접 예측하는 모델은 포논에 쓰면 안 된다\n<k>type</k>: compatibility\n<k>rule</k>: forces_conservative == true\n<k>applies_to</k>: [phonopy, phono3py, elastic, md.nve]\n<k>blocks</k>: [orb-v3-direct]\n<k>allows</k>: [mace-mpa-0, pet-oam, vasp, qe]\n<k>effect</k>: <s>excluded from agent choices</s>"],
+ ["대체","substitute","# 같은 양을 다른 비용과 정확도로 주는 도구\n<k>type</k>: substitute\n<k>quantity</k>: band_gap\n<k>options</k>:\n  - {tool: matgl.bandgap, tier: <s>T1</s>, mae: <s>~0.4 eV</s>}\n  - {tool: vasp.pbe,      tier: <s>T3</s>}\n  - {tool: vasp.hse06,    tier: <s>T3+</s>}\n<k>policy</k>: <s>cheapest first, confirm on budget</s>"],
+ ["검증","verify","# 생성 모델 출력이 라벨을 받기까지\n<k>type</k>: verification\n<k>input</k>: mattergen.sample\n<k>chain</k>:\n  - smact.charge_neutral\n  - mace.relax        # max_force < 1e-3 eV/Å\n  - hull.e_above_hull\n  - matcher.dedupe\n  - spglib.symmetry\n<k>on_fail</k>: <s>record status, no label</s>"]];
+var rt=0;
+function drawSnip(){
+  $("#rtabs").innerHTML=SNIP.map(function(s,i){return '<button type="button" class="'+(i===rt?"on":"")+'" data-i="'+i+'">'+s[0]+'</button>'}).join("");
+  $$("#rtabs button").forEach(function(b){b.addEventListener("click",function(){rt=+b.dataset.i;drawSnip()})});
+  $("#rcap").textContent="관계 항목 예시 · relations/"+SNIP[rt][1]+".yaml";
+  $("#rcode").innerHTML=esc(SNIP[rt][2]).replace(/&lt;k&gt;(.*?)&lt;\/k&gt;/g,'<span class="k">$1</span>').replace(/&lt;s&gt;(.*?)&lt;\/s&gt;/g,'<span class="s">$1</span>').replace(/(#[^\n]*)/g,'<span class="c">$1</span>');
 }
-var stOrder={prod:0,near:1,comm:2,res:3,demo:4,dead:5,gap:6};
-function regList(){
-  var q=F.q.trim().toLowerCase(),on=function(o){return Object.keys(o).filter(function(k){return o[k]})};
-  var cats=on(F.cat),sts=on(F.st),bes=on(F.be);
-  var rows=R.filter(function(r){return (!cats.length||cats.indexOf(r.cat)>=0)&&(!sts.length||sts.indexOf(r.st)>=0)&&(!bes.length||bes.every(function(b){return r.be.indexOf(b)>=0}))&&(!F.hub||r.hub===F.hub)&&(!F.badlic||/없음|미표기/.test(r.lic))&&(!q||(r.text+" "+r.url).toLowerCase().indexOf(q)>=0)});
-  var num=function(s){return s?+String(s).replace(/,/g,""):-1};
-  if(F.sort==="name")rows=rows.slice().sort(function(a,b){return a.name.localeCompare(b.name)});
-  if(F.sort==="status")rows=rows.slice().sort(function(a,b){return stOrder[a.st]-stOrder[b.st]});
-  if(F.sort==="stars")rows=rows.slice().sort(function(a,b){return num(b.stars)-num(a.stars)});
-  if(F.sort==="date")rows=rows.slice().sort(function(a,b){return (b.date||"").localeCompare(a.date||"")});
-  $("#rc").textContent=rows.length+(rows.length<R.length?" / "+R.length:"");
-  var act=[];cats.forEach(function(k){act.push(["cat",k,CAT[k]])});bes.forEach(function(k){act.push(["be",k,k])});sts.forEach(function(k){act.push(["st",k,ST[k]])});if(F.hub)act.push(["hub",F.hub,HUB[F.hub]]);if(F.badlic)act.push(["badlic","1","라이선스 없음"]);if(q)act.push(["q","","검색: "+F.q]);
-  $("#active").innerHTML=act.map(function(a){return '<button type="button" class="pill" data-k="'+a[0]+'" data-v="'+esc(a[1])+'">'+esc(a[2])+I.x+'</button>'}).join("")+(act.length>1?'<button type="button" class="pill" data-k="reset">모두 지우기</button>':"");
-  $$("#active .pill").forEach(function(b){b.addEventListener("click",function(){toggle(b.dataset.k,b.dataset.v,true)})});
-  $("#list").innerHTML=rows.map(function(r){
-    var href=r.url&&/\./.test(r.url)&&!/\s/.test(r.url)?(r.url.indexOf("http")===0?r.url:"https://"+r.url):"";
-    var meta=[];
-    meta.push('<span class="st s-'+r.st+'">'+ST[r.st]+'</span>');
-    if(r.stars)meta.push('<span>'+I.star+r.stars+'</span>');
-    if(r.commits)meta.push('<span>'+I.commit+r.commits+'</span>');
-    if(r.date)meta.push('<span>'+I.cal+r.date+'</span>');
-    if(r.lic)meta.push('<span class="lic'+(/없음|미표기/.test(r.lic)?" bad":"")+'">'+I.scale+esc(r.lic)+'</span>');
-    var bk=(r.backend||"").split(" · ").filter(function(p){return p.trim()!==r.inst});
-    if(bk.length&&bk[0])meta.push('<span>'+I.box+esc(bk.join(", "))+'</span>');
-    if(r.actRest)meta.push('<span>'+esc(r.actRest)+'</span>');
-    if(r.inst)meta.push('<span class="inst"><code>'+esc(r.inst)+'</code><button type="button" data-c="'+esc(r.inst)+'" aria-label="복사">'+I.copy+'</button></span>');
-    return '<div class="row"><div class="top">'+(href?'<a class="nm" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a>':'<span class="nm">'+esc(r.name)+'</span>')+
-      '<span class="tag"><span class="sw" style="background:var(--c-'+r.cat+')"></span>'+CAT[r.cat]+'</span>'+(href?'<span class="url">'+esc(r.url)+'</span>':"")+(r.hub?'<span class="hub h-'+r.hub+'">'+HUB[r.hub]+'</span>':"")+'</div>'+
-      '<div class="desc">'+esc(r.what)+'</div><div class="meta">'+meta.join("")+'</div></div>'}).join("")||'<div class="empty">조건에 맞는 항목이 없습니다.</div>';
-  $$(".inst button").forEach(function(b){b.addEventListener("click",function(){var t=b.dataset.c,done=function(){b.innerHTML=I.check;b.classList.add("done");setTimeout(function(){b.innerHTML=I.copy;b.classList.remove("done")},1200)};
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,function(){});else done()})});
-}
-function toggle(k,v,off){
-  if(k==="reset"){F={q:"",cat:{},st:{},be:{},hub:"",badlic:false,sort:F.sort};$("#hq").value=""}
-  else if(k==="q"){F.q="";$("#hq").value=""}
-  else if(k==="hub")F.hub=(off||F.hub===v)?"":v;
-  else if(k==="badlic")F.badlic=off?false:!F.badlic;
-  else F[k][v]=off?false:!F[k][v];
-  render();
-}
-function bindReg(){
-  $$(".side .pill").forEach(function(b){b.addEventListener("click",function(){toggle(b.dataset.k,b.dataset.v)})});
-  $("#morebe").addEventListener("click",function(){moreBe=!moreBe;render()});
-  $("#sort").value=F.sort;$("#sort").addEventListener("change",function(e){F.sort=e.target.value;regList()});
-  $("#fbtn").addEventListener("click",function(){$("#side").classList.toggle("open")});
-  regList();
-}
-$("#hq").addEventListener("input",function(e){F.q=e.target.value;if(location.hash&&location.hash!=="#registry")location.hash="registry";else regList()});
+drawSnip();
+$("#rcopy").addEventListener("click",function(){var t=SNIP[rt][2].replace(/<\/?[ks]>/g,"");var b=this;var done=function(){b.lastChild.textContent="복사됨";setTimeout(function(){b.lastChild.textContent="복사"},1200)};if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,function(){});else done()});
+$("#marks").innerHTML=["VASP","Quantum ESPRESSO","LAMMPS","phonopy","MACE","pymatgen","ASE","Materials Project","OPTIMADE","AiiDA","atomate2","pycalphad"].map(function(m){return "<span>"+m+"</span>"}).join("");
 
-/* ---------- tools ---------- */
-var tsort={k:"default",d:1};
-function toolsPage(){
-  var rows=N.slice();
-  if(tsort.k==="name")rows.sort(function(a,b){return a.name.localeCompare(b.name)*tsort.d});
-  if(tsort.k==="tier")rows.sort(function(a,b){return a.tier.localeCompare(b.tier)*tsort.d});
-  if(tsort.k==="wr")rows.sort(function(a,b){return (a.wr.length-b.wr.length)*tsort.d});
-  if(tsort.k==="rel")rows.sort(function(a,b){return (relCount(a.id)-relCount(b.id))*tsort.d});
-  var th=function(k,l,num){return '<th class="sort'+(tsort.k===k?(tsort.d>0?" asc":" desc"):"")+(num?" num":"")+'" data-k="'+k+'">'+l+'</th>'};
-  return '<p class="lead">허브의 노드가 될 시뮬레이션 소프트웨어입니다. 첫 버전 목표는 60에서 80개이고, 아래는 관계 예시에 등장하는 '+N.length+'개입니다. 비용 등급은 T0 밀리초, T1 초, T2 분, T3 시간에서 일입니다. 래퍼 수는 이 소프트웨어를 에이전트에 노출한 레지스트리 항목 수이고, 0이면 허브가 직접 감싸야 합니다.</p>'+
-  '<div class="tw"><table><thead><tr>'+th("name","도구")+'<th>역할</th>'+th("tier","비용")+'<th>라이선스</th><th>실행</th>'+th("wr","래퍼",1)+th("rel","관계",1)+'</tr></thead><tbody>'+
-  rows.map(function(n){return '<tr class="click" data-id="'+n.id+'"><td><a href="#tool-'+n.id+'"><b>'+esc(n.name)+'</b></a></td><td style="color:var(--fg2)">'+esc(n.role)+'</td><td><span class="tier">'+n.tier+'</span></td><td style="color:var(--fg2)">'+esc(n.spec.lic)+'</td><td style="color:var(--fg2)">'+esc(n.spec.exec)+'</td><td class="num">'+(n.wr.length||'<span style="color:var(--bad);font-weight:600">0</span>')+'</td><td class="num">'+relCount(n.id)+'</td></tr>'}).join("")+'</tbody></table></div>';
+/* examples */
+var EX=[
+ {cat:"포논 안정성",goal:"MatterGen이 만든 후보 가운데 동역학적으로 안정한 새 물질만 골라줘.",
+  tools:[["smact.charge_neutral","p"],["mace.relax","p"],["hull.e_above_hull","p"],["matcher.dedupe","p"],["orb-v3-direct","x"],["phonopy.bands(forces=mace)",""],["imag.check","p"]],
+  res:"검증 사슬 통과 후보만 라벨을 받음",lines:["존재할 수 없는 조성은 전하 중성 검사에서 가장 먼저, 가장 싸게 걸러짐","완화, E_hull, 중복, 대칭 순서는 검증 관계가 정함","Orb v3 direct는 힘이 에너지의 미분이 아니라 포논 계산기 후보에서 제외","허수 진동수 검사를 거친 것만 동역학적 안정성 라벨"]},
+ {cat:"결합 분석",goal:"이 산화물의 금속-산소 결합 세기를 COHP로 보여줘.",
+  tools:[["vasp.static(ISYM=-1, NBANDS↑)","p"],["conv.check","p"],["lobster.cohp",""]],
+  res:"전제 조건이 상위 계산 설정을 바꿈",lines:["LOBSTER를 고르는 순간 VASP가 대칭을 끄고 밴드 수를 늘려 돌아감","수렴 기록 검사를 거친 파동함수만 LOBSTER에 전달","투영 손실(spilling)이 크면 조용한 실패로 기록"]},
+ {cat:"상도",goal:"Li-Co-O 계에서 이 후보의 E_hull을 구해줘.",
+  tools:[["mp.competing_phases","p"],["mp.energy + pet-oam.energy","x"],["pet-oam.energy(all phases)","p"],["hull.e_above_hull",""],["vasp.mp_compatible(top-k)","p"]],
+  res:"기준점이 다른 에너지는 한 상도에 섞이지 않음",lines:["Materials Project 에너지와 OMat24 계열 에너지의 혼합은 호환성 관계가 차단","경쟁 상 전체를 같은 퍼텐셜로 다시 계산해 한 기준점 안에서 상도 작성","유망 후보만 대체 관계를 따라 MP 호환 설정의 DFT로 확인"]},
+ {cat:"열전도",goal:"이 반도체의 격자 열전도도를 예산 안에서 추정해줘.",
+  tools:[["mace.relax","p"],["phono3py(forces=mace)",""],["imag.check","p"],["vasp.dfpt(if budget)","p"]],
+  res:"대체 관계가 비용 사다리를 정함",lines:["T2 퍼텐셜 기반 phono3py로 먼저 추정","허수 진동수가 있으면 열전도 계산을 멈추고 상태 플래그 기록","남은 예산이 있을 때만 DFT 포논으로 승격"]},
+ {cat:"변형 하의 밴드갭",goal:"2% 이축 변형을 가했을 때 밴드갭이 어떻게 변하는지 알려줘.",
+  tools:[["strain.apply(2%, biaxial)","p"],["mace.relax(fixed cell)","p"],["matgl.bandgap",""],["vasp.pbe(top-k)","p"],["vasp.hse06(final)","p"]],
+  res:"싼 도구로 경향, 비싼 도구로 확인",lines:["조작 전후 쌍이 같은 도구로 계산되어 변화량 자체가 기록으로 남음","matgl 예측(T1)으로 경향을 보고 PBE(T3)로 확인","PBE가 밴드갭을 과소평가하므로 최종값만 HSE로 승격"]}];
+var exI=0;
+function drawEx(){
+  $("#excats").innerHTML=EX.map(function(e,i){return '<button type="button" class="cpill'+(i===exI?" on":"")+'" data-i="'+i+'">'+esc(e.cat)+'</button>'}).join("");
+  $$("#excats button").forEach(function(b){b.addEventListener("click",function(){exI=+b.dataset.i;drawEx()})});
+  var e=EX[exI];
+  $("#excard").innerHTML='<div class="q"><div class="lab"><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M12 3v18M5 10l7-7 7 7"/></svg>'+esc(e.cat)+'</div><div class="t">"'+esc(e.goal)+'"</div></div>'+
+    '<div class="tools">경로:'+e.tools.map(function(t){return '<code class="'+t[1]+'">'+esc(t[0])+'</code>'}).join("")+'<span style="margin-left:auto;font-size:11px">파랑 = 관계가 추가 · 빨강 = 차단</span></div>'+
+    '<div class="res"><b>'+esc(e.res)+'</b><ul>'+e.lines.map(function(l){return '<li>'+esc(l)+'</li>'}).join("")+'</ul></div>';
+  $("#exdots").innerHTML=EX.map(function(_,i){return '<i class="'+(i===exI?"on":"")+'"></i>'}).join("");
 }
-var ttab="spec";
-function toolPage(id){
-  var n=NM[id];if(!n)return '<p>도구를 찾을 수 없습니다. <a href="#tools">도구 목록</a></p>';
-  var s=n.spec,rels=E.filter(function(e){return e.from===id||e.to===id});
-  var body;
-  if(ttab==="spec")body='<dl class="kv">'+[["입력",s.in],["출력",s.out],["기준점 정보",s.ref],["비용 등급",n.tier],["라이선스",s.lic],["실행 환경",s.env],["실행 방식",s.exec],["실패 처리",s.fail]].map(function(p){return '<dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd>'}).join("")+'</dl>';
-  else if(ttab==="rel")body=rels.length?relTable(rels,id):'<p style="color:var(--fg3)">아직 적힌 관계가 없습니다.</p>';
-  else body=n.wr.length?'<div class="list">'+n.wr.map(function(w){var key=w.split(/[ (]/)[0];var r=R.filter(function(x){return x.name.indexOf(key)===0})[0];
-      return '<div class="row"><div class="top"><a class="nm" href="#registry" data-q="'+esc(key)+'">'+esc(w)+'</a>'+(r?'<span class="tag"><span class="sw" style="background:var(--c-'+r.cat+')"></span>'+CAT[r.cat]+'</span><span class="st s-'+r.st+'">'+ST[r.st]+'</span>':"")+'</div>'+(r?'<div class="desc">'+esc(r.what)+'</div>':"")+'</div>'}).join("")+'</div>':'<p style="color:var(--fg3)">레지스트리에서 이 도구를 노출하는 래퍼를 찾지 못했습니다. 허브가 직접 감싸야 하는 노드입니다.</p>';
-  return '<div class="crumb"><a href="#tools">도구</a> / '+esc(n.name)+'</div><div class="dh"><h1>'+esc(n.name)+'</h1><span class="tag">'+esc(n.role)+'</span><span class="tier">'+n.tier+'</span></div><div class="dsub">'+esc(s.out)+'</div>'+
-  '<div class="tabs">'+[["spec","명세",""],["rel","관계",rels.length],["wr","래퍼",n.wr.length]].map(function(t){return '<button type="button" class="'+(ttab===t[0]?"on":"")+'" data-t="'+t[0]+'">'+t[1]+(t[2]!==""?'<span class="n">'+t[2]+'</span>':"")+'</button>'}).join("")+'</div>'+body;
-}
-function relTable(rels,self){
-  return '<div class="tw"><table><thead><tr><th>종류</th><th>A</th><th>B</th><th>내용</th></tr></thead><tbody>'+
-  rels.map(function(e){var a=NM[e.from],b=NM[e.to];var lk=function(n){return n.id===self?'<b>'+esc(n.name)+'</b>':'<a href="#tool-'+n.id+'">'+esc(n.name)+'</a>'};
-    return '<tr><td class="rt rt-'+e.type+'">'+ET[e.type]+(e.forbid?" · 금지":"")+'</td><td style="white-space:nowrap">'+lk(a)+'</td><td style="white-space:nowrap">'+lk(b)+'</td><td style="color:var(--fg2)">'+esc(e.detail)+'</td></tr>'}).join("")+'</tbody></table></div>';
-}
+drawEx();
+$("#exprev").addEventListener("click",function(){exI=(exI+EX.length-1)%EX.length;drawEx()});
+$("#exnext").addEventListener("click",function(){exI=(exI+1)%EX.length;drawEx()});
 
-/* ---------- relations ---------- */
-var on={pre:true,cmp:true,sub:true,ver:true},gsel=null,scI=0,mode="graph";
-function relPage(){
-  return '<p class="lead">도구 사이의 관계 네 종류입니다. <b>전제 조건</b>은 B를 쓰려면 A를 먼저 특정 설정으로 돌려야 한다는 것, <b>호환성</b>은 두 결과를 같은 표에 놓거나 이어 붙여도 되는지, <b>대체</b>는 같은 양을 다른 비용과 정확도로 주는 도구, <b>검증</b>은 어떤 출력이 어떤 검사를 거쳐야 믿을 수 있는지입니다. 에이전트가 경로를 짤 때 입력 형식과 전제 조건과 호환성은 기계적으로 검사되고, 통과하지 못한 경로는 LLM이 제안해도 실행되지 않습니다.</p>'+
-  '<div class="gcard"><div class="gbar" id="legend"><span class="lab">관계</span></div><div class="gscroll"><svg id="graph" viewBox="0 0 1180 540" role="img" aria-label="도구 관계 그래프"></svg></div><div class="gpanel" id="gpanel" hidden></div></div>'+
-  '<p class="gnote">도구를 누르면 걸린 관계만 남고 아래에 요약이 열립니다. 선 위에 마우스를 올리면 내용이 보입니다.</p>'+
-  '<h2>게이트 동작 예시</h2><p class="lead" style="margin-bottom:6px">같은 목표를 받은 에이전트에 도구 목록만 주었을 때, 입출력 형식까지 주었을 때, 관계까지 주었을 때 짜이는 경로입니다. 조용한 실패는 에러 없이 그럴듯한 숫자가 나오지만 물리적으로 틀린 결과입니다. 규칙이 어떻게 작동하는지 보이려고 쓴 예시이며 측정 결과가 아닙니다.</p>'+
-  '<div class="segs"><div class="seg" id="sc"></div><div class="seg" id="md"></div></div><div id="pd"></div>'+
-  '<h2>관계 목록 <span style="color:var(--fg3);font-weight:400">'+E.length+'</span></h2>'+relTable(E,null)+
-  '<p class="gnote">관계는 세 곳에서 옵니다. 문서와 스킬 본문의 규칙을 사람이 옮긴 것, 입출력 형식에서 자동으로 나오는 것, 실제로 돌려 보며 조용한 실패를 낸 조합에서 발견되는 것입니다. 첫 버전은 150에서 200개를 사람이 옮길 계획입니다.</p>';
-}
-var tip=$("#gtip");
+/* graph */
+var on={pre:true,cmp:true,sub:true,ver:true},gsel=null,tip=$("#gtip");
 function showTip(ev,html){tip.innerHTML=html;tip.classList.add("show");moveTip(ev)}
-function moveTip(ev){var x=ev.clientX+14,y=ev.clientY+14;if(x+400>window.innerWidth)x=ev.clientX-400;if(y+120>window.innerHeight)y=ev.clientY-110;tip.style.left=x+"px";tip.style.top=y+"px"}
+function moveTip(ev){var x=ev.clientX+14,y=ev.clientY+14;if(x+380>window.innerWidth)x=ev.clientX-380;if(y+120>window.innerHeight)y=ev.clientY-110;tip.style.left=x+"px";tip.style.top=y+"px"}
 function hideTip(){tip.classList.remove("show")}
-function drawGraph(){
+(function drawGraph(){
   var svg=$("#graph"),NS="http://www.w3.org/2000/svg";
   var mk=function(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
   var defs=mk("defs",{},svg);
@@ -658,7 +695,7 @@ function drawGraph(){
     if(Math.abs(a.x-b.x)<10){var x=a.x+W,k=36+Math.abs(by-ay)*.18;d="M"+x+","+ay+" C"+(x+k)+","+ay+" "+(x+k)+","+by+" "+x+","+by;mx=x+k*.75;my=(ay+by)/2}
     else{var x1=b.x>a.x?a.x+W:a.x,x2=b.x>a.x?b.x:b.x+W,dx=(x2-x1)/2;d="M"+x1+","+ay+" C"+(x1+dx)+","+ay+" "+(x2-dx)+","+by+" "+x2+","+by;mx=(x1+x2)/2;my=(ay+by)/2}
     var g=mk("g",{"data-t":e.type,"data-a":e.from,"data-b":e.to,class:"edge"},eg),c="var(--"+e.type+")";
-    if(e.type==="sub"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:4"},g);mk("path",{d:d,style:"fill:none;stroke:var(--bg);stroke-width:1.5"},g)}
+    if(e.type==="sub"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:4"},g);mk("path",{d:d,style:"fill:none;stroke:var(--fbg);stroke-width:1.5"},g)}
     else if(e.type==="cmp"){mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.4;stroke-dasharray:6 4","marker-end":"url(#mcmp)","marker-start":"url(#mcmp)"},g);if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+mx+","+my+")"},g);mk("circle",{r:7},xm);mk("path",{d:"M-3,-3L3,3M3,-3L-3,3"},xm)}}
     else if(e.type==="pre")mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.5","marker-end":"url(#mpre)"},g);
     else mk("path",{d:d,style:"fill:none;stroke:"+c+";stroke-width:1.4;stroke-dasharray:2 3","marker-end":"url(#mver)"},g);
@@ -669,21 +706,20 @@ function drawGraph(){
   var ng=mk("g",{},svg);
   N.forEach(function(n){
     var g=mk("g",{class:"node","data-id":n.id,transform:"translate("+n.x+","+n.y+")",tabindex:"0",role:"button"},ng);
-    mk("rect",{class:"b",width:W,height:H,rx:6},g);
-    mk("rect",{class:"s",x:0,y:0,width:4,height:H,rx:2,style:"fill:var(--c-"+["db","mcp","mcp","pkg","std"][n.col]+")"},g);
-    mk("text",{x:13,y:19,class:"nm"},g).textContent=n.name;
-    mk("text",{x:13,y:35,class:"ro"},g).textContent=n.role;
+    mk("rect",{class:"b",width:W,height:H,rx:7},g);
+    mk("text",{x:12,y:19,class:"nm"},g).textContent=n.name;
+    mk("text",{x:12,y:35,class:"ro"},g).textContent=n.role;
     var tw=n.tier.length*6.4+10;mk("rect",{class:"tb",x:W-tw-8,y:8,width:tw,height:16,rx:4},g);
     mk("text",{x:W-tw/2-8,y:19.5,class:"tr","text-anchor":"middle"},g).textContent=n.tier;
     var act=function(){gsel=gsel===n.id?null:n.id;paint()};
     g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
-    g.addEventListener("mouseenter",function(ev){showTip(ev,'<div class="h">'+esc(n.name)+' <span class="tier">'+n.tier+'</span></div>'+esc(n.spec.out)+'<div style="color:var(--fg3);margin-top:3px">'+n.wr.length+'개 래퍼 · 관계 '+relCount(n.id)+'개 · 클릭해서 고정</div>')});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
+    g.addEventListener("mouseenter",function(ev){showTip(ev,'<div class="h">'+esc(n.name)+' · '+n.tier+'</div>'+esc(n.spec.out)+'<div style="color:#8a97a5;margin-top:3px">래퍼 '+n.wr.length+'개 · 관계 '+relCount(n.id)+'개 · 클릭해서 고정</div>')});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
   });
-  var sm={pre:'<line x1="0" y1="6" x2="20" y2="6" stroke="var(--pre)" stroke-width="1.6"/><path d="M16,2L22,6L16,10z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="6" x2="22" y2="6" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="5 3"/>',sub:'<line x1="0" y1="4" x2="22" y2="4" stroke="var(--sub)" stroke-width="1.5"/><line x1="0" y1="8" x2="22" y2="8" stroke="var(--sub)" stroke-width="1.5"/>',ver:'<line x1="0" y1="6" x2="20" y2="6" stroke="var(--ver)" stroke-width="1.6" stroke-dasharray="2 2"/><path d="M16,2L22,6L16,10z" fill="var(--ver)"/>'};
-  $("#legend").innerHTML='<span class="lab">관계</span>'+Object.keys(ET).map(function(t){return '<button type="button" class="pill on" data-t="'+t+'"><svg width="22" height="12" aria-hidden="true">'+sm[t]+'</svg>'+ET[t]+'<span class="n">'+E.filter(function(e){return e.type===t}).length+'</span></button>'}).join("")+'<span class="hint">왼쪽 색 띠는 열(데이터, 계산기, DFT, 후처리, 검사기)</span>';
-  $$("#legend .pill").forEach(function(b){b.addEventListener("click",function(){on[b.dataset.t]=!on[b.dataset.t];b.classList.toggle("on",on[b.dataset.t]);paint()})});
+  var sm={pre:'<line x1="0" y1="6" x2="18" y2="6" stroke="var(--pre)" stroke-width="1.6"/><path d="M14,2L20,6L14,10z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="6" x2="20" y2="6" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="5 3"/>',sub:'<line x1="0" y1="4" x2="20" y2="4" stroke="var(--sub)" stroke-width="1.5"/><line x1="0" y1="8" x2="20" y2="8" stroke="var(--sub)" stroke-width="1.5"/>',ver:'<line x1="0" y1="6" x2="18" y2="6" stroke="var(--ver)" stroke-width="1.6" stroke-dasharray="2 2"/><path d="M14,2L20,6L14,10z" fill="var(--ver)"/>'};
+  $("#legend").innerHTML='<span class="lab">Relations</span>'+Object.keys(ET).map(function(t){return '<button type="button" data-t="'+t+'"><svg width="20" height="12" aria-hidden="true">'+sm[t]+'</svg>'+ET[t]+' <span style="opacity:.6">'+E.filter(function(e){return e.type===t}).length+'</span></button>'}).join("")+'<span class="hint">T0 ms · T1 s · T2 min · T3 h~d</span>';
+  $$("#legend button").forEach(function(b){b.addEventListener("click",function(){on[b.dataset.t]=!on[b.dataset.t];b.classList.toggle("off",!on[b.dataset.t]);paint()})});
   paint();
-}
+})();
 function paint(){
   var keep={};
   if(gsel){keep[gsel]=1;E.forEach(function(e){if(on[e.type]&&(e.from===gsel||e.to===gsel)){keep[e.from]=1;keep[e.to]=1}})}
@@ -691,75 +727,63 @@ function paint(){
   $$("#graph .node").forEach(function(g){g.classList.toggle("sel",g.dataset.id===gsel);g.classList.toggle("fade",!!gsel&&!keep[g.dataset.id])});
   var p=$("#gpanel");if(!gsel){p.hidden=true;return}
   var n=NM[gsel],rels=E.filter(function(e){return on[e.type]&&(e.from===gsel||e.to===gsel)});
-  p.hidden=false;p.innerHTML='<div class="ph"><b>'+esc(n.name)+'</b><span class="tag">'+esc(n.role)+'</span><span class="tier">'+n.tier+'</span><a href="#tool-'+n.id+'" style="margin-left:auto;font-size:13px">상세 보기 →</a></div>'+
-    '<ul>'+rels.map(function(e){var o=e.from===gsel?NM[e.to]:NM[e.from];return '<li><span class="rt rt-'+e.type+'">'+ET[e.type]+'</span><span>'+(e.from===gsel?"→ ":"← ")+'<a href="#tool-'+o.id+'">'+esc(o.name)+'</a> <span style="color:var(--fg3)">'+esc(e.short)+'</span></span></li>'}).join("")+'</ul>';
-}
-var KL={ok:"정상",silent:"조용한 실패",blocked:"차단",added:"관계가 추가"};
-function drawPD(){
-  $("#sc").innerHTML=SC.map(function(s,i){return '<button type="button" class="'+(i===scI?"on":"")+'" data-i="'+i+'">'+esc(s.tab)+'</button>'}).join("");
-  $("#md").innerHTML=[["list","도구 목록만"],["io","입출력 형식까지"],["graph","관계까지"]].map(function(m){return '<button type="button" class="'+(m[0]===mode?"on":"")+'" data-m="'+m[0]+'">'+m[1]+'</button>'}).join("");
-  var s=SC[scI],m=s[mode];
-  $("#pd").innerHTML='<p style="margin-bottom:8px"><b>목표.</b> '+esc(s.goal)+'</p><ol class="steps">'+m.steps.map(function(st){return '<li class="'+st[2]+'"><div><div class="t"><span class="tool">'+esc(st[0])+'</span><span class="k k-'+st[2]+'">'+KL[st[2]]+'</span></div><div class="why">'+esc(st[1])+'</div></div></li>'}).join("")+'</ol>'+
-    '<div class="verdict"><b class="'+(m.v[0]==="ok"?"k k-ok":"k k-silent")+'">'+(m.v[0]==="ok"?"올바른 경로":"조용한 실패")+'</b>'+esc(m.v[1])+'</div>';
-  $$("#sc button").forEach(function(b){b.addEventListener("click",function(){scI=+b.dataset.i;drawPD()})});
-  $$("#md button").forEach(function(b){b.addEventListener("click",function(){mode=b.dataset.m;drawPD()})});
+  p.hidden=false;p.innerHTML='<div class="ph"><b>'+esc(n.name)+'</b><span class="tag">'+esc(n.role)+'</span><span class="tag">'+n.tier+'</span><span class="tag">'+esc(n.spec.lic)+'</span><span style="margin-left:auto;color:var(--ffg2);font-size:12.5px">래퍼: '+(n.wr.length?esc(n.wr.join(", ")):"없음, 허브가 직접 감쌈")+'</span></div>'+
+    '<div style="color:var(--ffg2)">입력 '+esc(n.spec.in)+' → 출력 '+esc(n.spec.out)+'</div>'+
+    '<ul>'+rels.map(function(e){var o=e.from===gsel?NM[e.to]:NM[e.from];return '<li><span class="rt rt-'+e.type+'">'+ET[e.type]+'</span><span>'+(e.from===gsel?"→ ":"← ")+'<a href="#graph-sec" data-n="'+o.id+'">'+esc(o.name)+'</a> '+esc(e.short)+'</span></li>'}).join("")+'</ul>';
+  $$("#gpanel a[data-n]").forEach(function(a){a.addEventListener("click",function(ev){ev.preventDefault();gsel=a.dataset.n;paint()})});
 }
 
-/* ---------- benchmarks ---------- */
-var BM=[
- ["DFTBench","github.com/Leo9660/TritonDFT","QE relax, static, bands, DOS를 전문가 수렴값과 비교","68 × 4","2026-03","예"],
- ["GENIUS 프롬프트 벤치","github.com/KIT-Workflows/agentic-workflow-framework","자연어에서 유효한 QE 입력, 60초 실행 통과","295","2025-12","예"],
- ["El Agente Sólido","github.com/govlum/Benchmark_Results_El_Agente_Solido","고체 과제 7종 루브릭","7종","2026-02","예"],
- ["VASP-Agent 벤치","github.com/Phoinikas03/VaspAgent_with_Benchmark","밴드갭과 완화","","2025-12","예"],
- ["Sol27LC","arxiv.org/abs/2507.14267","격자 상수 DFT 정확도","27 고체","","예"],
- ["MADE","arxiv.org/abs/2601.20996","폐루프 발견, 오라클 예산 안의 안정성","","2026-01","예 (오라클)"],
- ["CFDLLMBench, PhyNiKCE, FEABench","","OpenFOAM 케이스, COMSOL Java API","126 / 340 / 215","2025~2026","예"],
- ["MatToolBench","mattoolbench.github.io","Windows VM 멀티모달. GUI, OriginPro, 코드","204","2026-09","부분"],
- ["MatTools","github.com/Grenzlinie/MatTools","pymatgen QA와 Docker 툴 사용","69,225 + 138","2025-05","코드 실행"],
- ["SciAgentGym","github.com/CMarsRover/SciAgentGYM","물리, 화학, 재료, 바이오 다단계 툴 사용 (툴 1,780개)","259","2026-02","툴 실행"],
- ["CompMat-Bench","arxiv.org/abs/2610.00636","실제 연구의 입력 준비와 출력 분석, 규칙 채점","94","2026-09","아니오"],
- ["AutoMat","github.com/JHU-CLSP/AutoMat","코딩 에이전트의 논문 주장 재현","85","2026-05","아니오"],
- ["MatSciBench, ChemBench, LAB-Bench 외","","추론과 QA","","2024~2026","아니오"]];
-function benchPage(){
-  return '<p class="lead">에이전트의 도구 사용을 재는 벤치마크입니다. 관계의 효과는 에이전트가 짠 경로를 실제로 돌려 봐야 드러나므로, 시뮬레이터를 실제로 실행해 채점하는지를 가장 중요한 열로 두었습니다. 입력 준비만 채점하는 CompMat-Bench와 AutoMat은 조용한 실패를 잡지 못합니다.</p>'+
-  '<div class="tw"><table><thead><tr><th>이름</th><th>무엇을 재나</th><th>크기</th><th>날짜</th><th>시뮬레이터 실행</th></tr></thead><tbody>'+
-  BM.map(function(b){var k=b[5].indexOf("예")===0?"k-ok":b[5]==="아니오"?"k-blocked":"k-silent";return '<tr><td style="white-space:nowrap">'+(b[1]?'<a href="https://'+b[1]+'" target="_blank" rel="noopener"><b>'+esc(b[0])+'</b></a>':'<b>'+esc(b[0])+'</b>')+'</td><td style="color:var(--fg2)">'+esc(b[2])+'</td><td class="mono" style="white-space:nowrap">'+esc(b[3])+'</td><td style="white-space:nowrap;color:var(--fg2)">'+esc(b[4])+'</td><td><span class="k '+k+'">'+esc(b[5])+'</span></td></tr>'}).join("")+'</tbody></table></div>'+
-  '<p class="gnote">AtomisticSkillsBenchmark는 MatWorld 실험 0에 쓸 예정이지만 별도 벤치 이름이 원 논문 초록에 없어 표에서 뺐습니다.</p>';
+/* registry */
+var F={cat:"",q:"",st:""},shown=12;
+var cnt=function(fn){return R.filter(fn).length};
+function drawCats(){
+  $("#catgrid").innerHTML=Object.keys(CAT).filter(function(k){return k!=="gskill"}).map(function(k){return '<button type="button" class="ccard'+(F.cat===k?" on":"")+'" data-k="'+k+'"><span class="ic" style="background:var(--c-'+k+')"><svg class="i" viewBox="0 0 24 24">'+ICON[k]+'</svg></span><span class="n">'+String(cnt(function(r){return r.cat===k})).padStart(2,"0")+'</span><h4>'+CAT[k][0]+'</h4><p>'+CAT[k][1]+'</p><span class="go">'+(F.cat===k?"선택됨":"Explore →")+'</span></button>'}).join("");
+  $$(".ccard").forEach(function(b){b.addEventListener("click",function(){F.cat=F.cat===b.dataset.k?"":b.dataset.k;shown=12;drawCats();drawTools();$("#tfilt").scrollIntoView({behavior:"smooth",block:"start"})})});
 }
+function drawTools(){
+  var sts=[["","전체"],["prod","prod"],["near","prod 근접"],["demo","demo"],["comm","상용"],["res","연구"],["dead","dead"]];
+  $("#tfilt").innerHTML=sts.map(function(s){return '<button type="button" class="cpill'+(F.st===s[0]?" on":"")+'" data-s="'+s[0]+'">'+s[1]+'</button>'}).join("")+(F.cat?'<button type="button" class="cpill on" data-clear="1">'+CAT[F.cat][0]+' ×</button>':"");
+  $$("#tfilt button").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.clear){F.cat="";drawCats()}else F.st=b.dataset.s;shown=12;drawTools()})});
+  var q=F.q.trim().toLowerCase();
+  var rows=R.filter(function(r){return (!F.cat||r.cat===F.cat)&&(!F.st||r.st===F.st)&&(!q||r.text.indexOf(q)>=0)});
+  $("#qcnt").textContent=q?rows.length+"개":R.length+"개";
+  var vis=rows.slice(0,shown);
+  $("#tgrid").innerHTML=vis.map(function(r){
+    var href=r.url&&/\./.test(r.url)&&!/\s/.test(r.url)?(r.url.indexOf("http")===0?r.url:"https://"+r.url):"";
+    var ok=r.st==="prod"||r.st==="near"||r.st==="comm";
+    return '<div class="tcard" style="--c:var(--c-'+r.cat+')"><div class="row"><span class="ct">'+CAT[r.cat][0]+'</span><span class="st '+r.st+'">'+(ok?'<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>':"")+ST[r.st]+'</span></div>'+
+      '<h4>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a>':esc(r.name))+'</h4>'+
+      (r.be.length?'<div class="be">'+r.be.map(function(b){return "<code>"+esc(b)+"</code>"}).join("")+'</div>':"")+
+      '<p>'+esc(r.what)+'</p><div class="ft">'+(r.date?'<span>'+esc(r.date)+'</span>':"")+(r.stars?'<span>★ '+r.stars+'</span>':"")+(r.lic?'<span class="lic'+(/없음|미표기/.test(r.lic)?" bad":"")+'">'+esc(r.lic)+'</span>':"")+(r.hub?'<span class="hub '+r.hub+'">'+HUB[r.hub]+'</span>':"")+'</div></div>'}).join("")||'<div class="empty">조건에 맞는 항목이 없습니다.</div>';
+  $("#more").innerHTML=rows.length>shown?'<button type="button" class="btn ghost" id="morebtn">'+(rows.length-shown)+'개 더 보기</button>':'<span>'+rows.length+'개 전체 표시</span>';
+  var mb=$("#morebtn");if(mb)mb.addEventListener("click",function(){shown+=12;drawTools()});
+}
+drawCats();drawTools();
+var qt;$("#q").addEventListener("input",function(e){F.q=e.target.value;shown=12;drawTools();clearTimeout(qt);if(F.q.trim())qt=setTimeout(function(){$("#tfilt").scrollIntoView({behavior:"smooth",block:"start"})},600)});
 
-/* ---------- about ---------- */
-function aboutPage(){
-  return '<div class="prose"><h1>소개</h1>'+
-  '<p style="margin-top:12px">재료 계산 도구는 이미 충분히 많고, 그것을 에이전트에 노출한 래퍼도 수백 개가 있습니다. 비어 있는 것은 도구를 조합하는 지식입니다. LOBSTER를 쓰려면 VASP를 대칭을 끄고 밴드 수를 늘려 돌려야 한다는 것, 힘을 직접 예측하는 모델은 포논에 쓰면 안 된다는 것, Materials Project 계열과 OMat24 계열 에너지는 기준점이 달라 섞으면 안 된다는 것은 숙련된 연구자는 알지만 어디에도 기계가 읽을 수 있게 적혀 있지 않습니다. 에이전트가 이것을 모른 채 도구를 부르면 에러로 멈추지 않고 그럴듯한 틀린 숫자를 냅니다.</p>'+
-  '<p>SimulationHub는 도구를 노드로, 이런 지식을 네 종류의 관계로 적고 실행 시점에 강제합니다. 관계가 적혀 있으면 에이전트가 사람 없이도 도구를 올바른 순서와 설정으로 조합할 수 있고, 그 조합을 대량으로 돌려 재료 세계의 월드모델을 학습할 데이터를 만들 수 있습니다. 이것이 MatWorld 제안의 첫 단계입니다.</p>'+
-  '<h2>조사 방법</h2><p>MCP 서버와 에이전트 툴 서버, SKILL.md 스킬팩과 플러그인, 그리고 MCP가 아닌 에이전트 플랫폼과 원자 단위 밖 시뮬레이터와 벤치마크와 표준의 세 갈래로 나눠 조사했습니다. GitHub 페이지, PyPI와 npm 메타데이터, arXiv와 공식 문서를 열어 확인했고 스킬팩 30여 개는 저장소를 직접 클론해 SKILL.md 수와 스크립트 수를 셌습니다. GitHub API와 일부 MCP 디렉터리 사이트는 막혀 있어 PyPI 전체 인덱스를 키워드 150개로 훑고 검색 45회로 보완했습니다. 열지 못한 항목은 [미검증]으로 표시했습니다.</p>'+
-  '<h2>상태 기준</h2><ul><li><span class="st s-prod">prod</span> 패키징되어 있고 릴리스가 2회 이상이며 툴 목록이 실제로 있음</li><li><span class="st s-near">prod 근접</span> 위 조건 중 하나가 빠짐</li><li><span class="st s-demo">demo</span> PoC나 알파</li><li><span class="st s-dead">dead</span> 아카이브되었거나 명백히 방치됨</li></ul>'+
-  '<h2>주류 패키지의 에이전트 파일 배포</h2><p>직접 스킬을 배포하는 곳은 DeepModeling 생태계(deepmd-kit, dpdata, dpgen, dpdispatcher, reacnetgenerator), NVIDIA ALCHEMI, TB2J뿐입니다. pymatgen, LAMMPS, aiida-core, fairchem, matgl 등은 기여자용 AGENTS.md만 있고, ASE, phonopy, Quantum ESPRESSO, GPAW, atomate2, MACE, MatterGen, CP2K, PySCF 등 42개는 아무것도 없습니다.</p>'+
-  '<h2>공백</h2><div class="tw"><table><thead><tr><th>분야</th><th>에이전트 래퍼</th></tr></thead><tbody>'+
-  [["CFD","OpenFOAM MCP 2종, Ansys Fluent와 CFX 공식 MCP"],["FEM","FEniCSx, CalculiX, Abaqus MCP. COMSOL은 API와 스킬"],["Phase-field","MOOSE는 AutoMOOSE, MooseAgent. PRISMS-PF와 FiPy는 없음"],["kinetic Monte Carlo","Zacros, kmos, KMCLib 없음 (chatMOSP만)"],["광학","Lumerical, Tidy3D 공식. Meep은 없음"],["양자 수송","Kwant, QuantumATK 없음"],["멀티스케일","preCICE 없음"],["배터리","PyBaMM 위 Battery-Sim-Agent, MCP 없음"]].map(function(r){return '<tr><td style="white-space:nowrap"><b>'+r[0]+'</b></td><td style="color:var(--fg2)">'+r[1]+'</td></tr>'}).join("")+'</tbody></table></div>'+
-  '<p class="gnote">스킬팩 쪽에서도 CALPHAD, phase-field, kMC, FEM 연속체, MOF 스크리닝, ShengBTE와 phono3py, 전기화학은 거의 비어 있습니다.</p>'+
-  '<h2>허브에 반영하는 방식</h2><p>AtomisticSkills MCP 서버, fairchem-mcp의 비동기 잡 패턴, chemtoolsmcp의 실패 복구 계획, CatGo의 DAG 엔진과 HPC 제출, CrystOD, raspa-mcp, opencalphad-mcp, Profex-MCP, Pipeworx OPTIMADE 게이트웨이, MP 공식 MCP, DeepModeling과 NVIDIA의 저장소 내 스킬은 노드 실행기로 가져옵니다. materials-agent-toolkit의 JSON 카탈로그, semantikon의 타입 포트, TWA의 온톨로지에서 MCP로의 컴파일, Bohrium의 capability 스키마는 설계만 참고합니다. 라이선스가 없거나 아카이브되었거나 불완전하게 공개된 것은 제외합니다.</p>'+
-  '<p>관계의 1차 자료는 스킬 본문입니다. jinzhezenggroup 62개, catgo-LRG 139개, crystal668-hub 88개, AtomisticSkills 133개 등 약 500개의 SKILL.md에 "먼저 이걸 돌려라", "이 결과는 믿지 마라"가 자연어로 적혀 있고, 여기서 전제 조건과 호환성을 반자동으로 뽑는 것이 그래프 구축의 첫 단계입니다.</p>'+
-  '<h2>한계</h2><p>관계는 완전하지 않으며 완전하다고 주장하지 않습니다. VASP처럼 상용이거나 학술 전용인 도구는 그래프에 등록하되 공개 배포판에는 감싸는 코드만 넣고 실제 프로그램은 사용자가 가진 것을 가리킵니다. 이 페이지의 도구 명세 중 phonopy 외에는 원문에 완전한 명세가 없어 일반 문서 기준으로 채웠고, 확실하지 않은 칸은 카탈로그 확인으로 남겼습니다.</p></div>';
+/* accordion + illustration */
+var ACC=[
+ {k:"pre",t:"전제 조건",d:"B를 쓰려면 A를 먼저 특정 설정으로 돌려야 합니다. LOBSTER는 VASP를 <code>ISYM=-1</code>에 밴드 수를 늘려 돌린 출력이 필요하고, BoltzTraP2는 조밀한 k점이, 포논의 LO-TO 분리는 DFPT의 Born 전하가 필요합니다. 에이전트가 B를 고르면 A의 설정이 따라옵니다.",a:"VASP",b:"LOBSTER",lab:"ISYM=-1, NBANDS↑"},
+ {k:"cmp",t:"호환성",d:"두 결과를 같은 표에 놓거나 한 도구의 출력을 다른 도구의 입력으로 써도 되는지입니다. 안정성은 범함수와 +U와 의사퍼텐셜이 같은 결과끼리만 비교하고, Materials Project 계열과 OMat24 계열 에너지는 섞지 않으며, 포논과 탄성에는 힘이 에너지의 미분인 모델만 씁니다.",a:"Orb v3 direct",b:"phonopy",lab:"forces not conservative",x:true},
+ {k:"sub",t:"대체",d:"같은 양을 다른 비용과 정확도로 주는 도구들입니다. 밴드갭은 matgl 예측(T1)과 PBE(T3)와 HSE(T3+)가, 안정성은 퍼텐셜(T1)과 DFT(T3)가, 상태도는 CALPHAD(T0)와 클러스터 전개(T2)가 대체 관계입니다. 어느 쪽을 쓸지는 남은 예산과 불확실성이 정합니다.",a:"matgl · T1",b:"VASP PBE · T3",lab:"band gap, ~0.4 eV vs ref"},
+ {k:"ver",t:"검증",d:"어떤 출력은 어떤 검사를 거쳐야 믿을 수 있는지입니다. 생성 모델 출력은 완화, 안정성, 중복 확인, 대칭, 전하 중성을 전부 거치고, 포논은 허수 진동수 검사를, DFT는 수렴 기록 검사를, 분자동역학 궤적은 에너지 드리프트 검사를 거칩니다.",a:"phonopy",b:"허수 진동수 검사",lab:"imaginary modes → no label"}];
+$("#acc").innerHTML=ACC.map(function(a,i){return '<details'+(i===0?" open":"")+' data-k="'+a.k+'"><summary><span><span class="rt rt-'+a.k+'" style="margin-right:10px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase">'+a.k+'</span>'+a.t+'</span><span class="pm"></span></summary><div class="body">'+a.d+'</div></details>'}).join("");
+function drawIllus(k){
+  var a=ACC.filter(function(x){return x.k===k})[0],c={pre:"#0866ff",cmp:"#ef4444",sub:"#059669",ver:"#7c3aed"}[k];
+  var line=k==="sub"?'<line x1="150" y1="126" x2="270" y2="126" stroke="'+c+'" stroke-width="5"/><line x1="150" y1="126" x2="270" y2="126" stroke="#f5f7f9" stroke-width="1.6"/>':
+    k==="cmp"?'<line x1="150" y1="130" x2="270" y2="130" stroke="'+c+'" stroke-width="2" stroke-dasharray="7 5"/><circle cx="210" cy="130" r="11" fill="#fff" stroke="'+c+'" stroke-width="1.6"/><path d="M205,125L215,135M215,125L205,135" stroke="'+c+'" stroke-width="2"/>':
+    '<line x1="150" y1="130" x2="262" y2="130" stroke="'+c+'" stroke-width="2"'+(k==="ver"?' stroke-dasharray="3 4"':"")+'/><path d="M260,124L270,130L260,136z" fill="'+c+'"/>';
+  $("#illus").innerHTML='<rect class="bx" x="20" y="100" width="130" height="60" rx="10"/><text x="85" y="128" text-anchor="middle">'+esc(a.a)+'</text><text class="sm" x="85" y="146" text-anchor="middle">node</text>'+
+    '<rect class="bx" x="270" y="100" width="130" height="60" rx="10"/><text x="335" y="128" text-anchor="middle">'+esc(a.b)+'</text><text class="sm" x="335" y="146" text-anchor="middle">node</text>'+line+
+    '<text class="sm" x="210" y="112" text-anchor="middle" style="fill:'+c+'">'+esc(a.t)+'</text><text class="sm" x="210" y="170" text-anchor="middle">'+esc(a.lab)+'</text>'+
+    (a.x?'<text class="sm" x="210" y="215" text-anchor="middle">excluded from agent choices</text>':'<text class="sm" x="210" y="215" text-anchor="middle">enforced when the agent plans a path</text>');
 }
+drawIllus("pre");
+$$("#acc details").forEach(function(d){d.addEventListener("toggle",function(){if(d.open){$$("#acc details").forEach(function(o){if(o!==d)o.open=false});drawIllus(d.dataset.k)}})});
 
-/* ---------- router ---------- */
-function render(){
-  var h=(location.hash||"#registry").slice(1),page=h.indexOf("tool-")===0?"tools":h;
-  if(["registry","tools","relations","benchmarks","about"].indexOf(page)<0){page="registry";h="registry"}
-  $$(".hnav a").forEach(function(a){a.classList.toggle("on",a.dataset.p===page)});
-  var app=$("#app");hideTip();
-  if(h==="registry"){app.innerHTML=regPage();bindReg()}
-  else if(h==="tools"){app.innerHTML=toolsPage();$$("tr.click").forEach(function(tr){tr.addEventListener("click",function(e){if(e.target.tagName!=="A")location.hash="tool-"+tr.dataset.id})});$$("th.sort").forEach(function(t){t.addEventListener("click",function(){if(tsort.k===t.dataset.k)tsort.d=-tsort.d;else{tsort.k=t.dataset.k;tsort.d=1}render()})})}
-  else if(h.indexOf("tool-")===0){app.innerHTML=toolPage(h.slice(5));$$(".tabs button").forEach(function(b){b.addEventListener("click",function(){ttab=b.dataset.t;render()})});$$("[data-q]").forEach(function(a){a.addEventListener("click",function(){F.q=a.dataset.q;$("#hq").value=F.q})})}
-  else if(h==="relations"){app.innerHTML=relPage();drawGraph();drawPD()}
-  else if(h==="benchmarks")app.innerHTML=benchPage();
-  else app.innerHTML=aboutPage();
-  document.title=(page==="registry"?"":({tools:"도구",relations:"관계 그래프",benchmarks:"벤치마크",about:"소개"}[page]+" · "))+"SimulationHub";
-}
-var lastPage="";
-window.addEventListener("hashchange",function(){var p=(location.hash||"#registry").slice(1);var np=p.indexOf("tool-")===0?"tools":p;if(np!==lastPage||p.indexOf("tool-")===0)window.scrollTo(0,0);lastPage=np;if(p.indexOf("tool-")===0)ttab="spec";render()});
-render();
+/* bench */
+var BM=[["DFTBench","QE relax, static, bands, DOS를 전문가 수렴값과 비교","68 × 4","y"],["GENIUS 프롬프트 벤치","자연어에서 유효한 QE 입력, 60초 실행 통과","295","y"],["El Agente Sólido","고체 과제 7종 루브릭","7종","y"],["VASP-Agent 벤치","밴드갭과 완화","","y"],["MADE","폐루프 발견, 오라클 예산 안의 안정성","","y"],["MatToolBench","Windows VM 멀티모달. GUI, OriginPro, 코드","204","p"],["SciAgentGym","물리, 화학, 재료, 바이오 다단계 툴 사용","259 · 툴 1,780","p"],["CompMat-Bench","실제 연구의 입력 준비와 출력 분석, 규칙 채점","94","n"],["AutoMat","코딩 에이전트의 논문 주장 재현","85","n"]];
+$("#benchrows").innerHTML=BM.map(function(b){return '<tr><td><b>'+esc(b[0])+'</b></td><td style="color:var(--muted)">'+esc(b[1])+'</td><td class="mono" style="font-size:12.5px;white-space:nowrap">'+esc(b[2])+'</td><td><span class="pill '+b[3]+'">'+({y:"예",p:"부분",n:"아니오"})[b[3]]+'</span></td></tr>'}).join("");
 })();
 </script>
 </body>
