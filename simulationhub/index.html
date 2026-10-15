@@ -134,28 +134,34 @@ nav.top .btn{margin-left:auto}
 .exnav .dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:all .2s}
 .exnav .dots i.on{width:18px;background:var(--ink)}
 
-/* graph (force layout) */
+/* graph (layered, orthogonal) */
 .gbox{margin-top:40px;border:1px solid var(--line);border-radius:14px;background:#fff;display:grid;grid-template-columns:minmax(0,1fr) 300px;overflow:hidden;text-align:left}
-.gcanvas{position:relative;border-right:1px solid var(--line2);background:#fff}
-#graph{display:block;width:100%;height:auto;cursor:grab}
-#graph:active{cursor:grabbing}
-#graph .lk{fill:none;stroke-opacity:.55}
-#graph .lk.pre{stroke:var(--pre)}#graph .lk.ver{stroke:var(--ver)}#graph .lk.sub{stroke:var(--sub)}#graph .lk.cmp{stroke:var(--cmp);stroke-dasharray:4 3}
-#graph .lk.fade{stroke-opacity:.07}
-#graph .lk.hl{stroke-opacity:1;stroke-width:2.2}
-#graph .hit{stroke:transparent;stroke-width:14;fill:none;cursor:pointer}
-#graph .nd circle{stroke:#fff;stroke-width:1.5;cursor:pointer}
-#graph .nd text{font-size:11.5px;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none;font-weight:500}
+.gcanvas{border-right:1px solid var(--line2);background:#fff;padding:6px 10px 0;min-width:0}
+.gscroll{overflow-x:auto}
+#graph{display:block;width:100%;min-width:700px;height:auto}
+#graph .colh{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;fill:var(--faint)}
+#graph .grp{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--faint)}
+#graph .lk{fill:none;stroke-opacity:.75}
+#graph .lk.pre{stroke:var(--pre)}#graph .lk.ver{stroke:var(--ver)}#graph .lk.cmp{stroke:var(--cmp);stroke-dasharray:4 3}
+#graph .lk.sub{stroke:var(--sub);stroke-width:3.4}#graph .lk.sub2{stroke:#fff;stroke-width:1.2;stroke-opacity:1}
+#graph .lk.fade{stroke-opacity:.08}#graph .lk.sub2.fade{stroke-opacity:1}
+#graph .lk.hl{stroke-opacity:1}
+#graph .hit{stroke:transparent;stroke-width:12;fill:none;cursor:pointer}
+#graph .nd{cursor:pointer}
+#graph .nd rect{fill:#fff;stroke:#cfd6dd;stroke-width:1}
+#graph .nd:hover rect{stroke:var(--faint)}
+#graph .nd.sel rect{stroke:var(--ink);stroke-width:1.6}
+#graph .nd text{font-size:12px;fill:var(--ink);font-weight:500;pointer-events:none}
+#graph .nd.iso rect{stroke-dasharray:3 3}#graph .nd.iso text{fill:var(--faint)}#graph .nd.iso circle{opacity:.45}
 #graph .nd.fade{opacity:.18}
-#graph .nd.sel circle{stroke:var(--ink);stroke-width:2.5}
-#graph .xm{fill:#fff;stroke:var(--cmp);stroke-width:1.2}
+#graph .xm circle{fill:#fff;stroke:var(--cmp);stroke-width:1.2}#graph .xm path{stroke:var(--cmp);stroke-width:1.4;fill:none}
 .gkey{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--muted);padding:8px 14px;border-top:1px solid var(--line2);background:var(--soft)}
 .gkey span{display:inline-flex;align-items:center;gap:5px}
-.gkey i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.gkey i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .gkey label{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
 .gkey input{margin:0;width:12px;height:12px}
 .gkey svg{width:20px;height:8px}
-.gside{padding:18px 18px 20px;font-size:13.5px;display:grid;gap:12px;align-content:start;min-width:0;max-height:640px;overflow:auto}
+.gside{padding:18px 18px 20px;font-size:13.5px;display:grid;gap:12px;align-content:start;min-width:0;max-height:600px;overflow:auto}
 .gside h4{font-size:16px;letter-spacing:-.01em}
 .gside .meta{display:flex;flex-wrap:wrap;gap:5px}
 .gside .meta span{font-family:var(--mono);font-size:11px;background:var(--soft);color:var(--muted);padding:2px 7px;border-radius:5px}
@@ -336,9 +342,9 @@ footer a{color:var(--muted)}
 <section id="graph-sec" class="center"><div class="wrap">
   <span class="eyebrow">Demo</span>
   <h2>도구 그래프</h2>
-  <p class="sub">도구 27개와 관계 24개. 원의 크기는 걸린 관계 수, 색은 도구의 열입니다. 끌어서 옮기고, 올리면 이웃만 남고, 누르면 오른쪽에 명세가 열립니다.</p>
+  <p class="sub">도구 27개와 관계 24개. 왼쪽에서 오른쪽으로 데이터, 계산기, 후처리, 검사기 순입니다. 선 위에 올리면 내용이, 도구를 누르면 오른쪽에 명세가 열립니다.</p>
   <div class="gbox">
-    <div class="gcanvas"><svg id="graph" viewBox="0 0 840 600" role="img" aria-label="도구 관계 그래프"></svg><div class="gkey" id="gkey"></div></div>
+    <div class="gcanvas"><div class="gscroll"><svg id="graph" role="img" aria-label="도구 관계 그래프"></svg></div><div class="gkey" id="gkey"></div></div>
     <aside class="gside" id="gside"></aside>
   </div>
 </div></section>
@@ -393,11 +399,10 @@ footer a{color:var(--muted)}
 <footer><div class="wrap"><span>SimulationHub · Vision &amp; Learning Lab, SNU · 2026</span><span><a href="https://yerimoh.github.io">yerimoh.github.io</a></span></div></footer>
 <div class="gtip" id="gtip"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 (function(){
 "use strict";
-var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+var $=function(s){return document.querySelector(s)};
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
 var COLS=[{x:16,label:"Data / generators"},{x:252,label:"Fast calculators"},{x:488,label:"DFT"},{x:724,label:"Post-processing"},{x:960,label:"Checkers"}];
 var W=186,H=46;
@@ -676,56 +681,89 @@ drawEx();
 $("#exprev").addEventListener("click",function(){exI=(exI+EX.length-1)%EX.length;drawEx()});
 $("#exnext").addEventListener("click",function(){exI=(exI+1)%EX.length;drawEx()});
 
-/* graph (d3-force) */
+/* graph (layered, orthogonal routing) */
 var on={pre:true,cmp:true,sub:true,ver:true},gsel=null,ghover=null,tip=$("#gtip");
-var COLC=["#6f9ee0","#5cb98f","#e0965b","#a98ad8","#8fa3b5"],COLN=["데이터, 생성기","빠른 계산기","DFT","후처리","검사기"];
+var COLC=["#6f9ee0","#5cb98f","#a98ad8","#8fa3b5"],COLN=["데이터와 생성기","계산기","후처리","검사기"];
 function showTip(ev,html){tip.innerHTML=html;tip.classList.add("show");moveTip(ev)}
 function moveTip(ev){var x=ev.clientX+14,y=ev.clientY+14;if(x+360>window.innerWidth)x=ev.clientX-360;if(y+120>window.innerHeight)y=ev.clientY-110;tip.style.left=x+"px";tip.style.top=y+"px"}
 function hideTip(){tip.classList.remove("show")}
-var GW=840,GH=600,lw=function(s){var k=(s.match(/[\u3131-\uD79D]/g)||[]).length;return k*11.5+(s.length-k)*6.6},nodes=N.map(function(n){return {id:n.id,n:n,deg:relCount(n.id),lw:lw(n.name)}}),links=E.map(function(e){return {source:e.from,target:e.to,e:e}});
-var svg=d3.select("#graph"),defs=svg.append("defs");
-["pre","ver"].forEach(function(t){defs.append("marker").attr("id","ar-"+t).attr("viewBox","0 -4 8 8").attr("refX",8).attr("refY",0).attr("markerWidth",6).attr("markerHeight",6).attr("orient","auto").append("path").attr("d","M0,-3.5L8,0L0,3.5").style("fill","var(--"+t+")")});
-var lg=svg.append("g"),xg=svg.append("g"),ng=svg.append("g");
-var link=lg.selectAll("g").data(links).enter().append("g");
-link.append("path").attr("class",function(d){return "lk "+d.e.type}).attr("stroke-width",function(d){return d.e.type==="sub"?2.4:1.3}).attr("marker-end",function(d){return d.e.type==="pre"||d.e.type==="ver"?"url(#ar-"+d.e.type+")":null});
-link.append("path").attr("class","hit").on("mouseenter",function(ev,d){var e=d.e,a=NM[e.from],b=NM[e.to];showTip(ev,'<div class="h"><span class="rt rt-'+e.type+'">'+ET[e.type]+(e.forbid?" · 금지":"")+'</span> '+esc(a.name)+(e.type==="pre"||e.type==="ver"?" → ":" ↔ ")+esc(b.name)+'</div>'+esc(e.detail))}).on("mousemove",moveTip).on("mouseleave",hideTip);
-var xmark=xg.selectAll("g").data(links.filter(function(l){return l.e.forbid})).enter().append("g");
-xmark.append("circle").attr("class","xm").attr("r",6);xmark.append("path").attr("d","M-2.5,-2.5L2.5,2.5M2.5,-2.5L-2.5,2.5").style("stroke","var(--cmp)").style("stroke-width",1.4);
-var node=ng.selectAll("g").data(nodes).enter().append("g").attr("class","nd").attr("tabindex",0)
- .on("mouseenter",function(ev,d){ghover=d.id;paint();showTip(ev,'<div class="h">'+esc(d.n.name)+' · '+d.n.tier+'</div>'+esc(d.n.spec.out)+'<div style="color:#8a97a5;margin-top:3px">관계 '+d.deg+'개 · 래퍼 '+d.n.wr.length+'개</div>')})
- .on("mousemove",moveTip).on("mouseleave",function(){ghover=null;paint();hideTip()})
- .on("click",function(ev,d){gsel=gsel===d.id?null:d.id;paint();side()})
- .on("keydown",function(ev,d){if(ev.key==="Enter"){gsel=gsel===d.id?null:d.id;paint();side()}});
-node.append("circle").attr("r",function(d){return 6+d.deg*1.7}).attr("fill",function(d){return COLC[d.n.col]}).attr("fill-opacity",function(d){return d.deg?1:.45});
-node.append("text").attr("text-anchor","middle").attr("dy",function(d){return 6+d.deg*1.7+13}).text(function(d){return d.n.name}).style("fill-opacity",function(d){return d.deg?1:.6});
-var sim=d3.forceSimulation(nodes).force("link",d3.forceLink(links).id(function(d){return d.id}).distance(78).strength(.6)).force("charge",d3.forceManyBody().strength(-230)).force("x",d3.forceX(function(d){return 90+d.n.col*165}).strength(.38)).force("y",d3.forceY(GH/2).strength(.07)).force("collide",d3.forceCollide(function(d){return Math.max(18+d.deg*1.7,d.lw/2+8)}).strength(.9)).stop();
-for(var ti=0;ti<300;ti++)sim.tick();
-tick();sim.on("tick",tick).alpha(.15).restart();
-function tick(){
-  nodes.forEach(function(d){var h=d.lw/2+6;d.x=Math.max(h,Math.min(GW-h,d.x));d.y=Math.max(20,Math.min(GH-34,d.y))});
-  link.selectAll("path").attr("d",function(d){var sx=d.source.x,sy=d.source.y,tx=d.target.x,ty=d.target.y,dx=tx-sx,dy=ty-sy,L=Math.sqrt(dx*dx+dy*dy)||1,r=6+d.target.deg*1.7+2,ex=tx-dx/L*r,ey=ty-dy/L*r;return "M"+sx+","+sy+"L"+ex+","+ey});
-  xmark.attr("transform",function(d){return "translate("+((d.source.x+d.target.x)/2)+","+((d.source.y+d.target.y)/2)+")"});
-  node.attr("transform",function(d){return "translate("+d.x+","+d.y+")"});
+var lw=function(s){var k=(s.match(/[ㄱ-힝]/g)||[]).length;return k*12+(s.length-k)*6.6};
+/* column, row (hand-ordered so that edges do not cross pills) */
+var LAY={mattergen:[0,1],mp:[0,6],optimade:[0,7],pyxtal:[0,8],subst:[0,9],
+ matgl:[1,0],mace:[1,1],orbd:[1,2],pet:[1,3],calphad:[1,4],vasp:[1,6],hse:[1,7],qe:[1,8],dfpt:[1,9],ce:[1,10],
+ phonopy:[2,1],phono3py:[2,2],elastic:[2,3],hull:[2,4],lobster:[2,6],boltz:[2,7],wannier:[2,8],
+ conv:[3,0],imag:[3,1],sm:[3,4],spglib:[3,5],smact:[3,6]};
+var CX=[14,206,398,590],RY=function(r){return 66+r*40},PH=26,GW=740,GH=66+10*40+28;
+var P={};N.forEach(function(n){var l=LAY[n.id];n.gc=l[0];n.gr=l[1];n.w=lw(n.name)+26;n.px=CX[l[0]];n.py=RY(l[1]);n.deg=relCount(n.id);P[n.id]=n});
+var svg=$("#graph"),NS="http://www.w3.org/2000/svg";svg.setAttribute("viewBox","0 0 "+GW+" "+GH);
+var mk=function(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+var defs=mk("defs",{},svg);
+["pre","ver"].forEach(function(t){var m=mk("marker",{id:"ar-"+t,viewBox:"0 -4 8 8",refX:"7",refY:"0",markerWidth:"6",markerHeight:"6",orient:"auto"},defs);mk("path",{d:"M0,-3.2L8,0L0,3.2z",style:"fill:var(--"+t+")"},m)});
+COLN.forEach(function(c,i){mk("text",{x:CX[i],y:24,class:"colh"},svg).textContent=c.toUpperCase()});
+mk("text",{x:CX[1],y:RY(5)+14,class:"grp"},svg).textContent="DFT · T3";
+mk("text",{x:CX[1],y:RY(-0.5)+4,class:"grp"},svg).textContent="FAST · T0–T1";
+mk("text",{x:CX[0],y:RY(5)+14,class:"grp"},svg).textContent="NO RELATIONS YET";
+var eg=mk("g",{},svg),xg=mk("g",{},svg),ng=mk("g",{},svg);
+/* assign vertical lanes in each gap so parallel edges do not overlap */
+var lanes={},byKey={};E.forEach(function(e){var a=P[e.from],b=P[e.to];var key=a.gc===b.gc?"c"+a.gc:"g"+Math.min(a.gc,b.gc);e.laneN=key;e.span=Math.abs(a.gr-b.gr);(byKey[key]=byKey[key]||[]).push(e)});
+Object.keys(byKey).forEach(function(k){var arr=byKey[k];if(k[0]==="c")arr.sort(function(x,y){return x.span-y.span});arr.forEach(function(e,i){e.lane=i});lanes[k]=arr.length});
+function route(e){
+  var a=P[e.from],b=P[e.to],sy=a.py,ty=b.py,r=8,dir=ty>sy?1:-1,d,mid;
+  if(a.gc===b.gc){ /* same column: bracket on the left side */
+    var x=a.px,bx=x-10-e.lane*7;
+    d="M"+x+","+sy+" L"+(bx+r)+","+sy+" Q"+bx+","+sy+" "+bx+","+(sy+dir*r)+" L"+bx+","+(ty-dir*r)+" Q"+bx+","+ty+" "+(bx+r)+","+ty+" L"+x+","+ty;
+    mid=[bx,(sy+ty)/2];
+  }else{
+    var fwd=b.gc>a.gc,sx=fwd?a.px+a.w:a.px,tx=fwd?b.px:b.px+b.w,g=fwd?a.gc:b.gc,gapL=CX[g]+Math.max.apply(null,N.filter(function(n){return n.gc===g}).map(function(n){return n.w})),gapR=CX[g+1];
+    var vx=gapL+12+((gapR-gapL-24)/Math.max(1,lanes[e.laneN]-1||1))*e.lane*(lanes[e.laneN]>1?1:0);if(lanes[e.laneN]===1)vx=(gapL+gapR)/2;
+    var hx=fwd?1:-1;
+    if(Math.abs(ty-sy)<1){d="M"+sx+","+sy+" L"+tx+","+ty;mid=[(sx+tx)/2,sy]}
+    else{d="M"+sx+","+sy+" L"+(vx-hx*r)+","+sy+" Q"+vx+","+sy+" "+vx+","+(sy+dir*r)+" L"+vx+","+(ty-dir*r)+" Q"+vx+","+ty+" "+(vx+hx*r)+","+ty+" L"+tx+","+ty;mid=[vx,(sy+ty)/2]}
+  }
+  return {d:d,mid:mid};
 }
-node.call(d3.drag().on("start",function(ev,d){if(!ev.active)sim.alphaTarget(.25).restart();d.fx=d.x;d.fy=d.y}).on("drag",function(ev,d){d.fx=ev.x;d.fy=ev.y}).on("end",function(ev,d){if(!ev.active)sim.alphaTarget(0);d.fx=null;d.fy=null}));
+var EL=E.map(function(e){
+  var g=mk("g",{class:"edge","data-t":e.type,"data-a":e.from,"data-b":e.to},eg),rt=route(e);
+  var p=mk("path",{d:rt.d,class:"lk "+e.type,"stroke-width":e.type==="sub"?3.4:1.4},g);
+  if(e.type==="pre"||e.type==="ver")p.setAttribute("marker-end","url(#ar-"+e.type+")");
+  if(e.type==="sub")mk("path",{d:rt.d,class:"lk sub2"},g);
+  mk("path",{d:rt.d,class:"hit"},g);
+  if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+rt.mid[0]+","+rt.mid[1]+")"},xg);mk("circle",{r:6},xm);mk("path",{d:"M-2.5,-2.5L2.5,2.5M2.5,-2.5L-2.5,2.5"},xm);e.xm=xm}
+  var a=P[e.from],b=P[e.to],html='<div class="h"><span class="rt rt-'+e.type+'">'+ET[e.type]+(e.forbid?" · 금지":"")+'</span> '+esc(a.name)+(e.type==="pre"||e.type==="ver"?" → ":" ↔ ")+esc(b.name)+'</div>'+esc(e.detail);
+  g.addEventListener("mouseenter",function(ev){showTip(ev,html)});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
+  e.el=g;return g;
+});
+N.forEach(function(n){
+  var g=mk("g",{class:"nd"+(n.deg?"":" iso"),"data-id":n.id,transform:"translate("+n.px+","+(n.py-PH/2)+")",tabindex:"0",role:"button"},ng);
+  mk("rect",{width:n.w,height:PH,rx:7},g);
+  mk("circle",{cx:12,cy:PH/2,r:3.5,fill:COLC[n.gc]},g);
+  mk("text",{x:21,y:PH/2+4},g).textContent=n.name;
+  var act=function(){gsel=gsel===n.id?null:n.id;paint();side()};
+  g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
+  g.addEventListener("mouseenter",function(ev){ghover=n.id;paint();showTip(ev,'<div class="h">'+esc(n.name)+' · '+n.tier+'</div>'+esc(n.spec.out)+'<div style="color:#8a97a5;margin-top:3px">관계 '+n.deg+'개 · 래퍼 '+n.wr.length+'개 · 클릭해서 고정</div>')});
+  g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",function(){ghover=null;paint();hideTip()});
+  n.el=g;
+});
 function paint(){
   var f=ghover||gsel,keep={};
-  if(f){keep[f]=1;links.forEach(function(l){if(on[l.e.type]&&(l.e.from===f||l.e.to===f)){keep[l.e.from]=1;keep[l.e.to]=1}})}
-  link.style("display",function(d){return on[d.e.type]?null:"none"}).select(".lk").classed("fade",function(d){return !!f&&d.e.from!==f&&d.e.to!==f}).classed("hl",function(d){return !!f&&(d.e.from===f||d.e.to===f)});
-  xmark.style("display",function(d){return on[d.e.type]&&!(f&&d.e.from!==f&&d.e.to!==f)?null:"none"});
-  node.classed("fade",function(d){return !!f&&!keep[d.id]}).classed("sel",function(d){return d.id===gsel});
+  if(f){keep[f]=1;E.forEach(function(e){if(on[e.type]&&(e.from===f||e.to===f)){keep[e.from]=1;keep[e.to]=1}})}
+  E.forEach(function(e){var vis=on[e.type],rel=!!f&&(e.from===f||e.to===f);e.el.style.display=vis?"":"none";
+    $$(".lk",e.el).forEach(function(p){p.classList.toggle("fade",!!f&&!rel);p.classList.toggle("hl",rel)});
+    if(e.xm)e.xm.style.display=vis&&!(f&&!rel)?"":"none"});
+  N.forEach(function(n){n.el.classList.toggle("fade",!!f&&!keep[n.id]);n.el.classList.toggle("sel",n.id===gsel)});
 }
+function $$(s,root){return Array.prototype.slice.call((root||document).querySelectorAll(s))}
 function side(){
   var s=$("#gside");
-  if(!gsel){s.innerHTML='<span class="lab">읽는 법</span><p>원 하나가 도구 하나입니다. 색은 도구가 속한 열이고 원이 클수록 걸린 관계가 많습니다. 선 색이 관계의 종류입니다. 화살표가 있는 파랑은 전제 조건, 보라 점선 화살표는 검증, 초록 굵은 선은 대체, 빨강 점선은 호환성이고 가운데 × 표시는 금지된 조합입니다.</p><p>VASP와 MACE-MPA-0처럼 관계가 많이 걸린 도구가 가운데로 모입니다. 검사기 쪽 작은 원들은 출력이 라벨을 받기 전에 거치는 검증 사슬입니다.</p><span class="lab">관계 종류</span><ul>'+Object.keys(ET).map(function(k){return '<li><span class="rt rt-'+k+'">'+ET[k]+'</span><span>'+E.filter(function(e){return e.type===k}).length+'개</span></li>'}).join("")+'</ul>';return}
+  if(!gsel){s.innerHTML='<span class="lab">읽는 법</span><p>왼쪽에서 오른쪽으로 데이터와 생성기, 계산기, 후처리, 검사기입니다. 계산기 열은 위가 빠른 도구(T0에서 T1), 아래가 DFT(T3)입니다. 선 색이 관계의 종류입니다. 화살표가 있는 파랑은 전제 조건, 보라는 검증, 초록 굵은 선은 대체, 빨강 점선은 호환성이고 선 가운데 × 표시는 금지된 조합입니다.</p><p>같은 열 안의 관계(예: VASP와 MACE-MPA-0의 대체)는 열 왼쪽에 꺾쇠로 그렸습니다. 점선 테두리는 아직 관계가 등록되지 않은 도구입니다.</p><span class="lab">관계 종류</span><ul>'+Object.keys(ET).map(function(k){return '<li><span class="rt rt-'+k+'">'+ET[k]+'</span><span>'+E.filter(function(e){return e.type===k}).length+'개</span></li>'}).join("")+'</ul>';return}
   var n=NM[gsel],rels=E.filter(function(e){return on[e.type]&&(e.from===gsel||e.to===gsel)});
-  s.innerHTML='<div><span class="lab">'+COLN[n.col]+'</span><h4>'+esc(n.name)+'</h4></div><div class="meta"><span>'+esc(n.role)+'</span><span>'+n.tier+'</span><span>'+esc(n.spec.lic)+'</span><span>'+esc(n.spec.exec)+'</span></div>'+
+  s.innerHTML='<div><span class="lab">'+COLN[n.gc]+'</span><h4>'+esc(n.name)+'</h4></div><div class="meta"><span>'+esc(n.role)+'</span><span>'+n.tier+'</span><span>'+esc(n.spec.lic)+'</span><span>'+esc(n.spec.exec)+'</span></div>'+
     '<div class="kv"><div><b>입력</b> '+esc(n.spec.in)+'</div><div><b>출력</b> '+esc(n.spec.out)+'</div><div><b>기준점</b> '+esc(n.spec.ref)+'</div><div><b>실패 처리</b> '+esc(n.spec.fail)+'</div></div>'+
     '<div><span class="lab">관계 '+rels.length+'</span><ul style="margin-top:6px">'+rels.map(function(e){var o=e.from===gsel?NM[e.to]:NM[e.from];return '<li><span class="rt rt-'+e.type+'">'+ET[e.type]+'</span><span>'+(e.from===gsel?"→ ":"← ")+'<a data-n="'+o.id+'">'+esc(o.name)+'</a><br>'+esc(e.short)+'</span></li>'}).join("")+'</ul></div>'+
     '<div><span class="lab">래퍼 '+n.wr.length+'</span><p style="margin-top:4px">'+(n.wr.length?esc(n.wr.join(", ")):"레지스트리에 없음. 허브가 직접 감싸는 노드")+'</p></div>';
   $$("#gside a[data-n]").forEach(function(a){a.addEventListener("click",function(){gsel=a.dataset.n;paint();side()})});
 }
-(function(){var sm={pre:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--pre)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="4 3"/>',sub:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--sub)" stroke-width="2.6"/>',ver:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--ver)" stroke-width="1.6" stroke-dasharray="2 2"/><path d="M12,1L17,4L12,7z" fill="var(--ver)"/>'};
+(function(){var sm={pre:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--pre)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="4 3"/>',sub:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--sub)" stroke-width="3"/><line x1="0" y1="4" x2="18" y2="4" stroke="#fff" stroke-width="1"/>',ver:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--ver)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--ver)"/>'};
   $("#gkey").innerHTML=COLN.map(function(c,i){return '<span><i style="background:'+COLC[i]+'"></i>'+c+'</span>'}).join("")+'<span style="width:1px;height:12px;background:var(--line)"></span>'+Object.keys(ET).map(function(k){return '<label><input type="checkbox" data-t="'+k+'" checked><svg viewBox="0 0 18 8">'+sm[k]+'</svg>'+ET[k]+'</label>'}).join("");
   $$("#gkey input").forEach(function(i){i.addEventListener("change",function(){on[i.dataset.t]=i.checked;paint();side()})});
   paint();side();})();
