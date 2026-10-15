@@ -749,7 +749,7 @@ var dname=function(n){return L==="en"&&n.name_en?n.name_en:n.name};
 var svg=$("#graph"),NS="http://www.w3.org/2000/svg";
 var mk=function(tg,a,p){var e=document.createElementNS(NS,tg);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
 function drawGraph(){
-  layoutCols();svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+GW+" "+GH);svg.style.minWidth=Math.round(GW*0.95)+"px";
+  layoutCols();svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+GW+" "+GH);svg.style.minWidth=Math.round(GW*0.78)+"px";
   var P={};N.forEach(function(n){var l=LAY[n.id];n.gc=l[0];n.gr=l[1];n.w=lw(dname(n))+26;n.px=CX[l[0]];n.py=RY(l[1]);n.deg=relCount(n.id);P[n.id]=n});
   var defs=mk("defs",{},svg);
   ["pre","ver"].forEach(function(k){var m=mk("marker",{id:"ar-"+k,viewBox:"0 -4 8 8",refX:"7",refY:"0",markerWidth:"6",markerHeight:"6",orient:"auto"},defs);mk("path",{d:"M0,-3.2L8,0L0,3.2z",style:"fill:var(--"+k+")"},m)});
