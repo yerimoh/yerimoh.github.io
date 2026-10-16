@@ -124,18 +124,29 @@ nav.top .wrap{display:flex;align-items:center;height:64px;gap:20px}
 .lane+.lane{border-left:1px solid var(--line2)}
 .lane .lh{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:var(--faint);padding-bottom:10px;border-bottom:1px solid var(--line2);margin-bottom:6px}
 .lane .lh b{color:var(--ink);font-family:var(--sans);font-size:13px;letter-spacing:0;text-transform:none;font-weight:600}
-.tr{display:none;grid-template-columns:20px minmax(0,1fr) auto;gap:3px 8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}
+.tr{display:none;grid-template-columns:24px minmax(0,1fr) auto;gap:3px 10px;align-items:start;padding:9px 0;font-size:13px;position:relative}
+.tr:not(.end)::before{content:"";position:absolute;left:11.5px;top:0;bottom:0;width:1px;background:var(--line)}
+.tr.first::before{top:20px}
+.tr .num{position:relative;z-index:1;width:24px;height:24px;margin-top:-3px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);display:grid;place-items:center;font:600 11px var(--mono);color:var(--ink)}
+.tr.run .num::after{content:"";position:absolute;inset:-1.5px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--ink);animation:spin .7s linear infinite}
+.tr.call[data-vd="blocked"] .num{border-color:var(--red);color:var(--red)}
+.tr .head{display:flex;align-items:baseline;gap:8px;min-width:0;flex-wrap:wrap}
+.tr .sl{font-size:11.5px;color:var(--faint);white-space:nowrap}
+.tr .vd{display:inline-flex;align-items:center;gap:5px}
+.tr .gm{position:relative;z-index:1;justify-self:center;width:9px;height:9px;margin-top:4px;transform:rotate(45deg);border:1.5px solid var(--faint);background:var(--card)}
+.tr.gate.block .gm{border-color:var(--red)}
+.tlegend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 18px;border-top:1px solid var(--line2);font-size:12px;color:var(--faint)}
+.tlegend span{display:inline-flex;align-items:center;gap:7px}
+.tlegend .num{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font:600 9px var(--mono);color:var(--ink)}
+.tlegend .gm{width:8px;height:8px;transform:rotate(45deg);border:1.5px solid var(--faint)}
 .tr.in{display:grid;animation:trin .18s ease-out}
 @keyframes trin{from{opacity:0}to{opacity:1}}
-.tr .ico{display:grid;place-items:center;width:16px;height:16px}
-.tr .ic{width:15px;height:15px;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tr .ic{width:13px;height:13px;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .tr .ic.ok{stroke:var(--green)}.tr .ic.hold{stroke:var(--faint)}.tr .ic.bad{stroke:var(--red)}
-.tr .sp{width:12px;height:12px;border:1.6px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.tr.run .ic,.tr:not(.run) .sp,.tr:not(.run) .vr,.tr.run .vd,.tr.run .note{display:none}
+.tr:not(.run) .vr,.tr.run .vd,.tr.run .note{display:none}
 .tr .vr{font-size:12px;color:var(--faint);white-space:nowrap}
 .tr .note{font-family:var(--mono);font-size:11.5px!important;color:var(--muted)!important}
-.tr:last-child{border-bottom:0}
 .tr .n{font-family:var(--mono);font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
 .tr code{font-size:12px;color:var(--ink);word-break:break-all}
 .tr .note{grid-column:2/4;line-height:1.5}
@@ -144,14 +155,14 @@ nav.top .wrap{display:flex;align-items:center;height:64px;gap:20px}
 .vd.bad{color:var(--red);font-weight:600}
 .vd.warn{color:var(--amber)}
 .vd.info{color:var(--faint)}
-.tr.gate{border-left:1px solid var(--line);padding:6px 0 8px 12px;margin-left:7px;grid-template-columns:minmax(0,1fr) auto;border-bottom:0}
-.tr.gate.block{border-left-color:var(--red)}
+.tr.gate{padding:4px 0 10px}
+
 .tr.gate .g{font-size:12px;color:var(--faint)}
 .tr.gate.block .g{color:var(--red)}
-.tr.gate .msg{grid-column:1/3;color:var(--muted);font-size:12.5px;line-height:1.45}
+.tr.gate .msg{grid-column:2/4;color:var(--muted);font-size:12.5px;line-height:1.45}
 .tr.gate .msg code{font-size:11.5px;background:var(--soft);padding:0 5px;border-radius:4px}
 .tr.call.struck code{text-decoration:line-through;color:var(--faint)}
-.tr.end{margin-top:6px;padding:12px 0 0;border-top:1px solid var(--line);grid-template-columns:minmax(0,1fr) auto}
+.tr.end{margin-top:8px;padding:12px 0 0;border-top:1px solid var(--line);grid-template-columns:minmax(0,1fr) auto}
 .tr.end.bad .vd{color:var(--red)}
 .tr.end.good .vd{color:var(--green);font-weight:600}
 .tr.end .msg{color:var(--body);font-size:12.5px;line-height:1.45}
@@ -159,7 +170,7 @@ nav.top .wrap{display:flex;align-items:center;height:64px;gap:20px}
 .cursor{display:inline-block;width:7px;height:12px;background:var(--faint);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(1) infinite}
 html[lang="ko"] .tr.end .lab,html[lang="ko"] .tr.gate .g,html[lang="ko"] .lane .lh span,html[lang="ko"] .trace .goal small{font-family:var(--sans);letter-spacing:0;text-transform:none;font-size:12px}
 @media (max-width:860px){.lanes{grid-template-columns:1fr}.lane+.lane{border-left:0;border-top:1px solid var(--line2)}}
-@media (prefers-reduced-motion:reduce){.tr.in{animation:none}.tr .sp{animation:none}}
+@media (prefers-reduced-motion:reduce){.tr.in{animation:none}.tr.run .num::after{animation:none}}
 
 .cats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:30px}
 .cpill{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted);background:var(--card)}
@@ -375,6 +386,7 @@ footer a{color:var(--muted)}
   <div class="trace" id="trace">
     <div class="hd"><div class="goal"><small>Goal</small><span id="tgoal"></span></div><div class="scen" id="tscen"></div><button class="replay" type="button" id="treplay"><svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span id="treplayt">Replay</span></button></div>
     <div class="lanes"><div class="lane"><div class="lh"><b>Agent A</b><span id="laneA"></span></div><div id="logA"></div></div><div class="lane"><div class="lh"><b>Agent B</b><span id="laneB"></span></div><div id="logB"></div></div></div>
+    <div class="tlegend"><span><i class="num">1</i><span class="en">Tool call, one step of the run</span><span class="ko">도구 호출, 실행의 한 단계</span></span><span><i class="gm"></i><span class="en">Gate check between steps, not a tool call</span><span class="ko">단계 사이의 게이트 검사, 도구 호출 아님</span></span></div>
   </div>
   <p style="margin-top:18px;font-size:12.5px;color:var(--faint)"><span class="en">Traces are illustrative, written to show how the gate acts. Counts and values are not measurements.</span><span class="ko">기록은 게이트가 어떻게 작동하는지 보이기 위해 쓴 예시입니다. 개수와 값은 측정 결과가 아닙니다.</span></p>
 </div></section>
@@ -763,11 +775,11 @@ var TR=[
   B:[["call","mp.get_entries(Li-Co-O)","ok",["competing phases listed","경쟁 상 목록"]],["call","hull.e_above_hull(mp + pet-oam)","blocked",["","" ]],["gate","block",["compatibility · reference mismatch","호환성 · 기준점 불일치"],["MP energies and OMat24-family energies never share a hull. The mixed call is refused.","MP 에너지와 OMat24 계열 에너지는 한 상도에 섞지 않음. 섞인 호출 거부."]],["call","pet-oam.energy(all phases)","ok",["competing phases recomputed on one reference","경쟁 상 전체를 한 기준점으로 재계산"]],["call","hull.e_above_hull","ok",["E_hull = 0.041 eV/atom","E_hull = 0.041 eV/atom"]],["gate","insert",["substitute · T1 → T3 for confirmation","대체 · 확인용 T1 → T3"],["Budget remains, so the candidate is confirmed with <code>vasp.mp_compatible</code>.","예산이 남아 <code>vasp.mp_compatible</code>로 확인."]],["call","vasp.mp_compatible(candidate)","ok",["E_hull = 0.052 eV/atom","E_hull = 0.052 eV/atom"]],["end","good",["Post-hoc check with MP-compatible DFT","MP 호환 DFT로 사후 검사"],["Same reference, same answer. Verified.","같은 기준점, 같은 답. 검증됨."]]]}];
 var trI=0,trTimer=[],trPlayed={};
 var TRI={ok:'<svg class="ic ok" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg>',hold:'<svg class="ic hold" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.6"/><path d="M8 5v3.3l2.1 1.3"/></svg>',blocked:'<svg class="ic bad" viewBox="0 0 16 16"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg>'};
-function trRow(ev){
-  var k=ev[0];
+function trRow(ev,n,first){
+  var k=ev[0],f=first?" first":"";
   if(k==="call"){var vd=ev[2],lab={ok:t("returned","반환"),hold:t("held by gate","게이트가 잡음"),blocked:t("refused","거부")}[vd],cls={ok:"ok",hold:"info",blocked:"bad"}[vd];
-    return '<div class="tr call'+(vd==="blocked"?" struck":"")+'" data-vd="'+vd+'"><span class="ico"><span class="sp"></span>'+TRI[vd]+'</span><code>'+esc(ev[1])+'</code><span class="vr">'+t("running…","실행 중…")+'</span><span class="vd '+cls+'">'+lab+'</span>'+(li(ev[3])?'<span class="note">→ '+esc(li(ev[3]))+'</span>':"")+'</div>'}
-  if(k==="gate"){var g=ev[1];return '<div class="tr gate'+(g==="block"?" block":"")+'"><span class="g">'+t("gate","게이트")+' · '+esc(li(ev[2]))+'</span><span class="vd '+(g==="block"?"bad":"info")+'">'+{rewrite:t("rewritten","고쳐 씀"),insert:t("inserted","삽입"),block:t("blocked","차단")}[g]+'</span><span class="msg">'+li(ev[3])+'</span></div>'}
+    return '<div class="tr call'+f+(vd==="blocked"?" struck":"")+'" data-vd="'+vd+'"><span class="num">'+n+'</span><span class="head"><span class="sl">'+t("Step ","단계 ")+n+'</span><code>'+esc(ev[1])+'</code></span><span class="vr">'+t("running…","실행 중…")+'</span><span class="vd '+cls+'">'+TRI[vd]+lab+'</span>'+(li(ev[3])?'<span class="note">→ '+esc(li(ev[3]))+'</span>':"")+'</div>'}
+  if(k==="gate"){var g=ev[1];return '<div class="tr gate'+f+(g==="block"?" block":"")+'"><i class="gm"></i><span class="g">'+t("gate","게이트")+' · '+esc(li(ev[2]))+'</span><span class="vd '+(g==="block"?"bad":"info")+'">'+{rewrite:t("rewritten","고쳐 씀"),insert:t("inserted","삽입"),block:t("blocked","차단")}[g]+'</span><span class="msg">'+li(ev[3])+'</span></div>'}
   return '<div class="tr end '+ev[1]+'"><span class="msg"><span class="lab">'+esc(li(ev[2]))+'</span>'+esc(li(ev[3]))+'</span><span class="vd '+(ev[1]==="bad"?"bad":"ok")+'">'+(ev[1]==="bad"?t("silent failure","조용한 실패"):t("verified","검증됨"))+'</span></div>';
 }
 function trRender(play){
@@ -776,7 +788,7 @@ function trRender(play){
   $("#laneA").textContent=t("tool list only","도구 목록만");$("#laneB").textContent=t("tools + relation graph","도구 + 관계 그래프");
   $("#tscen").innerHTML=TR.map(function(x,i){return '<button type="button" class="'+(i===trI?"on":"")+'" data-i="'+i+'">'+esc(li(x.name))+'</button>'}).join("");
   $$("#tscen button").forEach(function(b){b.addEventListener("click",function(){trI=+b.dataset.i;trRender(true)})});
-  ["A","B"].forEach(function(l){$("#log"+l).innerHTML=s[l].map(trRow).join("")});
+  ["A","B"].forEach(function(l){var n=0;$("#log"+l).innerHTML=s[l].map(function(ev,i){if(ev[0]==="call")n++;return trRow(ev,n,i===0)}).join("")});
   trTimer.forEach(clearTimeout);trTimer=[];
   var rows=$$("#trace .tr"),reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches,lanes=$("#trace .lanes");
   /* reserve the finished height so the page does not jump while the log streams */
