@@ -961,13 +961,22 @@ function drawAcc(){
 }
 function drawIllus(k){
   var a=ACC.filter(function(x){return x.k===k})[0],c={pre:"var(--pre)",cmp:"var(--cmp)",sub:"var(--sub)",ver:"var(--ver)"}[k],bn=typeof a.b==="string"?a.b:li(a.b);
-  var line=k==="sub"?'<line x1="150" y1="126" x2="270" y2="126" stroke="'+c+'" stroke-width="5"/><line x1="150" y1="126" x2="270" y2="126" stroke="var(--soft)" stroke-width="1.6"/>':
-    k==="cmp"?'<line x1="150" y1="130" x2="270" y2="130" stroke="'+c+'" stroke-width="2" stroke-dasharray="7 5"/><circle cx="210" cy="130" r="11" fill="var(--card)" stroke="'+c+'" stroke-width="1.6"/><path d="M205,125L215,135M215,125L205,135" stroke="'+c+'" stroke-width="2"/>':
-    '<line x1="150" y1="130" x2="262" y2="130" stroke="'+c+'" stroke-width="2"'+(k==="ver"?' stroke-dasharray="3 4"':"")+'/><path d="M260,124L270,130L260,136z" fill="'+c+'"/>';
-  $("#illus").innerHTML='<rect class="bx" x="20" y="100" width="130" height="60" rx="10"/><text x="85" y="128" text-anchor="middle">'+esc(a.a)+'</text><text class="sm" x="85" y="146" text-anchor="middle">node</text>'+
-    '<rect class="bx" x="270" y="100" width="130" height="60" rx="10"/><text x="335" y="128" text-anchor="middle">'+esc(bn)+'</text><text class="sm" x="335" y="146" text-anchor="middle">node</text>'+line+
-    '<text class="sm" x="210" y="112" text-anchor="middle" style="fill:'+c+'">'+esc(li(a.t))+'</text><text class="sm" x="210" y="170" text-anchor="middle">'+esc(a.lab)+'</text>'+
-    (a.x?'<text class="sm" x="210" y="215" text-anchor="middle">excluded from agent choices</text>':'<text class="sm" x="210" y="215" text-anchor="middle">enforced when the agent plans a path</text>');
+  var rel=li(a.t),foot=a.x?t("excluded from agent choices","에이전트 선택지에서 제외"):t("enforced when the agent plans a path","에이전트가 경로를 짤 때 강제"),sv=$("#illus");
+  /* measure the labels first so the boxes and the gap fit them */
+  sv.innerHTML='<text id="m0">'+esc(a.a)+'</text><text id="m1">'+esc(bn)+'</text><text class="sm" id="m2">'+esc(rel)+'</text><text class="sm" id="m3">'+esc(a.lab)+'</text><text class="sm" id="m4">'+esc(foot)+'</text>';
+  var W=function(i,s,cw){var w=0;try{w=sv.querySelector("#m"+i).getBBox().width}catch(e){}return w||String(s).length*cw};
+  var wa=W(0,a.a,7.8),wb=W(1,bn,7.8),wr=W(2,rel,6.4),wl=W(3,a.lab,6.4),wf=W(4,foot,6.4);
+  var A=Math.max(112,wa+36),B=Math.max(112,wb+36),G=Math.max(96,wr+28),X=20,ax2=X+A,bx1=ax2+G,bx2=bx1+B;
+  var VW=Math.max(bx2+X,wl+40,wf+40),off=(VW-(bx2+X))/2;ax2+=off;bx1+=off;var ax1=X+off,mid=(ax2+bx1)/2,cx=VW/2,y=130;
+  var line=k==="sub"?'<line x1="'+ax2+'" y1="'+y+'" x2="'+bx1+'" y2="'+y+'" stroke="'+c+'" stroke-width="5"/><line x1="'+ax2+'" y1="'+y+'" x2="'+bx1+'" y2="'+y+'" stroke="var(--soft)" stroke-width="1.6"/>':
+    k==="cmp"?'<line x1="'+ax2+'" y1="'+y+'" x2="'+bx1+'" y2="'+y+'" stroke="'+c+'" stroke-width="2" stroke-dasharray="7 5"/><circle cx="'+mid+'" cy="'+y+'" r="11" fill="var(--card)" stroke="'+c+'" stroke-width="1.6"/><path d="M'+(mid-5)+','+(y-5)+'L'+(mid+5)+','+(y+5)+'M'+(mid+5)+','+(y-5)+'L'+(mid-5)+','+(y+5)+'" stroke="'+c+'" stroke-width="2"/>':
+    '<line x1="'+(ax2+2)+'" y1="'+y+'" x2="'+(bx1-9)+'" y2="'+y+'" stroke="'+c+'" stroke-width="2"'+(k==="ver"?' stroke-dasharray="3 4"':"")+'/><path d="M'+(bx1-10)+','+(y-6)+'L'+bx1+','+y+'L'+(bx1-10)+','+(y+6)+'z" fill="'+c+'"/>';
+  var box=function(x,w,s){return '<rect class="bx" x="'+x+'" y="100" width="'+w+'" height="60" rx="10"/><text x="'+(x+w/2)+'" y="128" text-anchor="middle">'+esc(s)+'</text><text class="sm" x="'+(x+w/2)+'" y="146" text-anchor="middle">node</text>'};
+  sv.setAttribute("viewBox","0 60 "+VW+" 175");
+  sv.innerHTML=box(ax1,A,a.a)+box(bx1,B,bn)+line+
+    '<text class="sm" x="'+mid+'" y="'+(y-14)+'" text-anchor="middle" style="fill:'+c+'">'+esc(rel)+'</text>'+
+    '<text class="sm" x="'+cx+'" y="188" text-anchor="middle">'+esc(a.lab)+'</text>'+
+    '<text class="sm" x="'+cx+'" y="218" text-anchor="middle">'+esc(foot)+'</text>';
 }
 
 /* bench */
