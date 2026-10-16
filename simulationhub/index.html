@@ -234,10 +234,11 @@ html[lang="ko"] .tr.end .lab,html[lang="ko"] .tr.gate .g,html[lang="ko"] .lane .
 .ccard.on{border-color:var(--ink)}
 .tfilt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:56px}
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
-.tcard{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:12px;padding:18px 20px 16px;background:var(--card);display:grid;gap:9px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative}
-.tcard:hover{box-shadow:var(--shadow);border-color:var(--faint);border-top-color:var(--c)}
+.tcard{border:1px solid var(--line);border-radius:10px;padding:16px 18px 14px;background:var(--card);display:grid;gap:8px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative}
+.tcard:hover{box-shadow:var(--shadow);border-color:var(--faint)}
 .tcard .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tcard .ct{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) 10%,var(--card));padding:2px 7px;border-radius:5px}
+.tcard .ct{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.tcard .ct::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
 .tcard .st{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600}
 .tcard .st svg{width:12px;height:12px;stroke-width:2.4}
 .st.prod{color:var(--green)}.st.near{color:#0891b2}.st.demo{color:var(--amber)}.st.dead{color:var(--faint)}.st.comm{color:var(--blue)}.st.res{color:var(--ver)}.st.gap{color:var(--red)}
