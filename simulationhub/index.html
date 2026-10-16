@@ -234,23 +234,36 @@ html[lang="ko"] .tr.end .lab,html[lang="ko"] .tr.gate .g,html[lang="ko"] .lane .
 .ccard.on{border-color:var(--ink)}
 .tfilt{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:56px}
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
-.tcard{border:1px solid var(--line);border-radius:10px;padding:16px 18px 14px;background:var(--card);display:grid;gap:8px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative}
+.tcard{border:1px solid var(--line);border-radius:10px;padding:16px 18px 14px;background:var(--card);display:grid;gap:10px;align-content:start;transition:box-shadow .15s,border-color .15s;position:relative;min-width:0}
 .tcard:hover{box-shadow:var(--shadow);border-color:var(--faint)}
-.tcard .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tcard .ct{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
-.tcard .ct::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
-.tcard .st{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600}
-.tcard .st svg{width:12px;height:12px;stroke-width:2.4}
-.st.prod{color:var(--green)}.st.near{color:#0891b2}.st.demo{color:var(--amber)}.st.dead{color:var(--faint)}.st.comm{color:var(--blue)}.st.res{color:var(--ver)}.st.gap{color:var(--red)}
-.tcard h4{font-size:15.5px;letter-spacing:-.01em;line-height:1.3}
+.tcard .hd{display:flex;align-items:flex-start;gap:10px}
+.tcard h4{font-size:16px;letter-spacing:-.01em;line-height:1.3;flex:1;min-width:0;word-break:break-word}
 .tcard h4 a:hover{color:var(--blue)}
-.tcard .be{display:flex;flex-wrap:wrap;gap:4px}
-.tcard .be code{font-size:11px;background:var(--soft);color:var(--muted);padding:2px 7px;border-radius:5px}
-.tcard p{font-size:13px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.tcard .ft{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--faint);margin-top:2px;flex-wrap:wrap}
-.tcard .ft .hub{margin-left:auto;font-weight:600}
-.hub.take{color:var(--green)}.hub.ref{color:var(--muted)}.hub.excl{color:var(--red)}
-.tcard .ft .lic.bad{color:var(--red)}
+.tcard .st{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;white-space:nowrap;margin-top:3px}
+.tcard .st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.prod{color:var(--green)}.st.near{color:#0891b2}.st.demo{color:var(--amber)}.st.dead{color:var(--faint)}.st.comm{color:var(--blue)}.st.res{color:var(--ver)}.st.gap{color:var(--red)}
+.tcard .src{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--faint);margin-top:-4px;min-width:0}
+.tcard .src .ct{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;flex:none}
+.tcard .src .ct::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+.tcard .src a{font-family:var(--mono);font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tcard .src a:hover{color:var(--blue)}
+.tcard .sum{font-size:13.5px;color:var(--body);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tcard .fns{display:flex;flex-wrap:wrap;gap:4px}
+.tcard .fns code{font-size:11px;background:var(--soft);color:var(--muted);padding:2px 6px;border-radius:4px}
+.tcard .fns .more-n{font-size:11px;color:var(--faint);padding:2px 4px}
+.tcard dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 12px;margin:2px 0 0;border-top:1px solid var(--line2);padding-top:10px;font-size:12.5px}
+.tcard dt{color:var(--faint);white-space:nowrap}
+.tcard dd{margin:0;color:var(--body);min-width:0;display:flex;flex-wrap:wrap;gap:3px 8px;align-items:center}
+.tcard dd .bad{color:var(--red)}
+.tcard dd .ok{color:var(--green);font-weight:600}
+.tcard dd .ref{color:var(--muted)}
+.tcard dd .ex{color:var(--red);font-weight:600}
+.inst{display:inline-flex;align-items:center;gap:4px;max-width:100%;background:var(--soft);border:1px solid var(--line2);border-radius:5px;padding:1px 2px 1px 7px;font-family:var(--mono);font-size:11px;color:var(--body)}
+.inst code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inst button{width:20px;height:18px;display:grid;place-items:center;border-radius:3px;color:var(--faint)}
+.inst button:hover{background:var(--line2);color:var(--ink)}
+.inst button svg{width:12px;height:12px}
+.inst button.done{color:var(--green)}
 .more{display:flex;justify-content:center;margin-top:28px;gap:10px;align-items:center;color:var(--faint);font-size:13px}
 .empty{padding:40px;text-align:center;color:var(--faint);grid-column:1/-1}
 
@@ -683,6 +696,7 @@ var nname=function(n){return L==="en"&&n.role_en?n.role_en:n.role};
 var nspec=function(n){return L==="en"&&n.spec_en?n.spec_en:n.spec};
 var rname=function(r){return L==="en"&&r.name_en?r.name_en:r.name};
 var rwhat=function(r){return L==="en"&&r.what_en?r.what_en:r.what};
+var rsum=function(r){var s=rwhat(r);if(!r.fns.length)return s;if(r.listHead){var di=s.indexOf(". ");return di>0?s.slice(di+2):""}r.fns.forEach(function(f){s=s.split(f).join("")});s=s.replace(/^[\s,.:·]+|[\s,.:·]+$/g,"").replace(/(,\s*){2,}/g,", ").replace(/^,\s*/,"").replace(/\s*,\s*\./g,".");if(/^(\+|\.|,|and|과|와)/.test(s))s=s.replace(/^(\+|\.|,|and|과|와)\s*/,"");return s};
 var eshort=function(e){return L==="en"&&e.short_en?e.short_en:e.short};
 var edetail=function(e){return L==="en"&&e.detail_en?e.detail_en:e.detail};
 
@@ -692,7 +706,12 @@ var ICON={mcp:'<path d="M4 6h16v5H4zM4 13h16v5H4zM7 8.5h.01M7 15.5h.01"/>',skill
 var ST=function(){return L==="en"?{prod:"prod",near:"near prod",demo:"demo",dead:"dead",comm:"commercial",res:"research",gap:"gap"}:{prod:"prod",near:"prod 근접",demo:"demo",dead:"dead",comm:"상용",res:"연구",gap:"공백"}};
 var HUB=function(){return L==="en"?{take:"Adopted as node",ref:"Design reference",excl:"Excluded"}:{take:"노드로 가져옴",ref:"설계 참고",excl:"제외"}};
 var BE=[["VASP",/\bVASP\b/i],["Quantum ESPRESSO",/\bQE\b|Quantum ESPRESSO/i],["LAMMPS",/LAMMPS/i],["GROMACS",/GROMACS|\bgmx\b/i],["phonopy",/phonopy/i],["MACE",/\bMACE\b/i],["ASE",/\bASE\b/i],["pymatgen",/pymatgen/i],["RDKit",/RDKit/i],["OpenMM",/OpenMM/i],["PySCF",/PySCF/i],["xTB",/\bxTB\b/i],["ORCA",/\bORCA\b/i],["CP2K",/CP2K/i],["deepmd",/deepmd|DPA/i],["Materials Project",/Materials Project|\bMP\b|mp-api/],["OPTIMADE",/OPTIMADE/i],["AiiDA",/AiiDA/i],["atomate2",/atomate2/i],["MatterGen",/MatterGen/i],["OVITO",/OVITO/i],["Cantera",/Cantera/i],["OpenFOAM",/OpenFOAM/i],["FEniCSx",/FEniCS/i]];
-R.forEach(function(r){r.text=[r.name,r.name_en,r.what,r.what_en,r.backend,r.url].join(" ").toLowerCase();r.be=BE.filter(function(b){return b[1].test(r.name+" "+r.what+" "+r.backend)}).map(function(b){return b[0]}).slice(0,4);r.date=(r.act.match(/20\d\d(-\d\d)?/)||[])[0]||"";r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1]||""});
+R.forEach(function(r){var m=(r.url||"").match(/(github|gitlab)\.com\/([^\/\s]+)\/([^\/\s]+)/);r.owner=m?m[2]:"";r.repo=m?m[3]:"";r.host=m?m[1]+".com":((r.url||"").match(/^([a-z0-9.-]+\.[a-z]+)/)||[])[1]||"";
+  var parts=(r.backend||"").split(" · ").map(function(s){return s.trim()}).filter(Boolean);r.inst="";r.bk=[];parts.forEach(function(p){if(/^(pip |uv |uvx|npm|npx|claude mcp|docker|clone|swift build|PyPI|wheel)/i.test(p))r.inst=r.inst||p;else r.bk.push(p)});
+  r.commits=(r.act.match(/커밋 ([\d,]+)/)||[])[1]||"";
+  var fnre=/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g;r.fns=(r.what.match(fnre)||[]).filter(function(x,i,a){return a.indexOf(x)===i});r.listHead=false;
+  if(r.fns.length>=2){var di=r.what.indexOf(". "),head=di>0?r.what.slice(0,di):r.what;if(r.fns.every(function(f){return head.indexOf(f)>=0})&&/^[a-z_][\w.()=, ↑-]*$/i.test(head)){r.listHead=true;r.fns=head.split(/,\s*/).map(function(s){return s.trim()}).filter(Boolean)}}
+  r.text=[r.name,r.name_en,r.what,r.what_en,r.backend,r.url].join(" ").toLowerCase();r.be=BE.filter(function(b){return b[1].test(r.name+" "+r.what+" "+r.backend)}).map(function(b){return b[0]}).slice(0,4);r.date=(r.act.match(/20\d\d(-\d\d)?/)||[])[0]||"";r.stars=(r.act.match(/별 ([\d,]+)/)||[])[1]||""});
 var relCount=function(id){return E.filter(function(e){return e.from===id||e.to===id}).length};
 
 /* theme + language */
@@ -902,11 +921,22 @@ function drawTools(){
   var vis=rows.slice(0,shown);
   $("#tgrid").innerHTML=vis.map(function(r){
     var href=r.url&&/\./.test(r.url)&&!/\s/.test(r.url)?(r.url.indexOf("http")===0?r.url:"https://"+r.url):"";
-    var ok=r.st==="prod"||r.st==="near"||r.st==="comm";
-    return '<div class="tcard" style="--c:var(--c-'+r.cat+')"><div class="row"><span class="ct">'+C[r.cat][0]+'</span><span class="st '+r.st+'">'+(ok?'<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>':"")+S[r.st]+'</span></div>'+
-      '<h4>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(rname(r))+'</a>':esc(rname(r)))+'</h4>'+
-      (r.be.length?'<div class="be">'+r.be.map(function(b){return "<code>"+esc(b)+"</code>"}).join("")+'</div>':"")+
-      '<p>'+esc(rwhat(r))+'</p><div class="ft">'+(r.date?'<span>'+esc(r.date)+'</span>':"")+(r.stars?'<span>★ '+r.stars+'</span>':"")+(r.lic?'<span class="lic'+(/없음|미표기/.test(r.lic)?" bad":"")+'">'+esc(tr(r.lic))+'</span>':"")+(r.hub?'<span class="hub '+r.hub+'">'+H[r.hub]+'</span>':"")+'</div></div>'}).join("")||'<div class="empty">'+t("Nothing matches.","조건에 맞는 항목이 없습니다.")+'</div>';
+    var sum=rsum(r),fns=r.fns.slice(0,6),extra=r.fns.length-fns.length;
+    var act=[];if(r.stars)act.push("★ "+r.stars);if(r.commits)act.push(r.commits+" "+t("commits","커밋"));if(r.date)act.push(r.date);
+    var rest=tr(r.act.replace(/별 [\d,]+/,"").replace(/커밋 [\d,]+/,"").replace(/20\d\d(-\d\d(-\d\d)?)?(~\d\d)?/,"").replace(/^[\s·]+|[\s·]+$/g,"").replace(/\s*·\s*·\s*/g," · "));if(rest)act.push(rest);
+    var hubText={take:t("adopted as a node","노드로 가져옴"),ref:t("design reference only","설계만 참고"),excl:t("excluded","제외")}[r.hub];
+    var rows=[];
+    if(r.bk.length)rows.push([r.cat==="skill"||r.cat==="gskill"?t("Covers","대상"):t("Wraps","감싸는 것"),r.bk.map(function(b){return esc(tr(b))}).join(", ")]);
+    if(r.inst)rows.push([t("Install","설치"),'<span class="inst"><code>'+esc(r.inst)+'</code><button type="button" data-c="'+esc(r.inst)+'" aria-label="copy"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></button></span>']);
+    if(r.lic)rows.push([t("License","라이선스"),'<span class="'+(/없음|미표기/.test(r.lic)?"bad":"")+'">'+esc(tr(r.lic))+(/없음|미표기/.test(r.lic)?" ⚠":"")+'</span>']);
+    if(act.length)rows.push([t("Activity","활동"),esc(act.join(" · "))]);
+    if(r.hub)rows.push([t("In the hub","허브에서"),'<span class="'+(r.hub==="take"?"ok":r.hub==="excl"?"ex":"ref")+'">'+hubText+'</span>']);
+    return '<div class="tcard" style="--c:var(--c-'+r.cat+')"><div class="hd"><h4>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(rname(r))+'</a>':esc(rname(r)))+'</h4><span class="st '+r.st+'">'+S[r.st]+'</span></div>'+
+      '<div class="src"><span class="ct">'+C[r.cat][0]+'</span>'+(href?'<span>·</span><a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(r.owner?r.owner+" / "+r.repo:r.host||r.url)+'</a>':"")+'</div>'+
+      (sum?'<p class="sum">'+esc(sum)+'</p>':"")+
+      (fns.length?'<div class="fns">'+fns.map(function(f){return "<code>"+esc(f)+"</code>"}).join("")+(extra>0?'<span class="more-n">+'+extra+'</span>':"")+'</div>':"")+
+      (rows.length?'<dl>'+rows.map(function(x){return '<dt>'+x[0]+'</dt><dd>'+x[1]+'</dd>'}).join("")+'</dl>':"")+'</div>'}).join("")||'<div class="empty">'+t("Nothing matches.","조건에 맞는 항목이 없습니다.")+'</div>';
+  $$("#tgrid .inst button").forEach(function(b){b.addEventListener("click",function(){var s=b.dataset.c,done=function(){b.classList.add("done");setTimeout(function(){b.classList.remove("done")},1200)};if(navigator.clipboard)navigator.clipboard.writeText(s).then(done,function(){});else done()})});
   $("#more").innerHTML=rows.length>shown?'<button type="button" class="btn ghost" id="morebtn">'+t("Show "+(rows.length-shown)+" more",(rows.length-shown)+"개 더 보기")+'</button>':'<span>'+t("All "+rows.length+" shown",rows.length+"개 전체 표시")+'</span>';
   var mb=$("#morebtn");if(mb)mb.addEventListener("click",function(){shown+=12;drawTools()});
 }
