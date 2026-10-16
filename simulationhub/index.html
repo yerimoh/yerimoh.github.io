@@ -183,17 +183,17 @@ html[lang="ko"] .tr.end .lab,html[lang="ko"] .tr.gate .g,html[lang="ko"] .lane .
 #graph{display:block;width:100%;min-width:700px;height:auto}
 #graph .colh{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;fill:var(--faint)}
 #graph .grp{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--faint)}
-#graph .lk{fill:none;stroke-opacity:.75}
+#graph .lk{fill:none;stroke-opacity:.7;stroke-linecap:round}
 #graph .lk.pre{stroke:var(--pre)}#graph .lk.ver{stroke:var(--ver)}#graph .lk.cmp{stroke:var(--cmp);stroke-dasharray:4 3}
 #graph .lk.sub{stroke:var(--sub);stroke-width:3.4}#graph .lk.sub2{stroke:var(--card);stroke-width:1.2;stroke-opacity:1}
 #graph .lk.fade{stroke-opacity:.08}#graph .lk.sub2.fade{stroke-opacity:1}
-#graph .lk.hl{stroke-opacity:1}
+#graph .lk.hl{stroke-opacity:1;stroke-width:2.2}#graph .lk.sub.hl{stroke-width:4}
 #graph .hit{stroke:transparent;stroke-width:12;fill:none;cursor:pointer}
 #graph .nd{cursor:pointer}
-#graph .nd rect{fill:var(--card);stroke:var(--line);stroke-width:1}
+#graph .nd rect{fill:var(--card);stroke:var(--line);stroke-width:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.04))}
 #graph .nd:hover rect{stroke:var(--faint)}
 #graph .nd.sel rect{stroke:var(--ink);stroke-width:1.6}
-#graph .nd text{font-size:12px;fill:var(--ink);font-weight:500;pointer-events:none;font-family:var(--sans)}
+#graph .nd text{font-size:12.5px;fill:var(--ink);font-weight:500;pointer-events:none;font-family:var(--sans)}
 #graph .nd.iso rect{stroke-dasharray:3 3}#graph .nd.iso text{fill:var(--faint)}#graph .nd.iso circle{opacity:.45}
 #graph .nd.fade{opacity:.18}
 #graph .xm circle{fill:var(--card);stroke:var(--cmp);stroke-width:1.2}#graph .xm path{stroke:var(--cmp);stroke-width:1.4;fill:none}
@@ -778,60 +778,65 @@ var LAY={mattergen:[0,1],mp:[0,6],optimade:[0,7],pyxtal:[0,8],subst:[0,9],
  matgl:[1,0],mace:[1,1],orbd:[1,2],pet:[1,3],calphad:[1,4],vasp:[1,6],hse:[1,7],qe:[1,8],dfpt:[1,9],ce:[1,10],
  phonopy:[2,1],phono3py:[2,2],elastic:[2,3],hull:[2,4],lobster:[2,6],boltz:[2,7],wannier:[2,8],
  conv:[3,0],imag:[3,1],sm:[3,4],spglib:[3,5],smact:[3,6]};
-var CX=[14,206,398,590],RY=function(r){return 66+r*40},PH=26,GW=740,GH=66+10*40+28;
-function layoutCols(){var mw=[0,0,0,0];N.forEach(function(n){var c=LAY[n.id][0],w=lw(dname(n))+26;if(w>mw[c])mw[c]=w});CX=[14];for(var i=0;i<3;i++)CX.push(CX[i]+mw[i]+58);GW=CX[3]+mw[3]+14}
+var CX=[14,206,398,590],RY=function(r){return 70+r*42},PH=28,GW=740,GH=70+10*42+30;
 var dname=function(n){return L==="en"&&n.name_en?n.name_en:n.name};
 var svg=$("#graph"),NS="http://www.w3.org/2000/svg";
 var mk=function(tg,a,p){var e=document.createElementNS(NS,tg);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
 function drawGraph(){
-  layoutCols();svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+GW+" "+GH);svg.style.minWidth=Math.round(GW*0.78)+"px";
-  var P={};N.forEach(function(n){var l=LAY[n.id];n.gc=l[0];n.gr=l[1];n.w=lw(dname(n))+26;n.px=CX[l[0]];n.py=RY(l[1]);n.deg=relCount(n.id);P[n.id]=n});
+  svg.innerHTML="";
+  var tw=function(s){var tt=mk("text",{x:-2000,y:-2000,style:"font-size:12.5px;font-weight:500;font-family:var(--sans)"},svg);tt.textContent=s;var w=0;try{w=tt.getComputedTextLength()}catch(e){}tt.remove();return w>0?w:lw(s)};
+  var P={},mw=[0,0,0,0];
+  N.forEach(function(n){var l=LAY[n.id];n.gc=l[0];n.gr=l[1];n.w=Math.ceil(tw(dname(n)))+36;n.deg=relCount(n.id);P[n.id]=n;if(n.w>mw[l[0]])mw[l[0]]=n.w});
+  var GAP=72;CX=[14];for(var i=0;i<3;i++)CX.push(CX[i]+mw[i]+GAP);GW=CX[3]+mw[3]+14;
+  N.forEach(function(n){n.px=CX[n.gc];n.py=RY(n.gr)});
+  svg.setAttribute("viewBox","0 0 "+GW+" "+GH);svg.style.minWidth=Math.round(GW*0.78)+"px";
   var defs=mk("defs",{},svg);
-  ["pre","ver"].forEach(function(k){var m=mk("marker",{id:"ar-"+k,viewBox:"0 -4 8 8",refX:"7",refY:"0",markerWidth:"6",markerHeight:"6",orient:"auto"},defs);mk("path",{d:"M0,-3.2L8,0L0,3.2z",style:"fill:var(--"+k+")"},m)});
+  ["pre","ver"].forEach(function(k){var m=mk("marker",{id:"ar-"+k,viewBox:"0 -4 8 8",refX:"7.5",refY:"0",markerWidth:"6",markerHeight:"6",orient:"auto"},defs);mk("path",{d:"M0,-3.2L8,0L0,3.2z",style:"fill:var(--"+k+")"},m)});
   COLN().forEach(function(c,i){mk("text",{x:CX[i],y:24,class:"colh"},svg).textContent=c.toUpperCase()});
   mk("text",{x:CX[1],y:RY(5)+14,class:"grp"},svg).textContent="DFT · T3";
   mk("text",{x:CX[1],y:RY(-0.5)+4,class:"grp"},svg).textContent="FAST · T0–T1";
   mk("text",{x:CX[0],y:RY(5)+14,class:"grp"},svg).textContent="NO RELATIONS YET";
   var eg=mk("g",{},svg),xg=mk("g",{},svg),ng=mk("g",{},svg);
-  var lanes={},byKey={};E.forEach(function(e){var a=P[e.from],b=P[e.to];var key=a.gc===b.gc?"c"+a.gc:"g"+Math.min(a.gc,b.gc);e.laneN=key;e.span=Math.abs(a.gr-b.gr);(byKey[key]=byKey[key]||[]).push(e)});
-  Object.keys(byKey).forEach(function(k){var arr=byKey[k];if(k[0]==="c")arr.sort(function(x,y){return x.span-y.span});arr.forEach(function(e,i){e.lane=i});lanes[k]=arr.length});
+  var byCol={};E.forEach(function(e){var a=P[e.from],b=P[e.to];if(a.gc===b.gc){e.span=Math.abs(a.gr-b.gr);(byCol[a.gc]=byCol[a.gc]||[]).push(e)}});
+  Object.keys(byCol).forEach(function(k){byCol[k].sort(function(x,y){return x.span-y.span}).forEach(function(e,i){e.lane=i})});
+  function S(x0,y0,x1,y1){var dx=x1-x0;return " C"+(x0+dx*.5)+","+y0+" "+(x1-dx*.5)+","+y1+" "+x1+","+y1}
   function route(e){
-    var a=P[e.from],b=P[e.to],sy=a.py,ty=b.py,r=8,dir=ty>sy?1:-1,d,mid;
-    if(a.gc===b.gc){var x=a.px,bx=x-10-e.lane*7;d="M"+x+","+sy+" L"+(bx+r)+","+sy+" Q"+bx+","+sy+" "+bx+","+(sy+dir*r)+" L"+bx+","+(ty-dir*r)+" Q"+bx+","+ty+" "+(bx+r)+","+ty+" L"+x+","+ty;mid=[bx,(sy+ty)/2]}
-    else{var fwd=b.gc>a.gc,sx=fwd?a.px+a.w:a.px,tx=fwd?b.px:b.px+b.w,g=fwd?a.gc:b.gc,gapL=CX[g]+Math.max.apply(null,N.filter(function(n){return n.gc===g}).map(function(n){return n.w})),gapR=CX[g+1];
-      var vx=lanes[e.laneN]===1?(gapL+gapR)/2:gapL+12+((gapR-gapL-24)/(lanes[e.laneN]-1))*e.lane,hx=fwd?1:-1;
-      if(Math.abs(ty-sy)<1){d="M"+sx+","+sy+" L"+tx+","+ty;mid=[(sx+tx)/2,sy]}
-      else{d="M"+sx+","+sy+" L"+(vx-hx*r)+","+sy+" Q"+vx+","+sy+" "+vx+","+(sy+dir*r)+" L"+vx+","+(ty-dir*r)+" Q"+vx+","+ty+" "+(vx+hx*r)+","+ty+" L"+tx+","+ty;mid=[vx,(sy+ty)/2]}}
+    var a=P[e.from],b=P[e.to],sy=a.py,ty=b.py,d,mid;
+    if(a.gc===b.gc){var x=a.px,k=26+e.lane*9;d="M"+x+","+sy+" C"+(x-k)+","+sy+" "+(x-k)+","+ty+" "+x+","+ty;mid=[x-k*.75,(sy+ty)/2]}
+    else{var fwd=b.gc>a.gc,sx=fwd?a.px+a.w:a.px,tx=fwd?b.px:b.px+b.w;
+      if(Math.abs(b.gc-a.gc)>=2&&fwd){var wx=CX[a.gc+1]-GAP*.45;d="M"+sx+","+sy+S(sx,sy,wx,ty)+" L"+tx+","+ty;mid=[(sx+wx)/2,(sy+ty)/2]}
+      else{d="M"+sx+","+sy+S(sx,sy,tx,ty);mid=[(sx+tx)/2,(sy+ty)/2]}}
     return {d:d,mid:mid};
   }
   E.forEach(function(e){
     var g=mk("g",{class:"edge"},eg),r0=route(e),et=ET();
-    var p=mk("path",{d:r0.d,class:"lk "+e.type,"stroke-width":e.type==="sub"?3.4:1.4},g);
+    var p=mk("path",{d:r0.d,class:"lk "+e.type,"stroke-width":e.type==="sub"?3.4:1.5},g);
     if(e.type==="pre"||e.type==="ver")p.setAttribute("marker-end","url(#ar-"+e.type+")");
     if(e.type==="sub")mk("path",{d:r0.d,class:"lk sub2"},g);
     mk("path",{d:r0.d,class:"hit"},g);e.xm=null;
-    if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+r0.mid[0]+","+r0.mid[1]+")"},xg);mk("circle",{r:6},xm);mk("path",{d:"M-2.5,-2.5L2.5,2.5M2.5,-2.5L-2.5,2.5"},xm);e.xm=xm}
+    if(e.forbid){var xm=mk("g",{class:"xm",transform:"translate("+r0.mid[0]+","+r0.mid[1]+")"},xg);mk("circle",{r:6.5},xm);mk("path",{d:"M-2.6,-2.6L2.6,2.6M2.6,-2.6L-2.6,2.6"},xm);e.xm=xm}
     var a=P[e.from],b=P[e.to],html='<div class="h"><span class="rt rt-'+e.type+'">'+et[e.type]+(e.forbid?t(" · forbidden"," · 금지"):"")+'</span> '+esc(dname(a))+(e.type==="pre"||e.type==="ver"?" → ":" ↔ ")+esc(dname(b))+'</div>'+esc(edetail(e));
     g.addEventListener("mouseenter",function(ev){showTip(ev,html)});g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",hideTip);
     e.el=g;
   });
   N.forEach(function(n){
     var g=mk("g",{class:"nd"+(n.deg?"":" iso"),"data-id":n.id,transform:"translate("+n.px+","+(n.py-PH/2)+")",tabindex:"0",role:"button"},ng);
-    mk("rect",{width:n.w,height:PH,rx:7},g);
-    mk("circle",{cx:12,cy:PH/2,r:3.5,fill:COLC[n.gc]},g);
-    mk("text",{x:21,y:PH/2+4},g).textContent=dname(n);
+    mk("rect",{width:n.w,height:PH,rx:PH/2},g);
+    mk("circle",{cx:14,cy:PH/2,r:3.5,fill:COLC[n.gc]},g);
+    mk("text",{x:24,y:PH/2+4.5},g).textContent=dname(n);
     var act=function(){gsel=gsel===n.id?null:n.id;paint();side()};
     g.addEventListener("click",act);g.addEventListener("keydown",function(ev){if(ev.key==="Enter")act()});
     g.addEventListener("mouseenter",function(ev){ghover=n.id;paint();showTip(ev,'<div class="h">'+esc(dname(n))+' · '+n.tier+'</div>'+esc(nspec(n).out)+'<div style="color:var(--faint);margin-top:3px">'+t("relations","관계")+' '+n.deg+' · '+t("wrappers","래퍼")+' '+n.wr.length+' · '+t("click to pin","클릭해서 고정")+'</div>')});
     g.addEventListener("mousemove",moveTip);g.addEventListener("mouseleave",function(){ghover=null;paint();hideTip()});
     n.el=g;
   });
-  var sm={pre:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--pre)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="4 3"/>',sub:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--sub)" stroke-width="3"/><line x1="0" y1="4" x2="18" y2="4" stroke="var(--card)" stroke-width="1"/>',ver:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--ver)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--ver)"/>'};
+  var sm={pre:'<path d="M0,4 C7,4 7,4 14,4" stroke="var(--pre)" stroke-width="1.6" fill="none"/><path d="M12,1L17,4L12,7z" fill="var(--pre)"/>',cmp:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--cmp)" stroke-width="1.6" stroke-dasharray="4 3"/>',sub:'<line x1="0" y1="4" x2="18" y2="4" stroke="var(--sub)" stroke-width="3"/><line x1="0" y1="4" x2="18" y2="4" stroke="var(--card)" stroke-width="1"/>',ver:'<line x1="0" y1="4" x2="14" y2="4" stroke="var(--ver)" stroke-width="1.6"/><path d="M12,1L17,4L12,7z" fill="var(--ver)"/>'};
   var et=ET();
   $("#gkey").innerHTML=COLN().map(function(c,i){return '<span><i style="background:'+COLC[i]+'"></i>'+c+'</span>'}).join("")+'<span style="width:1px;height:12px;background:var(--line)"></span>'+Object.keys(et).map(function(k){return '<label><input type="checkbox" data-t="'+k+'"'+(on[k]?" checked":"")+'><svg viewBox="0 0 18 8">'+sm[k]+'</svg>'+et[k]+'</label>'}).join("");
   $$("#gkey input").forEach(function(i){i.addEventListener("change",function(){on[i.dataset.t]=i.checked;paint();side()})});
   paint();side();
 }
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){drawGraph()});
 function paint(){
   var f=ghover||gsel,keep={};
   if(f){keep[f]=1;E.forEach(function(e){if(on[e.type]&&(e.from===f||e.to===f)){keep[e.from]=1;keep[e.to]=1}})}
